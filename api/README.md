@@ -1,19 +1,19 @@
 ## Usage (for development)
 
-Open up `package.json`, find the `"scripts"` section of the file,
-and replace the value for `"serverstart"` to
+Create a `.env` in the api directory, and set `DB_URI` to be the
+connection uri that mongoDB will connect to.
 
-`"DEBUG=express-locallibrary-tutorial:* npm run devstart"`
-on Linux and macOS
-
-or `"SET DEBUG=express-locallibrary-tutorial:* & npm run devstart"`
-on Windows.
-
-Next, run the following on the command line:
+From the api directory, execute the following commands to populate
+the mongoDB database.
 
 ```bash
 npm install
-npm run devstart
+cd seeds/
+node index.js
 ```
 
-Open up http://localhost:5000/ in the browser.
+Next, run the server using this command:
+
+```bash
+npm run devstart
+```
