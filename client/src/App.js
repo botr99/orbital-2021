@@ -1,18 +1,19 @@
 import "./App.css";
+import Navbar from "./components/partials/Navbar";
+import Footer from "./components/partials/Footer";
+import Home from "./components/routes/Home";
+import { JobListContextProvider } from "./context/JobListContext";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="d-flex flex-column vh-100">
+      <Navbar />
+      <JobListContextProvider>
+        <main className="container mt-5">
+          <Home />
+        </main>
+      </JobListContextProvider>
+      <Footer />
     </div>
   );
 }
