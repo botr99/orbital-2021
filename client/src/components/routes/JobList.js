@@ -1,14 +1,15 @@
 import { useContext, useEffect } from "react";
-import JobListApi from "../../apis/JobListApi";
+import JobsApi from "../../apis/JobsApi";
 import { JobListContext } from "../../context/JobListContext";
+import { Link } from "react-router-dom";
 
-const Home = (props) => {
+const JobList = (props) => {
   const { jobList, setJobList } = useContext(JobListContext);
 
   useEffect(() => {
     const fetchJobList = async () => {
       try {
-        const res = await JobListApi.get("/");
+        const res = await JobsApi.get("/");
         // console.log(res);
         setJobList(res.data);
       } catch (err) {
@@ -17,14 +18,14 @@ const Home = (props) => {
     };
 
     fetchJobList();
-  });
+  }, []);
 
   return (
-    <div>
-      <h1>Volunteer Board</h1>
-      <div>
-        <a href="/jobs/new">Add Job</a>
-      </div>
+    <>
+      <h1>Available Jobs</h1>
+      <Link to="/jobs/new">
+        <button type="button">Add Job</button>
+      </Link>
       {jobList && // will only render the jobs if they exists
         jobList.map((job) => (
           <div className="card mb-3" key={job._id}>
@@ -48,8 +49,8 @@ const Home = (props) => {
             </div>
           </div>
         ))}
-    </div>
+    </>
   );
 };
 
-export default Home;
+export default JobList;
