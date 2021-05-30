@@ -5,10 +5,24 @@ const Job = require("../../models/Job");
 // const { jobSchema, registrationSchema } = require("../../schemas");
 // const { categories, organizations } = require("../../seeds/seedHelpers"); // To provide default categories
 
+// order of the routes matter, if this route
+// comes after /:id route, then the :id could be
+// matched to categories, causing an error.
+router.get("/categories", async (req, res) => {
+  try {
+    // returns an array of all the enum values
+    // of the category field in the Job model
+    const categories = await Job.schema.path("category").enumValues;
+    res.status(200).json(categories);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+});
+
 router.get("/", async (req, res) => {
   try {
-    // find all jobs
-    const jobs = await Job.find({});
+    // find all jobs, sort them by the latest job created
+    const jobs = await Job.find({}).sort({ createdAt: "desc" });
     res.status(200).json(jobs);
   } catch (err) {
     res.status(404).json({ message: err.message });
@@ -35,8 +49,8 @@ router.post("/", async (req, res) => {
   // do some job validation here
 
   try {
-    const savedJob = await newJob.save();
-    res.status(201).json(savedjob);
+    await newJob.save();
+    res.status(201).json(newJob);
   } catch (err) {
     res.status(409).json({ message: err.message });
   }
