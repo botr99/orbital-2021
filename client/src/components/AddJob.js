@@ -1,14 +1,14 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import JobsApi from "../apis/JobsApi";
-import { JobListContext } from "../context/JobListContext";
 
 const AddJob = () => {
-  const { addJob } = useContext(JobListContext);
   const [title, setTitle] = useState("");
   const [purpose, setPurpose] = useState("");
   const [categories, setCategories] = useState([]); // the categories retrieved from the database
   const [category, setCategory] = useState(""); // the category that is currently being selected by the user
   const [organizer, setOrganizer] = useState("");
+  let history = useHistory();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -29,16 +29,13 @@ const AddJob = () => {
     e.preventDefault();
 
     try {
-      const res = await JobsApi.post("/", {
+      await JobsApi.post("/", {
         title,
         organizer,
         purpose,
         category,
       });
-      addJob(res.data);
-
-      // TODO: redirect to job detail page instead
-      alert("Post success");
+      history.push("/");
     } catch (err) {
       console.log(err);
     }
