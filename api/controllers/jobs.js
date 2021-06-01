@@ -21,13 +21,14 @@ module.exports.getJobs = async (req, res) => {
   }
 };
 
-module.exports.getJobDetail = async (req, res) => {
-  try {
-    const job = await Job.findById(req.params.id);
-    res.status(200).json(job);
-  } catch (err) {
-    res.status(404).json({ message: err.message });
-  }
+module.exports.getJobDetail = (req, res) => {
+  Job.findById(req.params.id)
+    .then((job) => {
+      job
+        ? res.status(200).json(job)
+        : res.status(404).json({ message: "Job not found" });
+    })
+    .catch((err) => res.status(404).json({ message: err.message }));
 };
 
 module.exports.postJob = async (req, res) => {
@@ -35,8 +36,7 @@ module.exports.postJob = async (req, res) => {
 
   try {
     await newJob.save();
-    // res.status(201).json(newJob);
-    res.redirect(`/api/jobs/${newJob._id}`);
+    res.status(201).json(newJob);
   } catch (err) {
     res.status(409).json({ message: err.message });
   }
@@ -44,8 +44,9 @@ module.exports.postJob = async (req, res) => {
 
 module.exports.updateJob = async (req, res) => {
   try {
-    await Job.findByIdAndUpdate(req.params.id, req.body);
-    res.redirect(`/api/jobs/${req.params.id}`);
+    const job = await Job.findByIdAndUpdate(req.params.id, req.body);
+    const updatedJob = { ...job.toObject(), ...req.body };
+    res.status(200).json(updatedJob);
   } catch (err) {
     res.status(404).json({ message: err.message });
   }
@@ -54,7 +55,7 @@ module.exports.updateJob = async (req, res) => {
 module.exports.deleteJob = async (req, res) => {
   try {
     const deletedJob = await Job.findByIdAndDelete(req.params.id);
-    res.json(deletedJob);
+    res.status(204).json(deletedJob);
   } catch (err) {
     res.status(404).json({ message: err.message });
   }
