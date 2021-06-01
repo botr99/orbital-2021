@@ -5,6 +5,7 @@ import Jobs from "./components/Jobs/Jobs";
 import { JobsContextProvider } from "./context/JobsContext";
 import { Route, Switch } from "react-router-dom";
 import AddJob from "./components/AddJob";
+import JobEdit from "./components/Jobs/Job/JobEdit";
 import JobDetail from "./components/Jobs/Job/JobDetail";
 
 function App() {
@@ -17,11 +18,13 @@ function App() {
             <Route path="/jobs/new" exact>
               <AddJob />
             </Route>
+            <Route path="/jobs/:id/edit" exact>
+              <JobEdit />
+            </Route>
             <Route path="/jobs/:id" exact>
               <JobDetail />
             </Route>
-            {/* This route will always match the URL */}
-            <Route path="/">
+            <Route path="/" exact>
               <Jobs />
             </Route>
           </Switch>

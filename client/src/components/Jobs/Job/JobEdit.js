@@ -1,28 +1,38 @@
 import { useEffect, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
-import JobsApi from "../apis/JobsApi";
+import { Link, useHistory, useParams } from "react-router-dom";
+import JobsApi from "../../../apis/JobsApi";
 
-const AddJob = () => {
+const JobEdit = () => {
+  const { id } = useParams();
+
   const [title, setTitle] = useState("");
   const [purpose, setPurpose] = useState("");
   const [categories, setCategories] = useState([]); // the categories retrieved from the database
   const [category, setCategory] = useState(""); // the category that is currently being selected by the user
-  const [organizer, setOrganizer] = useState(""); // to be removed once authentication is added
 
   let history = useHistory();
 
   useEffect(() => {
+    const fetchJob = async () => {
+      try {
+        const res = await JobsApi.get(`/${id}`);
+        setTitle(res.data.title);
+        setPurpose(res.data.purpose);
+        setCategory(res.data.category);
+      } catch (err) {
+        console.log(err);
+      }
+    };
     const fetchCategories = async () => {
       try {
         const res = await JobsApi.get("/categories");
-        // console.log(res);
         setCategories(res.data);
-        setCategory(res.data[0]);
       } catch (err) {
         console.log(err);
       }
     };
 
+    fetchJob();
     fetchCategories();
   }, []);
 
@@ -30,15 +40,13 @@ const AddJob = () => {
     e.preventDefault();
 
     try {
-      await JobsApi.post("/", {
+      await JobsApi.patch(`/${id}`, {
         title,
-        organizer,
         purpose,
         category,
       });
-      // redirect somewhere else,
-      // e.g: to the job detail page,
-      history.push("/");
+      // redirect to the job detail page
+      history.push(`/jobs/${id}`);
     } catch (err) {
       console.log(err);
     }
@@ -46,7 +54,7 @@ const AddJob = () => {
 
   return (
     <div className="row">
-      <h1 className="text-center">New Job</h1>
+      <h1 className="text-center">Edit Job</h1>
       <div className="col-6 offset-3">
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
@@ -61,20 +69,6 @@ const AddJob = () => {
               name="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-            />
-          </div>
-          <div className="mb-3">
-            <label className="form-label" htmlFor="organizer">
-              Organizer
-            </label>
-            <input
-              required
-              className="form-control"
-              type="text"
-              id="organizer"
-              name="organizer"
-              value={organizer}
-              onChange={(e) => setOrganizer(e.target.value)}
             />
           </div>
           <div className="mb-3">
@@ -108,15 +102,13 @@ const AddJob = () => {
             </select>
           </div>
           <div className="mb-3">
-            <button className="btn btn-success" type="submit">
-              Add Job
-            </button>
+            <button className="btn btn-info">Update Job</button>
           </div>
         </form>
-        <Link to="/">Return to Board</Link>
+        <Link to={`/jobs/${id}`}>Back to Job</Link>
       </div>
     </div>
   );
 };
 
-export default AddJob;
+export default JobEdit;
