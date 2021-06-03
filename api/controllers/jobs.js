@@ -11,14 +11,15 @@ module.exports.getCategories = async (req, res) => {
   }
 };
 
-module.exports.getJobs = async (req, res) => {
-  try {
-    // find all jobs, sort them by the latest job created
-    const jobs = await Job.find({}).sort({ createdAt: "desc" });
-    res.status(200).json(jobs);
-  } catch (err) {
-    res.status(404).json({ message: err.message });
-  }
+module.exports.getJobs = (req, res) => {
+  res.status(200).json(res.data);
+  // try {
+  //   // find all jobs, sort them by the latest job created
+  //   const jobs = await Job.find({}).sort({ createdAt: "desc" });
+  //   res.status(200).json(jobs);
+  // } catch (err) {
+  //   res.status(404).json({ message: err.message });
+  // }
 };
 
 module.exports.getJobDetail = (req, res) => {

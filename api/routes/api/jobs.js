@@ -7,7 +7,8 @@ const {
   updateJob,
   deleteJob,
 } = require("../../controllers/jobs");
-const { validateJob } = require("../../middleware");
+const Job = require("../../models/Job");
+const { validateJob, paginatedResults } = require("../../middleware");
 const router = express.Router();
 
 // const { jobSchema, registrationSchema } = require("../../schemas");
@@ -18,7 +19,7 @@ const router = express.Router();
 // matched to categories, causing an error.
 router.get("/categories", getCategories);
 
-router.get("/", getJobs);
+router.get("/", paginatedResults(Job, {}), getJobs);
 
 router.get("/:id", getJobDetail);
 

@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-// const Registration = require("./registration");
+// const Registration = require("./Registration");
 const { categories } = require("../seeds/seedHelpers"); // To provide default categories
 const Schema = mongoose.Schema;
 
@@ -13,11 +13,11 @@ const jobSchema = new Schema(
     //   type: String,
     //   // required: true,
     // },
-    // contact: {
-    //   type: Number,
-    //   maxlength: 8,
-    //   // required: true,
-    // },
+    contact: {
+      type: Number,
+      maxlength: 8,
+      // required: true,
+    },
     title: {
       type: String,
       required: true,
@@ -31,20 +31,20 @@ const jobSchema = new Schema(
       required: true,
       enum: categories,
     },
-    // duration: {
-    //   start: {
-    //     type: Date,
-    //     // required: true,
-    //   },
-    //   end: {
-    //     type: Date,
-    //     // required: true,
-    //   },
-    //   hours: {
-    //     type: Number,
-    //     // required: true,
-    //   },
-    // },
+    duration: {
+      start: {
+        type: Date,
+        // required: true,
+      },
+      end: {
+        type: Date,
+        // required: true,
+      },
+      hours: {
+        type: Number,
+        // required: true,
+      },
+    },
     // registrations: [
     //   {
     //     type: Schema.Types.ObjectId,
