@@ -3,12 +3,16 @@ import JobsApi from "../../apis/JobsApi";
 import { JobsContext } from "../../context/JobsContext";
 import { Link } from "react-router-dom";
 import Job from "./Job/Job";
-import Pagination from "../Pagination";
+import Pagination from "@material-ui/lab/Pagination";
 
 const Jobs = () => {
   const { jobs, setJobs } = useContext(JobsContext);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(1);
+
+  const handleChange = (e, value) => {
+    setPage(value);
+  };
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -31,20 +35,30 @@ const Jobs = () => {
       <Link to="/jobs/new">
         <button type="button">Add Job</button>
       </Link>
-      {/* {jobs && // will only render the jobs if they exists
-      {<Pagination page={page} pageCount={pageCount} changePage={setPage} />
-      jobs.map((job) => (
-        <Job key={job._id} job={job} />
-      ))
-      <Pagination page={page} pageCount={pageCount} changePage={setPage} />} */}
 
       {jobs && (
         <div>
-          <Pagination page={page} pageCount={pageCount} changePage={setPage} />
+          <Pagination
+            count={pageCount}
+            page={page}
+            variant="outlined"
+            color="primary"
+            showFirstButton
+            showLastButton
+            onChange={handleChange}
+          />
           {jobs.map((job) => (
             <Job key={job._id} job={job} />
           ))}
-          <Pagination page={page} pageCount={pageCount} changePage={setPage} />
+          <Pagination
+            count={pageCount}
+            page={page}
+            variant="outlined"
+            color="primary"
+            showFirstButton
+            showLastButton
+            onChange={handleChange}
+          />
         </div>
       )}
     </>
