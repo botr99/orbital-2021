@@ -13,12 +13,12 @@ module.exports.getCategories = async (req, res) => {
 
 module.exports.getJobs = async (req, res) => {
   try {
-    if (req.query.page <= 0) {
+    if (req.query.page <= 0 || req.query.limit <= 0) {
       return res.status(404).json({ message: "Page not found" });
     }
 
     const page = parseInt(req.query.page) || 1; // current page
-    const limit = parseInt(req.query.limit) || 5; // max number of items in a page
+    const limit = parseInt(req.query.limit) || 10; // max number of items in a page
     const skip = (page - 1) * limit; // number of items to skip
 
     const modelCount = await Job.find({}).countDocuments();
@@ -26,7 +26,7 @@ module.exports.getJobs = async (req, res) => {
     const pageCount = Math.ceil(modelCount / limit); // number of pages
 
     if (page > pageCount) {
-      // page number is out of upper bound or limit is negative
+      // page number is out of upper bound
       return res.status(404).json({ message: "Page not found" });
     }
 
