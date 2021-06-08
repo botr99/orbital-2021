@@ -4,7 +4,7 @@ module.exports.getCategories = async (req, res) => {
   try {
     // returns an array of all the enum values
     // of the category field in the Job model
-    const categories = await Job.schema.path("category").enumValues;
+    const categories = await Job.schema.path("categories").caster.enumValues;
     res.status(200).json(categories);
   } catch (err) {
     res.status(404).json({ message: err.message });

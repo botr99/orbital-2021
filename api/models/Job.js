@@ -26,10 +26,9 @@ const jobSchema = new Schema(
       type: String,
       required: true,
     },
-    category: {
-      type: String,
+    categories: {
+      type: [{ type: String, enum: categories }], // allow for multiple categories
       required: true,
-      enum: categories,
     },
     duration: {
       start: {
