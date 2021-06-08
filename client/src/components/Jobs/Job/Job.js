@@ -1,21 +1,33 @@
+import { Box, Chip } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
 const Job = ({ job }) => {
+  const { title, organizer, purpose, categories, _id } = job;
+
   return (
     <div className="card mb-3">
       <div className="row">
         <div className="col md-4"></div>
         <div className="col-md-8">
           <div className="card-body">
-            <h5 className="card-title">{job.title}</h5>
+            <h5 className="card-title">{title}</h5>
             <p className="card-text">
-              <small className="text-muted">{job.organizer}</small>
+              <small className="text-muted">{organizer}</small>
             </p>
-            <p className="card-text">{job.purpose}</p>
+            <p className="card-text">{purpose}</p>
             <p className="card-text">
-              <small className="text-muted">{job.category}</small>
+              <Box display="flex" flexWrap="wrap">
+                {categories.map((category) => (
+                  <Chip
+                    key={category}
+                    label={category}
+                    clickable="true"
+                    style={{ margin: 2 }}
+                  />
+                ))}
+              </Box>
             </p>
-            <Link to={`/jobs/${job._id}`}>
+            <Link to={`/jobs/${_id}`}>
               <button type="button" className="btn btn-primary">
                 View Job
               </button>

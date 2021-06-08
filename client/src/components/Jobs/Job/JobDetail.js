@@ -1,3 +1,4 @@
+import { Box, Chip } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import JobsApi from "../../../apis/JobsApi";
@@ -60,7 +61,17 @@ const JobDetail = () => {
             </div>
             <ul className="list-group list-group-flush">
               <li className="list-group-item text-muted">
-                {jobDetail.category}
+                <Box display="flex" flexWrap="wrap">
+                  {jobDetail.categories &&
+                    jobDetail.categories.map((category) => (
+                      <Chip
+                        key={category}
+                        label={category}
+                        clickable="true"
+                        style={{ margin: 2 }}
+                      />
+                    ))}
+                </Box>
               </li>
               <li className="list-group-item">
                 Organized by: {jobDetail.organizer}
