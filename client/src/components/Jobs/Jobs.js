@@ -3,6 +3,7 @@ import JobsApi from "../../apis/JobsApi";
 import { JobsContext } from "../../context/JobsContext";
 import { Link } from "react-router-dom";
 import Job from "./Job/Job";
+import SearchBar from "../SearchBar";
 import {
   Box,
   FormControl,
@@ -27,6 +28,8 @@ const Jobs = () => {
   const [pageCount, setPageCount] = useState(1);
   const [limit, setLimit] = useState(10);
 
+  const [searchTerm, setSearchTerm] = useState("");
+
   const handlePageChange = (e, value) => {
     setPage(value);
   };
@@ -39,7 +42,9 @@ const Jobs = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const res = await JobsApi.get(`/?page=${page}&limit=${limit}`);
+        const res = await JobsApi.get(
+          `/?page=${page}&limit=${limit}&search=${searchTerm}`
+        );
         setJobs(res.data.data);
         setPage(res.data.page);
         setPageCount(res.data.pageCount);
@@ -50,7 +55,7 @@ const Jobs = () => {
     };
 
     fetchJobs();
-  }, [page, limit]);
+  }, [page, limit, searchTerm]);
 
   return (
     <>
@@ -60,9 +65,9 @@ const Jobs = () => {
           <button type="button">Add Job</button>
         </Link>
       </Box>
-
       {/* <SearchBar />
       Category/Date filters */}
+      <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
       {jobs && (
         <Box>
