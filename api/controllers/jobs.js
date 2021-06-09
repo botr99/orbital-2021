@@ -13,6 +13,16 @@ module.exports.getCategories = async (req, res) => {
 
 module.exports.getJobs = async (req, res) => {
   try {
+    const searchQuery = req.query.search
+      ? {
+          // find all titles or organizers that contain the search query
+          $or: [
+            { title: { $regex: req.query.search.trim(), $options: "i" } },
+            { organizer: { $regex: req.query.search.trim(), $options: "i" } },
+          ],
+        }
+      : {};
+
     if (req.query.page <= 0 || req.query.limit <= 0) {
       return res.status(404).json({ message: "Page not found" });
     }
@@ -21,7 +31,7 @@ module.exports.getJobs = async (req, res) => {
     const limit = parseInt(req.query.limit) || 10; // max number of items in a page
     const skip = (page - 1) * limit; // number of items to skip
 
-    const modelCount = await Job.find({}).countDocuments();
+    const modelCount = await Job.find(searchQuery).countDocuments();
 
     const pageCount = Math.ceil(modelCount / limit); // number of pages
 
@@ -31,7 +41,7 @@ module.exports.getJobs = async (req, res) => {
     }
 
     // paginate the jobs, sort them by the latest job created
-    const jobs = await Job.find({})
+    const jobs = await Job.find(searchQuery)
       .skip(skip)
       .limit(limit)
       .sort({ createdAt: "desc" });
