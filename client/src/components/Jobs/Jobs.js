@@ -67,7 +67,11 @@ const Jobs = () => {
       </Box>
       {/* <SearchBar />
       Category/Date filters */}
-      <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <SearchBar
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        setPage={setPage}
+      />
 
       {jobs && (
         <Box>

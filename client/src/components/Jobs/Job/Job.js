@@ -15,18 +15,18 @@ const Job = ({ job }) => {
               <small className="text-muted">{organizer}</small>
             </p>
             <p className="card-text">{purpose}</p>
-            <p className="card-text">
+            <div className="card-text">
               <Box display="flex" flexWrap="wrap">
                 {categories.map((category) => (
                   <Chip
                     key={category}
                     label={category}
-                    clickable="true"
+                    clickable={true}
                     style={{ margin: 2 }}
                   />
                 ))}
               </Box>
-            </p>
+            </div>
             <Link to={`/jobs/${_id}`}>
               <button type="button" className="btn btn-primary">
                 View Job

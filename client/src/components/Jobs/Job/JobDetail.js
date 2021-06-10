@@ -67,7 +67,7 @@ const JobDetail = () => {
                       <Chip
                         key={category}
                         label={category}
-                        clickable="true"
+                        clickable={true}
                         style={{ margin: 2 }}
                       />
                     ))}
