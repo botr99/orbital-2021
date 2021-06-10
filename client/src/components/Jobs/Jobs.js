@@ -4,6 +4,7 @@ import { JobsContext } from "../../context/JobsContext";
 import { Link } from "react-router-dom";
 import Job from "./Job/Job";
 import SearchBar from "../SearchBar";
+import CategoryFilter from "../CategoryFilter";
 import {
   Box,
   FormControl,
@@ -29,6 +30,7 @@ const Jobs = () => {
   const [limit, setLimit] = useState(10);
 
   const [searchTerm, setSearchTerm] = useState("");
+  const [filteredCategories, setFilteredCategories] = useState([]);
 
   const handlePageChange = (e, value) => {
     setPage(value);
@@ -42,8 +44,12 @@ const Jobs = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
+        const categoriesString = filteredCategories.join(",");
+
         const res = await JobsApi.get(
-          `/?page=${page}&limit=${limit}&search=${searchTerm}`
+          `/?page=${page}&limit=${limit}&search=${searchTerm}&categories=${encodeURIComponent(
+            categoriesString
+          )}`
         );
         setJobs(res.data.data);
         setPage(res.data.page);
@@ -55,7 +61,7 @@ const Jobs = () => {
     };
 
     fetchJobs();
-  }, [page, limit, searchTerm]);
+  }, [page, limit, searchTerm, filteredCategories]);
 
   return (
     <>
@@ -65,13 +71,18 @@ const Jobs = () => {
           <button type="button">Add Job</button>
         </Link>
       </Box>
-      {/* <SearchBar />
-      Category/Date filters */}
+
       <SearchBar
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         setPage={setPage}
       />
+      <CategoryFilter
+        filteredCategories={filteredCategories}
+        setFilteredCategories={setFilteredCategories}
+        setPage={setPage}
+      />
+      {/* DateFilter */}
 
       {jobs && (
         <Box>
