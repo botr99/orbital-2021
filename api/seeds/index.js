@@ -22,15 +22,17 @@ db.once('open', () => {
 });
 
 const sample = (array) => array[Math.floor(Math.random() * array.length)];
-
+const removeDupes = (array) => [...new Set(array)];
 // Clears existing data
 const seedDB = async () => {
   await Job.deleteMany({});
-  for (let i = 0; i < 10; i++) {
-    const rand = Math.floor(Math.random() * 10);
+  for (let i = 0; i < 20; i++) {
     const job = new Job({
       organizer: `${sample(organizations)}`,
-      category: `${sample(categories)}`,
+      categories: removeDupes([
+        `${sample(categories)}`,
+        `${sample(categories)}`,
+      ]),
       title: `${sample(titles)}`,
       purpose:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin id nisi nisi. Curabitur erat ligula, luctus sit amet tincidunt a, convallis et turpis. Etiam suscipit feugiat dolor, nec ornare nisl. Sed eu massa nisl. Vivamus non magna vel felis egestas dictum eget at dui. Vestibulum dapibus porttitor nisl, maximus tristique ante dapibus sed. Duis sodales sollicitudin enim ut posuere. ',
