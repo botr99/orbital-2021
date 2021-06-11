@@ -7,7 +7,8 @@ import {
   updateJob,
   deleteJob,
 } from '../../controllers/jobs.js';
-import { validateJob } from '../../middleware.js';
+import { validateJob } from '../../middleware/validateJob.js';
+import checkAuth from '../../middleware/checkAuth.js';
 
 const router = express.Router();
 
@@ -23,10 +24,10 @@ router.get('/', getJobs);
 
 router.get('/:id', getJobDetail);
 
-router.post('/', validateJob, postJob);
+router.post('/', checkAuth, validateJob, postJob);
 
-router.patch('/:id', validateJob, updateJob);
+router.patch('/:id', checkAuth, validateJob, updateJob);
 
-router.delete('/:id', deleteJob);
+router.delete('/:id', checkAuth, deleteJob);
 
 export default router;

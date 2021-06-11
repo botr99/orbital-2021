@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import {
   Avatar,
   Button,
@@ -7,12 +8,14 @@ import {
   Typography,
   Container,
 } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
+import { login, signup } from '../../actions/auth.js';
 import useStyles from './styles';
 import Input from './Input';
 
-const initialState = {
+const initialFormData = {
   firstName: '',
   lastName: '',
   email: '',
@@ -21,30 +24,42 @@ const initialState = {
 };
 
 const Auth = () => {
-  const classes = useStyles();
+  const [formData, setFormData] = useState(initialFormData);
   const [isSignup, setIsSignup] = useState(false);
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const classes = useStyles();
+
   const [showPassword, setShowPassword] = useState(false);
-  const [form, setForm] = useState(initialState);
-
-  const handleSubmit = () => {};
-
-  const handleChange = () => {};
-
   const handleShowPassword = () => setShowPassword(!showPassword);
 
   const switchMode = () => {
-    setForm(initialState);
     setIsSignup(!isSignup);
     setShowPassword(false);
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (isSignup) {
+      dispatch(signup(formData, history));
+    } else {
+      dispatch(login(formData, history));
+    }
+  };
+
+  const handleChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+
   return (
     <Container component="main" maxWidth="xs">
-      <Paper className={classes.paper}>
+      <Paper className={classes.paper} elevation={3}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography variant="h5">{isSignup ? 'Sign Up' : 'Login'}</Typography>
+        <Typography component="h1" variant="h5">
+          {isSignup ? 'Sign up' : 'Sign in'}
+        </Typography>
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             {isSignup && (
@@ -92,7 +107,7 @@ const Auth = () => {
             variant="contained"
             color="primary"
             className={classes.submit}>
-            {isSignup ? 'Sign Up' : 'Login'}
+            {isSignup ? 'Sign Up' : 'Sign In'}
           </Button>
           <Grid container justify="flex-end">
             <Grid item>

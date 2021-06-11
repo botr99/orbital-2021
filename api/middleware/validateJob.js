@@ -1,4 +1,4 @@
-import jobSchema from './schemas.js';
+import jobSchema from '../schemas.js';
 
 export const validateJob = (req, res, next) => {
   const { err } = jobSchema.validate(req.body);
