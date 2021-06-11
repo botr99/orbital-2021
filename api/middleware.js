@@ -1,6 +1,6 @@
-const { jobSchema } = require("./schemas");
+import jobSchema from './schemas.js';
 
-module.exports.validateJob = (req, res, next) => {
+export const validateJob = (req, res, next) => {
   const { err } = jobSchema.validate(req.body);
   if (err) {
     res.status(400).json({ message: err.message });
