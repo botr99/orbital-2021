@@ -82,8 +82,9 @@ export const postJob = async (req, res) => {
 
 export const updateJob = async (req, res) => {
   try {
-    const job = await Job.findByIdAndUpdate(req.params.id, req.body);
-    const updatedJob = { ...job.toObject(), ...req.body };
+    const updatedJob = await Job.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
     res.status(200).json(updatedJob);
   } catch (err) {
     res.status(404).json({ message: err.message });

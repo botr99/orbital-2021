@@ -1,4 +1,10 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Avatar, Typography, Button } from '@material-ui/core';
+
 const Navbar = () => {
+  const user = null;
+
   return (
     <nav className="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
       <div className="container-fluid">
@@ -12,8 +18,7 @@ const Navbar = () => {
           data-bs-target="#navbarNavAltMarkup"
           aria-controls="navbarNavAltMarkup"
           aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
+          aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
@@ -21,12 +26,28 @@ const Navbar = () => {
             <a className="nav-link" href="/">
               Home
             </a>
-            <a className="nav-link" href="/jobs">
-              Jobs
-            </a>
             <a className="nav-link" href="/jobs/new">
               New Job
             </a>
+            {user ? (
+              <div>
+                <Avatar alt={user.result.name}>
+                  {user.result.name.charAt(0)}
+                </Avatar>
+                <Typography variant="h6">{user.result.name}</Typography>
+                <Button variant="contained" color="secondary">
+                  Logout
+                </Button>
+              </div>
+            ) : (
+              <Button
+                component={Link}
+                to="/auth"
+                variant="contained"
+                color="primary">
+                Login
+              </Button>
+            )}
           </div>
         </div>
       </div>

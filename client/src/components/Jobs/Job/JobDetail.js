@@ -1,7 +1,7 @@
-import { Box, Chip } from "@material-ui/core";
-import { useEffect, useState } from "react";
-import { Link, useHistory, useParams } from "react-router-dom";
-import JobsApi from "../../../apis/JobsApi";
+import { Box, Chip } from '@material-ui/core';
+import { useEffect, useState } from 'react';
+import { Link, useHistory, useParams } from 'react-router-dom';
+import JobsApi from '../../../apis/JobsApi';
 
 const JobDetail = () => {
   const { id } = useParams();
@@ -24,14 +24,14 @@ const JobDetail = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Register form is submitted");
+    console.log('Register form is submitted');
   };
 
   const handleDelete = async () => {
     try {
       await JobsApi.delete(`/${id}`);
       // redirect to home page
-      history.push("/");
+      history.push('/');
     } catch (err) {
       console.log(err);
     }
@@ -95,7 +95,7 @@ const JobDetail = () => {
         </div>
       </div>
       {/* To be abstracted to Register component */}
-      <div className="row" style={{ marginTop: "2em" }}>
+      {/* <div className="row" style={{ marginTop: "2em" }}>
         <div className="col-6 offset-3">
           <div className="card">
             <form className="mb-3" onSubmit={handleSubmit}>
@@ -116,7 +116,7 @@ const JobDetail = () => {
             <h5>Registered:</h5>
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   );
 };

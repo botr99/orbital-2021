@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
-import JobsApi from "../apis/JobsApi";
+import { useEffect, useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+import JobsApi from '../apis/JobsApi';
 import {
   Chip,
   FormControl,
@@ -9,7 +9,7 @@ import {
   makeStyles,
   MenuItem,
   Select,
-} from "@material-ui/core";
+} from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -18,8 +18,8 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 300,
   },
   chips: {
-    display: "flex",
-    flexWrap: "wrap",
+    display: 'flex',
+    flexWrap: 'wrap',
   },
   chip: {
     margin: 2,
@@ -39,18 +39,18 @@ const MenuProps = {
 
 const AddJob = () => {
   const classes = useStyles();
-  const [title, setTitle] = useState("");
-  const [purpose, setPurpose] = useState("");
+  const [title, setTitle] = useState('');
+  const [purpose, setPurpose] = useState('');
   const [categories, setCategories] = useState([]); // the categories retrieved from the database
   const [chosenCategories, setChosenCategories] = useState([]); // the categories the user selects
-  const [organizer, setOrganizer] = useState(""); // to be removed once authentication is added
+  const [organizer, setOrganizer] = useState(''); // to be removed once authentication is added
 
   let history = useHistory();
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await JobsApi.get("/categories");
+        const res = await JobsApi.get('/categories');
         setCategories(res.data);
       } catch (err) {
         console.log(err);
@@ -63,7 +63,7 @@ const AddJob = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await JobsApi.post("/", {
+      const res = await JobsApi.post('/', {
         title,
         organizer,
         purpose,
@@ -121,8 +121,7 @@ const AddJob = () => {
               cols="30"
               rows="5"
               value={purpose}
-              onChange={(e) => setPurpose(e.target.value)}
-            ></textarea>
+              onChange={(e) => setPurpose(e.target.value)}></textarea>
           </div>
 
           <FormControl className={classes.formControl}>
@@ -140,8 +139,7 @@ const AddJob = () => {
                   ))}
                 </div>
               )}
-              MenuProps={MenuProps}
-            >
+              MenuProps={MenuProps}>
               {categories.map((category) => (
                 <MenuItem key={category} value={category}>
                   {category}
@@ -166,7 +164,7 @@ const AddJob = () => {
             </select>
           </div> */}
           <div className="mb-3">
-            <button className="btn btn-success" type="submit">
+            <button className="btn btn-outline-success" type="submit">
               Add Job
             </button>
           </div>
