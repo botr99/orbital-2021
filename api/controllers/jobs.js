@@ -70,7 +70,8 @@ export const getJobDetail = (req, res) => {
 };
 
 export const postJob = async (req, res) => {
-  const newJob = new Job(req.body);
+  // req.userId available from checkAuth middleware, set organizer to currently logged in user
+  const newJob = new Job({ ...req.body, creator: req.userId });
 
   try {
     await newJob.save();

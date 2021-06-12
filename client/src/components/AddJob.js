@@ -44,6 +44,7 @@ const AddJob = () => {
   const [categories, setCategories] = useState([]); // the categories retrieved from the database
   const [chosenCategories, setChosenCategories] = useState([]); // the categories the user selects
   const [organizer, setOrganizer] = useState(''); // to be removed once authentication is added
+  const user = JSON.parse(localStorage.getItem('profile')); // get logged in user
 
   let history = useHistory();
 
@@ -65,7 +66,7 @@ const AddJob = () => {
     try {
       const res = await JobsApi.post('/', {
         title,
-        organizer,
+        organizer: user?.result?.name,
         purpose,
         categories: chosenCategories,
       });
@@ -95,7 +96,7 @@ const AddJob = () => {
               onChange={(e) => setTitle(e.target.value)}
             />
           </div>
-          <div className="mb-3">
+          {/* <div className="mb-3">
             <label className="form-label" htmlFor="organizer">
               Organizer
             </label>
@@ -108,7 +109,7 @@ const AddJob = () => {
               value={organizer}
               onChange={(e) => setOrganizer(e.target.value)}
             />
-          </div>
+          </div> */}
           <div className="mb-3">
             <label className="form-label" htmlFor="purpose">
               Purpose

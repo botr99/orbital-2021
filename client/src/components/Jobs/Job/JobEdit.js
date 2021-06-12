@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { Link, useHistory, useParams } from "react-router-dom";
-import JobsApi from "../../../apis/JobsApi";
+import { useEffect, useState } from 'react';
+import { Link, useHistory, useParams } from 'react-router-dom';
+import JobsApi from '../../../apis/JobsApi';
 import {
   Chip,
   FormControl,
@@ -9,7 +9,7 @@ import {
   makeStyles,
   MenuItem,
   Select,
-} from "@material-ui/core";
+} from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -18,8 +18,8 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 300,
   },
   chips: {
-    display: "flex",
-    flexWrap: "wrap",
+    display: 'flex',
+    flexWrap: 'wrap',
   },
   chip: {
     margin: 2,
@@ -41,8 +41,8 @@ const JobEdit = () => {
   const { id } = useParams();
   const classes = useStyles();
 
-  const [title, setTitle] = useState("");
-  const [purpose, setPurpose] = useState("");
+  const [title, setTitle] = useState('');
+  const [purpose, setPurpose] = useState('');
   const [categories, setCategories] = useState([]); // the categories retrieved from the database
   const [chosenCategories, setChosenCategories] = useState([]); // the categories the user selects
 
@@ -64,7 +64,7 @@ const JobEdit = () => {
     };
     const fetchCategories = async () => {
       try {
-        const res = await JobsApi.get("/categories");
+        const res = await JobsApi.get('/categories');
         setCategories(res.data);
       } catch (err) {
         console.log(err);
@@ -122,8 +122,7 @@ const JobEdit = () => {
               cols="30"
               rows="5"
               value={purpose}
-              onChange={(e) => setPurpose(e.target.value)}
-            ></textarea>
+              onChange={(e) => setPurpose(e.target.value)}></textarea>
           </div>
 
           <FormControl className={classes.formControl}>
@@ -141,8 +140,7 @@ const JobEdit = () => {
                   ))}
                 </div>
               )}
-              MenuProps={MenuProps}
-            >
+              MenuProps={MenuProps}>
               {categories.map((category) => (
                 <MenuItem key={category} value={category}>
                   {category}
