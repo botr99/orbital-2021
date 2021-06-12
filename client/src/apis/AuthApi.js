@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API = axios.create({ baseURL: 'http://localhost:5000/api/jobs' });
+const API = axios.create({ baseURL: 'http://localhost:5000/api/user' });
 
 API.interceptors.request.use((req) => {
   if (localStorage.getItem('profile')) {
@@ -12,4 +12,5 @@ API.interceptors.request.use((req) => {
   return req;
 });
 
-export default API;
+export const login = (formData) => API.post('/login', formData);
+export const signup = (formData) => API.post('/signup', formData);

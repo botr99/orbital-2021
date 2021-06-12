@@ -1,5 +1,5 @@
-import { Box, Chip } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { Box, Chip } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 const Job = ({ job }) => {
   const { title, organizer, purpose, categories, _id } = job;

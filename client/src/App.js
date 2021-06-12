@@ -1,12 +1,13 @@
-import "./App.css";
-import Navbar from "./components/partials/Navbar";
-import Footer from "./components/partials/Footer";
-import Jobs from "./components/Jobs/Jobs";
-import { JobsContextProvider } from "./context/JobsContext";
-import { Route, Switch } from "react-router-dom";
-import AddJob from "./components/AddJob";
-import JobEdit from "./components/Jobs/Job/JobEdit";
-import JobDetail from "./components/Jobs/Job/JobDetail";
+import './App.css';
+import Navbar from './components/partials/Navbar';
+import Footer from './components/partials/Footer';
+import Jobs from './components/Jobs/Jobs';
+import { JobsContextProvider } from './context/JobsContext';
+import { Route, Switch } from 'react-router-dom';
+import AddJob from './components/AddJob';
+import JobEdit from './components/Jobs/Job/JobEdit';
+import JobDetail from './components/Jobs/Job/JobDetail';
+import Auth from './components/Auth/Auth';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <JobsContextProvider>
         <main className="container mt-5">
           <Switch>
+            <Route path="/auth" exact component={Auth} />
             <Route path="/jobs/new" exact>
               <AddJob />
             </Route>

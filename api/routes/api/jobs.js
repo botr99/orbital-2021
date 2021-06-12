@@ -1,13 +1,15 @@
-const express = require("express");
-const {
+import express from 'express';
+import {
   getCategories,
   getJobs,
   getJobDetail,
   postJob,
   updateJob,
   deleteJob,
-} = require("../../controllers/jobs");
-const { validateJob } = require("../../middleware");
+} from '../../controllers/jobs.js';
+import { validateJob } from '../../middleware/validateJob.js';
+import checkAuth from '../../middleware/checkAuth.js';
+
 const router = express.Router();
 
 // const { jobSchema, registrationSchema } = require("../../schemas");
@@ -16,16 +18,16 @@ const router = express.Router();
 // order of the routes matter, if this route
 // comes after /:id route, then the :id could be
 // matched to categories, causing an error.
-router.get("/categories", getCategories);
+router.get('/categories', getCategories);
 
-router.get("/", getJobs);
+router.get('/', getJobs);
 
-router.get("/:id", getJobDetail);
+router.get('/:id', getJobDetail);
 
-router.post("/", validateJob, postJob);
+router.post('/', checkAuth, validateJob, postJob);
 
-router.patch("/:id", validateJob, updateJob);
+router.patch('/:id', checkAuth, validateJob, updateJob);
 
-router.delete("/:id", deleteJob);
+router.delete('/:id', checkAuth, deleteJob);
 
-module.exports = router;
+export default router;

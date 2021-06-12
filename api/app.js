@@ -1,10 +1,14 @@
-require("dotenv").config();
+import dotenv from 'dotenv';
 
-const express = require("express");
-const cors = require("cors");
+import express from 'express';
+import mongoose from 'mongoose';
+import jobRoutes from './routes/api/jobs.js';
+import userRoutes from './routes/api/user.js';
+import cors from 'cors';
+
+dotenv.config();
 
 // set up db connection
-const mongoose = require("mongoose");
 const uri = process.env.DB_URI;
 mongoose.connect(uri, {
   useNewUrlParser: true,
@@ -14,22 +18,21 @@ mongoose.connect(uri, {
   // autoIndex: false,
 });
 const db = mongoose.connection;
-db.on("error", console.error.bind(console, "MongoDB connection error:"));
-db.once("open", () => {
-  console.log("Database connected");
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.once('open', () => {
+  console.log('Database connected');
 });
-
-// routes
-const jobs = require("./routes/api/jobs");
 
 const app = express();
 
 // middleware set up
 app.use(cors()); // enable all CORS requests
-app.use(express.json());
+app.use(express.json({ limit: '5mb' }));
+app.use(express.urlencoded({ limit: '5mb', extended: true }));
 
 // routes set up
-app.use("/api/jobs", jobs);
+app.use('/api/jobs', jobRoutes);
+app.use('/api/user', userRoutes);
 
 const port = process.env.PORT || 5000;
 
