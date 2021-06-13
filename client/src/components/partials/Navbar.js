@@ -1,24 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useHistory, useLocation } from 'react-router-dom';
-import { Avatar, Typography, Button } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect } from "react";
+import { Link, useHistory, useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 const Navbar = () => {
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
   const history = useHistory();
   const dispatch = useDispatch();
   const location = useLocation();
 
   const logout = () => {
-    dispatch({ type: 'LOGOUT' });
-    history.push('/');
+    dispatch({ type: "LOGOUT" });
+    history.push("/");
     setUser(null);
   };
 
   useEffect(() => {
-    const token = user?.token;
-
-    setUser(JSON.parse(localStorage.getItem('profile')));
+    // const token = user?.token;
+    setUser(JSON.parse(localStorage.getItem("profile")));
   }, [location]);
 
   return (
