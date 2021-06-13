@@ -1,10 +1,10 @@
-import { useContext, useEffect, useState } from 'react';
-import JobsApi from '../../apis/JobsApi';
-import { JobsContext } from '../../context/JobsContext';
-import { Link } from 'react-router-dom';
-import Job from './Job/Job';
-import SearchBar from '../SearchBar';
-import CategoryFilter from '../CategoryFilter';
+import { useContext, useEffect, useState } from "react";
+import JobsApi from "../../apis/JobsApi";
+import { JobsContext } from "../../context/JobsContext";
+import { Link } from "react-router-dom";
+import Job from "./Job/Job";
+import SearchBar from "../SearchBar";
+import CategoryFilter from "../CategoryFilter";
 import {
   Box,
   FormControl,
@@ -12,8 +12,8 @@ import {
   makeStyles,
   MenuItem,
   Select,
-} from '@material-ui/core';
-import Pagination from '@material-ui/lab/Pagination';
+} from "@material-ui/core";
+import Pagination from "@material-ui/lab/Pagination";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -23,14 +23,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Jobs = () => {
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
   const classes = useStyles();
   const { jobs, setJobs } = useContext(JobsContext);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(1);
   const [limit, setLimit] = useState(10);
 
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [filteredCategories, setFilteredCategories] = useState([]);
 
   const handlePageChange = (e, value) => {
@@ -45,12 +45,12 @@ const Jobs = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const categoriesString = filteredCategories.join(',');
+        const categoriesString = filteredCategories.join(",");
 
         const res = await JobsApi.get(
-          `/?page=${page}&limit=${limit}&search=${searchTerm}&categories=${encodeURIComponent(
-            categoriesString
-          )}`
+          `/?page=${page}&limit=${limit}&search=${encodeURIComponent(
+            searchTerm
+          )}&categories=${encodeURIComponent(categoriesString)}`
         );
         setJobs(res.data.data);
         setPage(res.data.page);
@@ -98,7 +98,8 @@ const Jobs = () => {
             display="flex"
             justifyContent="space-between"
             alignItems="center"
-            flexWrap="wrap">
+            flexWrap="wrap"
+          >
             <Pagination
               count={pageCount}
               page={page}
@@ -113,7 +114,8 @@ const Jobs = () => {
               <Select
                 labelId="limit-select-label"
                 value={limit}
-                onChange={handleLimitChange}>
+                onChange={handleLimitChange}
+              >
                 <MenuItem value={5}>5</MenuItem>
                 <MenuItem value={10}>10</MenuItem>
                 <MenuItem value={15}>15</MenuItem>

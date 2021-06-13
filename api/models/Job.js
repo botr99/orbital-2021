@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 // const Registration = require("./Registration");
-import { categories } from '../seeds/seedHelpers.js'; // To provide default categories
+import { categories } from "../seeds/seedHelpers.js"; // To provide default categories
 const Schema = mongoose.Schema;
 
 const jobSchema = new Schema(
@@ -65,5 +65,5 @@ const jobSchema = new Schema(
 //   }
 // });
 
-const Job = mongoose.model('Job', jobSchema);
+const Job = mongoose.model("Job", jobSchema);
 export default Job;

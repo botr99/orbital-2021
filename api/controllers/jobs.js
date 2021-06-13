@@ -71,7 +71,6 @@ export const getJobDetail = (req, res) => {
 
 export const postJob = async (req, res) => {
   const newJob = new Job({ ...req.body });
-
   try {
     await newJob.save();
     res.status(201).json(newJob);
