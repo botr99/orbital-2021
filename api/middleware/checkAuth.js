@@ -1,20 +1,20 @@
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 
-const secret = 'test';
+const secret = "test";
 
 const checkAuth = async (req, res, next) => {
   try {
-    const token = req.headers.authorization.split(' ')[1];
+    const token = req.headers.authorization.split(" ")[1];
+
     let decodedData;
 
     if (token) {
-      // Token found, user is authenticated
       decodedData = jwt.verify(token, secret);
-      req.userId = decodedData?.id;
+      req.userName = decodedData?.name;
     }
     next();
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.log(error);
   }
 };
 

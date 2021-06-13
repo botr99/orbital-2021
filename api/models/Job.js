@@ -8,7 +8,7 @@ const jobSchema = new Schema(
     organizer: {
       type: String,
     },
-    creator: String,
+
     // registerID: {
     //   type: String,
     //   // required: true,

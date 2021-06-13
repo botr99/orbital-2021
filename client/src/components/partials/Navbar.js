@@ -46,23 +46,13 @@ const Navbar = () => {
               New Job
             </a>
             {user ? (
-              <div>
-                <Avatar alt={user.result.name}>
-                  {user.result.name.charAt(0)}
-                </Avatar>
-                <Typography variant="h6">{user.result.name}</Typography>
-                <Button variant="contained" color="secondary" onClick={logout}>
-                  Logout
-                </Button>
-              </div>
+              <a className="nav-link" href="/" onClick={logout}>
+                Logout
+              </a>
             ) : (
-              <Button
-                component={Link}
-                to="/auth"
-                variant="contained"
-                color="primary">
+              <a className="nav-link" href="/auth">
                 Login
-              </Button>
+              </a>
             )}
           </div>
         </div>

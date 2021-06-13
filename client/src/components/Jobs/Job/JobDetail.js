@@ -6,6 +6,7 @@ import JobsApi from '../../../apis/JobsApi';
 const JobDetail = () => {
   const { id } = useParams();
   const [jobDetail, setJobDetail] = useState([]);
+  const user = JSON.parse(localStorage.getItem('profile')); // get logged in user
 
   let history = useHistory();
 
@@ -78,15 +79,16 @@ const JobDetail = () => {
               </li>
             </ul>
 
-            {/* Check if the current user is the one who created the job */}
-            <div className="card-body">
-              <Link to={`/jobs/${jobDetail._id}/edit`}>
-                <button className="btn btn-info">Edit</button>
-              </Link>
-              <button className="btn btn-danger" onClick={handleDelete}>
-                Delete job
-              </button>
-            </div>
+            {user?.result?.name === jobDetail.organizer && (
+              <div className="card-body">
+                <Link to={`/jobs/${jobDetail._id}/edit`}>
+                  <button className="btn btn-info">Edit</button>
+                </Link>
+                <button className="btn btn-danger" onClick={handleDelete}>
+                  Delete job
+                </button>
+              </div>
+            )}
 
             <div className="card-footer">
               <Link to="/">Return to Board</Link>

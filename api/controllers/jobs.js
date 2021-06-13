@@ -1,10 +1,10 @@
-import Job from '../models/Job.js';
+import Job from "../models/Job.js";
 
 export const getCategories = async (req, res) => {
   try {
     // returns an array of all the enum values
     // of the category field in the Job model
-    const categories = await Job.schema.path('categories').caster.enumValues;
+    const categories = await Job.schema.path("categories").caster.enumValues;
     res.status(200).json(categories);
   } catch (err) {
     res.status(404).json({ message: err.message });
@@ -17,18 +17,18 @@ export const getJobs = async (req, res) => {
       ? {
           // find all titles or organizers that contain the search query
           $or: [
-            { title: { $regex: req.query.search.trim(), $options: 'i' } },
-            { organizer: { $regex: req.query.search.trim(), $options: 'i' } },
+            { title: { $regex: req.query.search.trim(), $options: "i" } },
+            { organizer: { $regex: req.query.search.trim(), $options: "i" } },
           ],
         }
       : {};
 
     const categoriesQuery = req.query.categories
-      ? { categories: { $in: req.query.categories.split(',') } }
+      ? { categories: { $in: req.query.categories.split(",") } }
       : {};
 
     if (req.query.page <= 0 || req.query.limit <= 0) {
-      return res.status(404).json({ message: 'Page not found' });
+      return res.status(404).json({ message: "Page not found" });
     }
 
     const page = parseInt(req.query.page) || 1; // current page
@@ -43,7 +43,7 @@ export const getJobs = async (req, res) => {
 
     if (page > pageCount) {
       // page number is out of upper bound
-      return res.status(404).json({ message: 'Page not found' });
+      return res.status(404).json({ message: "Page not found" });
     }
 
     // paginate the jobs, sort them by the latest job created
@@ -51,7 +51,7 @@ export const getJobs = async (req, res) => {
       .find(categoriesQuery)
       .skip(skip)
       .limit(limit)
-      .sort({ createdAt: 'desc' });
+      .sort({ createdAt: "desc" });
 
     res.status(200).json({ page, limit, pageCount, data: jobs });
   } catch (err) {
@@ -64,14 +64,13 @@ export const getJobDetail = (req, res) => {
     .then((job) => {
       job
         ? res.status(200).json(job)
-        : res.status(404).json({ message: 'Job not found' });
+        : res.status(404).json({ message: "Job not found" });
     })
     .catch((err) => res.status(404).json({ message: err.message }));
 };
 
 export const postJob = async (req, res) => {
-  // req.userId available from checkAuth middleware, set organizer to currently logged in user
-  const newJob = new Job({ ...req.body, creator: req.userId });
+  const newJob = new Job({ ...req.body });
 
   try {
     await newJob.save();

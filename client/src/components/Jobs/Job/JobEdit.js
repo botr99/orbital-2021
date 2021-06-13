@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
-import JobsApi from '../../../apis/JobsApi';
+import { useEffect, useState } from "react";
+import { Link, useHistory, useParams } from "react-router-dom";
+import JobsApi from "../../../apis/JobsApi";
 import {
   Chip,
   FormControl,
@@ -9,7 +9,7 @@ import {
   makeStyles,
   MenuItem,
   Select,
-} from '@material-ui/core';
+} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -18,8 +18,8 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 300,
   },
   chips: {
-    display: 'flex',
-    flexWrap: 'wrap',
+    display: "flex",
+    flexWrap: "wrap",
   },
   chip: {
     margin: 2,
@@ -41,10 +41,12 @@ const JobEdit = () => {
   const { id } = useParams();
   const classes = useStyles();
 
-  const [title, setTitle] = useState('');
-  const [purpose, setPurpose] = useState('');
+  const [organizer, setOrganizer] = useState("");
+  const [title, setTitle] = useState("");
+  const [purpose, setPurpose] = useState("");
   const [categories, setCategories] = useState([]); // the categories retrieved from the database
   const [chosenCategories, setChosenCategories] = useState([]); // the categories the user selects
+  const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
 
   let history = useHistory();
 
@@ -55,6 +57,7 @@ const JobEdit = () => {
 
         // set title, purpose, categories to be the same
         // as that of the job retrieved.
+        setOrganizer(res.data.organizer);
         setTitle(res.data.title);
         setPurpose(res.data.purpose);
         setChosenCategories(res.data.categories);
@@ -64,7 +67,7 @@ const JobEdit = () => {
     };
     const fetchCategories = async () => {
       try {
-        const res = await JobsApi.get('/categories');
+        const res = await JobsApi.get("/categories");
         setCategories(res.data);
       } catch (err) {
         console.log(err);
@@ -80,6 +83,7 @@ const JobEdit = () => {
 
     try {
       await JobsApi.patch(`/${id}`, {
+        organizer: user?.result?.name,
         title,
         purpose,
         categories: chosenCategories,
@@ -90,6 +94,10 @@ const JobEdit = () => {
       console.log(err);
     }
   };
+
+  if (user?.result?.name !== organizer) {
+    return null;
+  }
 
   return (
     <div className="row">
