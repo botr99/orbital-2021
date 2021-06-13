@@ -58,7 +58,7 @@ const Auth = () => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          {isSignup ? 'Sign up' : 'Sign in'}
+          {isSignup ? 'Sign up' : 'Login'}
         </Typography>
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
@@ -107,13 +107,13 @@ const Auth = () => {
             variant="contained"
             color="primary"
             className={classes.submit}>
-            {isSignup ? 'Sign Up' : 'Sign In'}
+            {isSignup ? 'Sign Up' : 'Login'}
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
               <Button onClick={switchMode}>
                 {isSignup
-                  ? 'Already have an account? Sign in'
+                  ? 'Already have an account? Login'
                   : "Don't have an account? Sign Up"}
               </Button>
             </Grid>

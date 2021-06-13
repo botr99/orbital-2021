@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Jobs = () => {
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
   const classes = useStyles();
   const { jobs, setJobs } = useContext(JobsContext);
   const [page, setPage] = useState(1);
@@ -67,11 +68,13 @@ const Jobs = () => {
     <>
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <h1>Available Jobs</h1>
-        <Link to="/jobs/new">
-          <button className="btn btn-outline-primary" type="button">
-            Add Job
-          </button>
-        </Link>
+        {user && (
+          <Link to="/jobs/new">
+            <button className="btn btn-outline-primary" type="button">
+              Add Job
+            </button>
+          </Link>
+        )}
       </Box>
 
       <SearchBar
