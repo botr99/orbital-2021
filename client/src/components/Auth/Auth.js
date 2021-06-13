@@ -165,19 +165,24 @@ const Auth = () => {
               />
             )}
           </Grid>
-
           {isSignup && (
             <>
               <FormControlLabel
                 control={
-                  <Checkbox checked={agree} onChange={handleCheck} name="TnC" />
+                  <Checkbox
+                    color="primary"
+                    checked={agree}
+                    onChange={handleCheck}
+                    name="TnC"
+                  />
                 }
-                label="I agree to the "
+                label="I agree to the"
               />
-              <TnC />
+              <TnC setAgree={setAgree} />
             </>
           )}
           <Button
+            disabled={isSignup && !agree ? true : false}
             type="submit"
             fullWidth
             variant="contained"

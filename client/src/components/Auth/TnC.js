@@ -7,7 +7,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TnCText from "./TnCText";
 
-const TnC = () => {
+const TnC = ({ setAgree }) => {
   const [open, setOpen] = React.useState(false);
   const [scroll, setScroll] = React.useState("paper");
 
@@ -17,6 +17,16 @@ const TnC = () => {
   };
 
   const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleAgree = () => {
+    setAgree(true);
+    setOpen(false);
+  };
+
+  const handleDisagree = () => {
+    setAgree(false);
     setOpen(false);
   };
 
@@ -31,8 +41,10 @@ const TnC = () => {
   }, [open]);
 
   return (
-    <div>
-      <Button onClick={handleClickOpen("paper")}>Terms and Conditions</Button>
+    <>
+      <Button onClick={handleClickOpen("paper")}>
+        Terms and Conditions of Use
+      </Button>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -51,15 +63,15 @@ const TnC = () => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleDisagree} color="primary">
             Disagree
           </Button>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleAgree} color="primary">
             Agree
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </>
   );
 };
 
