@@ -11,6 +11,8 @@ import {
   InputLabel,
   MenuItem,
   FormControl,
+  FormControlLabel,
+  Checkbox,
 } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
@@ -18,6 +20,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { login, signup } from "../../actions/auth.js";
 import useStyles from "./styles";
 import Input from "./Input";
+import TnC from "./TnC";
 
 const initialFormData = {
   role: "",
@@ -32,6 +35,7 @@ const initialFormData = {
 
 const Auth = () => {
   const [formData, setFormData] = useState(initialFormData);
+  const [agree, setAgree] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
@@ -58,6 +62,8 @@ const Auth = () => {
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const handleCheck = () => setAgree(!agree);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -159,6 +165,18 @@ const Auth = () => {
               />
             )}
           </Grid>
+
+          {isSignup && (
+            <>
+              <FormControlLabel
+                control={
+                  <Checkbox checked={agree} onChange={handleCheck} name="TnC" />
+                }
+                label="I agree to the "
+              />
+              <TnC />
+            </>
+          )}
           <Button
             type="submit"
             fullWidth
