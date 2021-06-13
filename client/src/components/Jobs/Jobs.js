@@ -48,9 +48,9 @@ const Jobs = () => {
         const categoriesString = filteredCategories.join(",");
 
         const res = await JobsApi.get(
-          `/?page=${page}&limit=${limit}&search=${searchTerm}&categories=${encodeURIComponent(
-            categoriesString
-          )}`
+          `/?page=${page}&limit=${limit}&search=${encodeURIComponent(
+            searchTerm
+          )}&categories=${encodeURIComponent(categoriesString)}`
         );
         setJobs(res.data.data);
         setPage(res.data.page);
@@ -98,7 +98,8 @@ const Jobs = () => {
             display="flex"
             justifyContent="space-between"
             alignItems="center"
-            flexWrap="wrap">
+            flexWrap="wrap"
+          >
             <Pagination
               count={pageCount}
               page={page}
@@ -113,7 +114,8 @@ const Jobs = () => {
               <Select
                 labelId="limit-select-label"
                 value={limit}
-                onChange={handleLimitChange}>
+                onChange={handleLimitChange}
+              >
                 <MenuItem value={5}>5</MenuItem>
                 <MenuItem value={10}>10</MenuItem>
                 <MenuItem value={15}>15</MenuItem>
