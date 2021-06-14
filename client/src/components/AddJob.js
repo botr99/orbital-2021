@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import JobsApi from '../apis/JobsApi';
+import { useContext, useState } from "react";
+import { Link, useHistory } from "react-router-dom";
+import JobsApi from "../apis/JobsApi";
+import { JobsCategoryContext } from "../context/JobsCategoryContext";
 import {
   Chip,
   FormControl,
@@ -9,7 +10,7 @@ import {
   makeStyles,
   MenuItem,
   Select,
-} from '@material-ui/core';
+} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -18,8 +19,8 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 300,
   },
   chips: {
-    display: 'flex',
-    flexWrap: 'wrap',
+    display: "flex",
+    flexWrap: "wrap",
   },
   chip: {
     margin: 2,
@@ -39,32 +40,19 @@ const MenuProps = {
 
 const AddJob = () => {
   const classes = useStyles();
-  const [title, setTitle] = useState('');
-  const [purpose, setPurpose] = useState('');
-  const [categories, setCategories] = useState([]); // the categories retrieved from the database
+  const [title, setTitle] = useState("");
+  const [purpose, setPurpose] = useState("");
+  const categories = useContext(JobsCategoryContext); // the categories retrieved from the database
   const [chosenCategories, setChosenCategories] = useState([]); // the categories the user selects
-  const [organizer, setOrganizer] = useState(''); // to be removed once authentication is added
-  const user = JSON.parse(localStorage.getItem('profile')); // get logged in user
+  // const [organizer, setOrganizer] = useState(''); // to be removed once authentication is added
+  const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
 
   let history = useHistory();
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const res = await JobsApi.get('/categories');
-        setCategories(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    fetchCategories();
-  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await JobsApi.post('/', {
+      const res = await JobsApi.post("/", {
         title,
         organizer: user?.result?.name,
         purpose,
@@ -122,7 +110,8 @@ const AddJob = () => {
               cols="30"
               rows="5"
               value={purpose}
-              onChange={(e) => setPurpose(e.target.value)}></textarea>
+              onChange={(e) => setPurpose(e.target.value)}
+            ></textarea>
           </div>
 
           <FormControl className={classes.formControl}>
@@ -140,12 +129,14 @@ const AddJob = () => {
                   ))}
                 </div>
               )}
-              MenuProps={MenuProps}>
-              {categories.map((category) => (
-                <MenuItem key={category} value={category}>
-                  {category}
-                </MenuItem>
-              ))}
+              MenuProps={MenuProps}
+            >
+              {categories.length > 0 &&
+                categories.map((category) => (
+                  <MenuItem key={category} value={category}>
+                    {category}
+                  </MenuItem>
+                ))}
             </Select>
           </FormControl>
 

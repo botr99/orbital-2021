@@ -1,30 +1,16 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import JobsApi from "../../../apis/JobsApi";
+import { JobsCategoryContext } from "../../../context/JobsCategoryContext";
 import {
   Chip,
   FormControl,
   Input,
   InputLabel,
-  makeStyles,
   MenuItem,
   Select,
 } from "@material-ui/core";
-
-const useStyles = makeStyles((theme) => ({
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-    maxWidth: 300,
-  },
-  chips: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  chip: {
-    margin: 2,
-  },
-}));
+import useStyles from "./styles";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -44,7 +30,7 @@ const JobEdit = () => {
   const [organizer, setOrganizer] = useState("");
   const [title, setTitle] = useState("");
   const [purpose, setPurpose] = useState("");
-  const [categories, setCategories] = useState([]); // the categories retrieved from the database
+  const categories = useContext(JobsCategoryContext); // the categories retrieved from the database
   const [chosenCategories, setChosenCategories] = useState([]); // the categories the user selects
   const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
 
@@ -65,17 +51,8 @@ const JobEdit = () => {
         console.log(err);
       }
     };
-    const fetchCategories = async () => {
-      try {
-        const res = await JobsApi.get("/categories");
-        setCategories(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
 
     fetchJob();
-    fetchCategories();
   }, []);
 
   const handleSubmit = async (e) => {
@@ -130,7 +107,8 @@ const JobEdit = () => {
               cols="30"
               rows="5"
               value={purpose}
-              onChange={(e) => setPurpose(e.target.value)}></textarea>
+              onChange={(e) => setPurpose(e.target.value)}
+            ></textarea>
           </div>
 
           <FormControl className={classes.formControl}>
@@ -148,12 +126,14 @@ const JobEdit = () => {
                   ))}
                 </div>
               )}
-              MenuProps={MenuProps}>
-              {categories.map((category) => (
-                <MenuItem key={category} value={category}>
-                  {category}
-                </MenuItem>
-              ))}
+              MenuProps={MenuProps}
+            >
+              {categories.length > 0 &&
+                categories.map((category) => (
+                  <MenuItem key={category} value={category}>
+                    {category}
+                  </MenuItem>
+                ))}
             </Select>
           </FormControl>
 
