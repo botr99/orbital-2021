@@ -1,12 +1,27 @@
-import { Box, Chip } from '@material-ui/core';
-import { useEffect, useState } from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
-import JobsApi from '../../../apis/JobsApi';
+import {
+  Button,
+  Chip,
+  Card,
+  CardActions,
+  CardMedia,
+  CardContent,
+  Container,
+  Grid,
+  Typography,
+} from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from "@material-ui/icons/Edit";
+import { useEffect, useState } from "react";
+import { Link, useHistory, useParams } from "react-router-dom";
+import JobsApi from "../../../apis/JobsApi";
+import useStyles from "./styles";
 
 const JobDetail = () => {
+  const classes = useStyles();
+
   const { id } = useParams();
   const [jobDetail, setJobDetail] = useState([]);
-  const user = JSON.parse(localStorage.getItem('profile')); // get logged in user
+  const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
 
   let history = useHistory();
 
@@ -23,16 +38,16 @@ const JobDetail = () => {
     fetchJobDetail();
   }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Register form is submitted');
-  };
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   console.log("Register form is submitted");
+  // };
 
   const handleDelete = async () => {
     try {
       await JobsApi.delete(`/${id}`);
       // redirect to home page
-      history.push('/');
+      history.push("/");
     } catch (err) {
       console.log(err);
     }
@@ -51,76 +66,87 @@ const JobDetail = () => {
   // }
 
   return (
-    <>
-      <div className="row">
-        <div className="col-6 offset-3">
-          <div className="card">
-            {/* <img src="..." className="card-img-top" alt="..." /> */}
-            <div className="card-body">
-              <h5 className="card-title">{jobDetail.title}</h5>
-              <p className="card-text">{jobDetail.purpose}</p>
-            </div>
-            <ul className="list-group list-group-flush">
-              <li className="list-group-item text-muted">
-                <Box display="flex" flexWrap="wrap">
-                  {jobDetail.categories &&
-                    jobDetail.categories.map((category) => (
-                      <Chip
-                        key={category}
-                        label={category}
-                        clickable={true}
-                        style={{ margin: 2 }}
-                      />
-                    ))}
-                </Box>
-              </li>
-              <li className="list-group-item">
-                Organized by: {jobDetail.organizer}
-              </li>
-            </ul>
+    <Container maxWidth="md">
+      {jobDetail && (
+        <Card className={classes.card}>
+          <CardMedia
+            className={classes.cardMedia}
+            image="https://source.unsplash.com/random"
+            title="Job Image"
+          />
+          <CardContent className={classes.cardContent}>
+            <Typography gutterBottom variant="h5">
+              {jobDetail.title}
+            </Typography>
+            <Typography>Organized by: {jobDetail.organizer}</Typography>
+            <Typography>{jobDetail.purpose}</Typography>
+            <Grid>
+              {jobDetail.categories &&
+                jobDetail.categories.map((category) => (
+                  <Chip
+                    key={category}
+                    label={category}
+                    clickable={true}
+                    style={{ margin: 2 }}
+                  />
+                ))}
+            </Grid>
+          </CardContent>
+          <CardActions>
+            <Grid>
+              {user?.result?.name === jobDetail.organizer && (
+                <Grid>
+                  <Button
+                    color="primary"
+                    startIcon={<EditIcon />}
+                    component={Link}
+                    to={`/jobs/${jobDetail._id}/edit`}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    className={classes.button}
+                    startIcon={<DeleteIcon />}
+                    onClick={handleDelete}
+                  >
+                    Delete
+                  </Button>
+                </Grid>
+              )}
 
-            {user?.result?.name === jobDetail.organizer && (
-              <div className="card-body">
-                <Link to={`/jobs/${jobDetail._id}/edit`}>
-                  <button className="btn btn-info">Edit</button>
-                </Link>
-                <button className="btn btn-danger" onClick={handleDelete}>
-                  Delete job
-                </button>
-              </div>
-            )}
-
-            <div className="card-footer">
               <Link to="/">Return to Board</Link>
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* To be abstracted to Register component */}
-      {/* <div className="row" style={{ marginTop: "2em" }}>
-        <div className="col-6 offset-3">
-          <div className="card">
-            <form className="mb-3" onSubmit={handleSubmit}>
-              <div className="mb-3">
-                <label className="form-label" htmlFor="name">
-                  Register
-                </label>
-                <input
-                  className="form-control"
-                  type="text"
-                  name="name"
-                  id="name"
-                  required
-                />
-              </div>
-              <button className="btn btn-success">Submit</button>
-            </form>
-            <h5>Registered:</h5>
-          </div>
-        </div>
-      </div> */}
-    </>
+            </Grid>
+          </CardActions>
+        </Card>
+      )}
+    </Container>
   );
+
+  //  To be abstracted to Register component
+  // <div className="row" style={{ marginTop: "2em" }}>
+  //   <div className="col-6 offset-3">
+  //     <div className="card">
+  //       <form className="mb-3" onSubmit={handleSubmit}>
+  //         <div className="mb-3">
+  //           <label className="form-label" htmlFor="name">
+  //             Register
+  //           </label>
+  //           <input
+  //             className="form-control"
+  //             type="text"
+  //             name="name"
+  //             id="name"
+  //             required
+  //           />
+  //         </div>
+  //         <button className="btn btn-success">Submit</button>
+  //       </form>
+  //       <h5>Registered:</h5>
+  //     </div>
+  //   </div>
+  // </div>
 };
 
 export default JobDetail;
