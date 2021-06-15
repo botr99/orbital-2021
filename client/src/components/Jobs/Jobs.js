@@ -6,7 +6,7 @@ import Job from "./Job/Job";
 import SearchBar from "../SearchBar";
 import CategoryFilter from "../CategoryFilter";
 import PaginationLimit from "../PaginationLimit/PaginationLimit";
-import { Box, Button, Container, Grid } from "@material-ui/core";
+import { Box, Button, Grid } from "@material-ui/core";
 
 const Jobs = () => {
   const user = JSON.parse(localStorage.getItem("profile"));
@@ -68,13 +68,13 @@ const Jobs = () => {
 
       {jobs && (
         <>
-          <Container>
+          <Box marginTop={3}>
             <Grid container spacing={6}>
               {jobs.map((job) => (
                 <Job key={job._id} job={job} />
               ))}
             </Grid>
-          </Container>
+          </Box>
           <PaginationLimit
             page={page}
             setPage={setPage}
