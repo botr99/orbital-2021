@@ -40,9 +40,11 @@ const Navbar = () => {
             <a className="nav-link" href="/">
               Home
             </a>
-            <a className="nav-link" href="/jobs/new">
-              New Job
-            </a>
+            {user && (
+              <a className="nav-link" href="/jobs/new">
+                New Job
+              </a>
+            )}
             {user ? (
               <a className="nav-link" href="/" onClick={logout}>
                 Logout

@@ -100,8 +100,7 @@ const JobDetail = () => {
                     color="primary"
                     startIcon={<EditIcon />}
                     component={Link}
-                    to={`/jobs/${jobDetail._id}/edit`}
-                  >
+                    to={`/jobs/${jobDetail._id}/edit`}>
                     Edit
                   </Button>
                   <Button
@@ -109,14 +108,14 @@ const JobDetail = () => {
                     color="secondary"
                     className={classes.button}
                     startIcon={<DeleteIcon />}
-                    onClick={handleDelete}
-                  >
+                    onClick={handleDelete}>
                     Delete
                   </Button>
                 </Grid>
               )}
-
-              <Link to="/">Return to Board</Link>
+              <Button component={Link} to={`/`} color="primary">
+                Return to Board
+              </Button>
             </Grid>
           </CardActions>
         </Card>
