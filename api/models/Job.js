@@ -50,6 +50,7 @@ const jobSchema = new Schema(
     //     ref: "Registration",
     //   },
     // ],
+    isApproved: { type: Boolean, default: false },
   },
   { timestamps: true } // assigns createdAt and updatedAt fields to the schema
 );

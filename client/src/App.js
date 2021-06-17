@@ -9,6 +9,7 @@ import AddJob from "./components/AddJob";
 import JobEdit from "./components/Jobs/Job/JobEdit";
 import JobDetail from "./components/Jobs/Job/JobDetail";
 import Auth from "./components/Auth/Auth";
+import Admin from "./components/Auth/Admin";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <JobsCategoryContextProvider>
           <main className="container mt-5">
             <Switch>
+              <Route path="/admin" exact component={Admin} />
               <Route path="/auth" exact component={Auth} />
               <Route path="/jobs/new" exact>
                 <AddJob />
