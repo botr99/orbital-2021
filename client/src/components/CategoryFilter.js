@@ -1,25 +1,12 @@
-import React, { useEffect, useState } from "react";
-import JobsApi from "../apis/JobsApi";
+import React, { useContext } from "react";
+import { JobsCategoryContext } from "../context/JobsCategoryContext";
 
 const CategoryFilter = ({
   filteredCategories,
   setFilteredCategories,
   setPage,
 }) => {
-  const [categories, setCategories] = useState([]);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const res = await JobsApi.get("/categories");
-        setCategories(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    fetchCategories();
-  }, []);
+  const categories = useContext(JobsCategoryContext);
 
   const handleChange = (e) => {
     const isChecked = e.target.checked;

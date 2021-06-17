@@ -1,15 +1,21 @@
-import { useEffect, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import JobsApi from '../apis/JobsApi';
+import { useContext, useState } from "react";
+import { Link, useHistory } from "react-router-dom";
+import JobsApi from "../apis/JobsApi";
+import { JobsCategoryContext } from "../context/JobsCategoryContext";
 import {
+  Button,
   Chip,
   FormControl,
   Input,
   InputLabel,
-  makeStyles,
   MenuItem,
   Select,
-} from '@material-ui/core';
+  TextField,
+  Typography,
+} from "@material-ui/core";
+
+/* styles */
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -18,14 +24,13 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 300,
   },
   chips: {
-    display: 'flex',
-    flexWrap: 'wrap',
+    display: "flex",
+    flexWrap: "wrap",
   },
   chip: {
     margin: 2,
   },
 }));
-
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -36,39 +41,34 @@ const MenuProps = {
     },
   },
 };
+/* end styles */
+
+const initialFormData = {
+  title: "",
+  purpose: "",
+  categories: [],
+};
 
 const AddJob = () => {
   const classes = useStyles();
-  const [title, setTitle] = useState('');
-  const [purpose, setPurpose] = useState('');
-  const [categories, setCategories] = useState([]); // the categories retrieved from the database
-  const [chosenCategories, setChosenCategories] = useState([]); // the categories the user selects
-  const [organizer, setOrganizer] = useState(''); // to be removed once authentication is added
-  const user = JSON.parse(localStorage.getItem('profile')); // get logged in user
+
+  const [formData, setFormData] = useState(initialFormData);
+  const categories = useContext(JobsCategoryContext); // the categories retrieved from the database
+  const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
 
   let history = useHistory();
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const res = await JobsApi.get('/categories');
-        setCategories(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    fetchCategories();
-  }, []);
+  const handleChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await JobsApi.post('/', {
-        title,
+      const res = await JobsApi.post("/", {
+        title: formData.title,
         organizer: user?.result?.name,
-        purpose,
-        categories: chosenCategories,
+        purpose: formData.purpose,
+        categories: formData.categories,
       });
       // redirect to the job detail page
       history.push(`/jobs/${res.data._id}`);
@@ -79,95 +79,70 @@ const AddJob = () => {
 
   return (
     <div className="row">
-      <h1 className="text-center">New Job</h1>
+      <Typography variant="h5" align="center" gutterBottom>
+        Add Job
+      </Typography>
       <div className="col-6 offset-3">
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
-            <label className="form-label" htmlFor="title">
-              Title
-            </label>
-            <input
-              required
-              className="form-control"
-              type="text"
-              id="title"
+            <TextField
+              variant="outlined"
+              label="Title"
               name="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              value={formData.title}
+              onChange={handleChange}
+              fullWidth
+              required
             />
           </div>
-          {/* <div className="mb-3">
-            <label className="form-label" htmlFor="organizer">
-              Organizer
-            </label>
-            <input
-              required
-              className="form-control"
-              type="text"
-              id="organizer"
-              name="organizer"
-              value={organizer}
-              onChange={(e) => setOrganizer(e.target.value)}
-            />
-          </div> */}
           <div className="mb-3">
-            <label className="form-label" htmlFor="purpose">
-              Purpose
-            </label>
-            <textarea
-              required
-              className="form-control"
+            <TextField
+              variant="outlined"
+              label="Purpose"
               name="purpose"
-              id="purpose"
-              cols="30"
-              rows="5"
-              value={purpose}
-              onChange={(e) => setPurpose(e.target.value)}></textarea>
+              value={formData.purpose}
+              multiline
+              rows="10"
+              onChange={handleChange}
+              fullWidth
+              required
+            />
           </div>
-
-          <FormControl className={classes.formControl}>
-            <InputLabel id="mutiple-categories-label">Categories</InputLabel>
-            <Select
-              labelId="mutiple-categories-label"
-              multiple
-              value={chosenCategories}
-              onChange={(e) => setChosenCategories(e.target.value)}
-              input={<Input id="select-multiple-chip" />}
-              renderValue={(selected) => (
-                <div className={classes.chips}>
-                  {selected.map((value) => (
-                    <Chip key={value} label={value} className={classes.chip} />
-                  ))}
-                </div>
-              )}
-              MenuProps={MenuProps}>
-              {categories.map((category) => (
-                <MenuItem key={category} value={category}>
-                  {category}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          {/* <div className="mb-3">
-            <select
-              className="form-select"
-              name="category"
-              id="category"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            >
-              {categories.map((category) => (
-                <option value={category} key={category}>
-                  {category}
-                </option>
-              ))}
-            </select>
-          </div> */}
           <div className="mb-3">
-            <button className="btn btn-outline-success" type="submit">
+            <FormControl required className={classes.formControl}>
+              <InputLabel id="mutiple-categories-label">Categories</InputLabel>
+              <Select
+                labelId="mutiple-categories-label"
+                multiple
+                name="categories"
+                value={formData.categories}
+                onChange={handleChange}
+                input={<Input id="select-multiple-chip" />}
+                renderValue={(selected) => (
+                  <div className={classes.chips}>
+                    {selected.map((value) => (
+                      <Chip
+                        key={value}
+                        label={value}
+                        className={classes.chip}
+                      />
+                    ))}
+                  </div>
+                )}
+                MenuProps={MenuProps}
+              >
+                {categories.map((category) => (
+                  <MenuItem key={category} value={category}>
+                    {category}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+          <div className="mb-3">
+            <Button variant="contained" color="primary" type="submit">
               Add Job
-            </button>
+            </Button>
           </div>
         </form>
         <Link to="/">Return to Board</Link>

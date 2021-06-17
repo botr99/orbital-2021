@@ -5,26 +5,12 @@ import { Link } from "react-router-dom";
 import Job from "./Job/Job";
 import SearchBar from "../SearchBar";
 import CategoryFilter from "../CategoryFilter";
-import {
-  Box,
-  FormControl,
-  InputLabel,
-  makeStyles,
-  MenuItem,
-  Select,
-} from "@material-ui/core";
-import Pagination from "@material-ui/lab/Pagination";
-
-const useStyles = makeStyles((theme) => ({
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-  },
-}));
+import PaginationLimit from "../PaginationLimit/PaginationLimit";
+import { Box, Button, Grid } from "@material-ui/core";
 
 const Jobs = () => {
   const user = JSON.parse(localStorage.getItem("profile"));
-  const classes = useStyles();
+
   const { jobs, setJobs } = useContext(JobsContext);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(1);
@@ -32,15 +18,6 @@ const Jobs = () => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredCategories, setFilteredCategories] = useState([]);
-
-  const handlePageChange = (e, value) => {
-    setPage(value);
-  };
-
-  const handleLimitChange = (e) => {
-    setPage(1); // go back to the front page
-    setLimit(e.target.value); // change the number of jobs per page
-  };
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -70,9 +47,9 @@ const Jobs = () => {
         <h1>Available Jobs</h1>
         {user && (
           <Link to="/jobs/new">
-            <button className="btn btn-outline-primary" type="button">
+            <Button variant="contained" color="primary">
               Add Job
-            </button>
+            </Button>
           </Link>
         )}
       </Box>
@@ -90,39 +67,22 @@ const Jobs = () => {
       {/* DateFilter */}
 
       {jobs && (
-        <Box>
-          {jobs.map((job) => (
-            <Job key={job._id} job={job} />
-          ))}
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            flexWrap="wrap"
-          >
-            <Pagination
-              count={pageCount}
-              page={page}
-              variant="outlined"
-              color="primary"
-              showFirstButton
-              showLastButton
-              onChange={handlePageChange}
-            />
-            <FormControl className={classes.formControl}>
-              <InputLabel>Jobs per Page</InputLabel>
-              <Select
-                labelId="limit-select-label"
-                value={limit}
-                onChange={handleLimitChange}
-              >
-                <MenuItem value={5}>5</MenuItem>
-                <MenuItem value={10}>10</MenuItem>
-                <MenuItem value={15}>15</MenuItem>
-              </Select>
-            </FormControl>
+        <>
+          <Box marginTop={3}>
+            <Grid container spacing={6}>
+              {jobs.map((job) => (
+                <Job key={job._id} job={job} />
+              ))}
+            </Grid>
           </Box>
-        </Box>
+          <PaginationLimit
+            page={page}
+            setPage={setPage}
+            pageCount={pageCount}
+            limit={limit}
+            setLimit={setLimit}
+          />
+        </>
       )}
     </>
   );
