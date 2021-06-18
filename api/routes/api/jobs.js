@@ -2,13 +2,16 @@ import express from "express";
 import {
   getCategories,
   getJobs,
+  getJobRegistrations,
   getJobDetail,
+  postJobRegistration,
   postJob,
   updateJob,
   deleteJob,
 } from "../../controllers/jobs.js";
 import { validateJob } from "../../middleware/validateJob.js";
 import checkAuth from "../../middleware/checkAuth.js";
+import ROLES from "../../utils/roles.js";
 
 const router = express.Router();
 
@@ -22,7 +25,11 @@ router.get("/categories", getCategories);
 
 router.get("/", getJobs);
 
+router.get("/:id/registrations", getJobRegistrations);
+
 router.get("/:id", getJobDetail);
+
+router.post("/:id/registrations", postJobRegistration); // only students can register
 
 router.post("/", validateJob, postJob);
 

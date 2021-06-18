@@ -9,5 +9,14 @@ const userSchema = mongoose.Schema({
   password: { type: String, required: true },
 });
 
+// allow students to see which jobs they have registered for
+userSchema.virtual("registeredJobs", {
+  ref: "Job",
+  localField: "_id",
+  foreignField: "registrations",
+});
+userSchema.set("toObject", { virtuals: true });
+userSchema.set("toJSON", { virtuals: true });
+
 const User = mongoose.model("User", userSchema);
 export default User;
