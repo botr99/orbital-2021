@@ -64,6 +64,7 @@ const JobDetail = () => {
   //     </div>
   //   );
   // }
+
   const isCreator = () => {
     if (user?.result?.name === jobDetail.organizer) {
       return (

@@ -229,7 +229,9 @@ const JobEdit = () => {
             Update Job
           </Button>
         </form>
-        <Link to={`/jobs/${id}`}>Back to Job</Link>
+        <Button component={Link} to={`/jobs/${id}`} color="primary">
+          Back to Job
+        </Button>
       </div>
     </div>
   );

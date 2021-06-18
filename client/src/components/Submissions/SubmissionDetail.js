@@ -38,6 +38,18 @@ const SubmissionDetail = () => {
     fetchJobDetail();
   }, []);
 
+  const handleApprove = async () => {
+    try {
+      await JobsApi.patch(`/${id}`, {
+        ...jobDetail,
+        isApproved: true,
+      });
+      history.push("/submissions");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   // const handleSubmit = (e) => {
   //   e.preventDefault();
   //   console.log("Register form is submitted");
@@ -46,8 +58,7 @@ const SubmissionDetail = () => {
   const handleDelete = async () => {
     try {
       await JobsApi.delete(`/${id}`);
-      // redirect to home page
-      history.push("/");
+      history.push("/submissions");
     } catch (err) {
       console.log(err);
     }
@@ -64,30 +75,6 @@ const SubmissionDetail = () => {
   //     </div>
   //   );
   // }
-  const isCreator = () => {
-    if (user?.result?.name === jobDetail.organizer) {
-      return (
-        <Grid>
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<EditIcon />}
-            component={Link}
-            to={`/jobs/${jobDetail._id}/edit`}>
-            Edit
-          </Button>
-          <Button
-            variant="contained"
-            color="secondary"
-            className={classes.button}
-            startIcon={<DeleteIcon />}
-            onClick={handleDelete}>
-            Delete
-          </Button>
-        </Grid>
-      );
-    }
-  };
 
   return (
     <Container maxWidth="md">
@@ -118,7 +105,23 @@ const SubmissionDetail = () => {
           </CardContent>
           <CardActions>
             <Grid>
-              {isCreator}
+              <Grid>
+                <Button
+                  onClick={handleApprove}
+                  color="primary"
+                  className={classes.button}
+                  variant="contained">
+                  Approve
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  className={classes.button}
+                  startIcon={<DeleteIcon />}
+                  onClick={handleDelete}>
+                  Reject
+                </Button>
+              </Grid>
               <Button component={Link} to={`/submissions`} color="primary">
                 Return to Submissions
               </Button>

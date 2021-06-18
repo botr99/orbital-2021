@@ -39,7 +39,7 @@ const Jobs = () => {
     };
 
     fetchJobs();
-  }, [page, limit, searchTerm, filteredCategories, setJobs, jobs]);
+  }, [page, limit, searchTerm, filteredCategories, setJobs]);
 
   return (
     <>
