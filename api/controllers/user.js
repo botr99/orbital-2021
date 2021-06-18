@@ -24,7 +24,11 @@ export const login = async (req, res) => {
 
     // User with correct password found
     const token = jwt.sign(
-      { email: existingUser.email, id: existingUser._id },
+      {
+        email: existingUser.email,
+        id: existingUser._id,
+        role: existingUser.role,
+      },
       secret,
       {
         expiresIn: "1h",
@@ -70,9 +74,13 @@ export const signup = async (req, res) => {
 
     console.log(newUser);
 
-    const token = jwt.sign({ email: newUser.email, id: newUser._id }, secret, {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign(
+      { email: newUser.email, id: newUser._id, role: existingUser.role },
+      secret,
+      {
+        expiresIn: "1h",
+      }
+    );
 
     res.status(201).json({ result: newUser, token });
   } catch (error) {

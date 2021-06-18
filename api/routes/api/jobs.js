@@ -25,16 +25,38 @@ router.get("/categories", getCategories);
 
 router.get("/", getJobs);
 
-router.get("/:id/registrations", getJobRegistrations);
+router.get(
+  "/:id/registrations",
+  checkAuth([ROLES.StudentGroup, ROLES.Organization]),
+  getJobRegistrations
+);
 
 router.get("/:id", getJobDetail);
 
-router.post("/:id/registrations", postJobRegistration); // only students can register
+router.post(
+  "/:id/registrations",
+  checkAuth([ROLES.Student]),
+  postJobRegistration
+); // only students can register
 
-router.post("/", validateJob, postJob);
+router.post(
+  "/",
+  checkAuth([ROLES.StudentGroup, ROLES.Organization]),
+  validateJob,
+  postJob
+);
 
-router.patch("/:id", validateJob, updateJob);
+router.patch(
+  "/:id",
+  checkAuth([ROLES.StudentGroup, ROLES.Organization]),
+  validateJob,
+  updateJob
+);
 
-router.delete("/:id", deleteJob);
+router.delete(
+  "/:id",
+  checkAuth([ROLES.Admin, ROLES.StudentGroup, ROLES.Organization]),
+  deleteJob
+);
 
 export default router;
