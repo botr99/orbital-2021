@@ -39,7 +39,7 @@ const Jobs = () => {
     };
 
     fetchJobs();
-  }, [page, limit, searchTerm, filteredCategories]);
+  }, [page, limit, searchTerm, filteredCategories, setJobs]);
 
   return (
     <>
@@ -70,9 +70,10 @@ const Jobs = () => {
         <>
           <Box marginTop={3}>
             <Grid container spacing={6}>
-              {jobs.map((job) => (
-                <Job key={job._id} job={job} />
-              ))}
+              {jobs.map(
+                (job) =>
+                  job.isApproved ? <Job key={job._id} job={job} /> : null // only approved jobs
+              )}
             </Grid>
           </Box>
           <PaginationLimit

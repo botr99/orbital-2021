@@ -24,14 +24,23 @@ const Job = ({ job }) => {
   const truncatedPurpose =
     purpose.length > 150 ? purpose.substring(0, 150) + "..." : purpose;
 
+  const handleClick = async () => {
+    try {
+      await JobsApi.patch(`/${_id}`, {
+        title,
+        organizer,
+        purpose,
+        categories,
+        isApproved: true,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <Grid item xs={12} sm={6}>
       <Card className={classes.card}>
-        <CardMedia
-          className={classes.cardMedia}
-          image="https://source.unsplash.com/random"
-          title="Job Image"
-        />
         <CardContent className={classes.cardContent}>
           <Typography gutterBottom variant="h5">
             {truncatedTitle}
@@ -55,6 +64,9 @@ const Job = ({ job }) => {
             </Grid>
             <Button component={Link} to={`/jobs/${_id}`} color="primary">
               View Job
+            </Button>
+            <Button onClick={handleClick} color="primary">
+              Approve
             </Button>
           </Grid>
         </CardActions>

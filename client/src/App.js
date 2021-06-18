@@ -10,8 +10,12 @@ import JobEdit from "./components/Jobs/Job/JobEdit";
 import JobDetail from "./components/Jobs/Job/JobDetail";
 import Auth from "./components/Auth/Auth";
 import Admin from "./components/Auth/Admin";
+import Submissions from "./components/Submissions/Submissions";
+import { Typography } from "@material-ui/core";
 
 function App() {
+  const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
+
   return (
     <div className="d-flex flex-column vh-100">
       <Navbar />
@@ -20,6 +24,9 @@ function App() {
           <main className="container mt-5">
             <Switch>
               <Route path="/admin" exact component={Admin} />
+              {user && (
+                <Route path="/submissions" exact component={Submissions} />
+              )}
               <Route path="/auth" exact component={Auth} />
               <Route path="/jobs/new" exact>
                 <AddJob />
@@ -32,6 +39,9 @@ function App() {
               </Route>
               <Route path="/" exact>
                 <Jobs />
+              </Route>
+              <Route path="*">
+                <Typography>Page not found</Typography>
               </Route>
             </Switch>
           </main>

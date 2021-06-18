@@ -64,6 +64,30 @@ const JobDetail = () => {
   //     </div>
   //   );
   // }
+  const isCreator = () => {
+    if (user?.result?.name === jobDetail.organizer) {
+      return (
+        <Grid>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<EditIcon />}
+            component={Link}
+            to={`/jobs/${jobDetail._id}/edit`}>
+            Edit
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            className={classes.button}
+            startIcon={<DeleteIcon />}
+            onClick={handleDelete}>
+            Delete
+          </Button>
+        </Grid>
+      );
+    }
+  };
 
   return (
     <Container maxWidth="md">
@@ -94,25 +118,7 @@ const JobDetail = () => {
           </CardContent>
           <CardActions>
             <Grid>
-              {user?.result?.name === jobDetail.organizer && (
-                <Grid>
-                  <Button
-                    color="primary"
-                    startIcon={<EditIcon />}
-                    component={Link}
-                    to={`/jobs/${jobDetail._id}/edit`}>
-                    Edit
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    className={classes.button}
-                    startIcon={<DeleteIcon />}
-                    onClick={handleDelete}>
-                    Delete
-                  </Button>
-                </Grid>
-              )}
+              {isCreator()}
               <Button component={Link} to={`/`} color="primary">
                 Return to Board
               </Button>

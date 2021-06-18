@@ -48,7 +48,8 @@ export const getJobs = async (req, res) => {
 
     // paginate the jobs, sort them by the latest job created
     const jobs = await Job.find(searchQuery) // only show jobs that are approved
-      .find({ $and: [categoriesQuery, { isApproved: true }] })
+      // .find({ $and: [categoriesQuery, { isApproved: true }] })
+      .find(categoriesQuery)
       .skip(skip)
       .limit(limit)
       .sort({ createdAt: "desc" });

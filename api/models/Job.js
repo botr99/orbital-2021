@@ -8,16 +8,26 @@ const jobSchema = new Schema(
     organizer: {
       type: String,
     },
-
-    // registerID: {
-    //   type: String,
-    //   // required: true,
-    // },
-    contact: {
+    registerNum: {
+      type: String,
+    },
+    contactName: {
       type: Number,
       maxlength: 8,
-      // required: true,
     },
+
+    telephoneNum: {
+      type: Number,
+      maxlength: 8,
+    },
+    mobileNum: {
+      type: Number,
+      maxlength: 8,
+    },
+    email: {
+      type: String,
+    },
+
     title: {
       type: String,
       required: true,
@@ -25,6 +35,9 @@ const jobSchema = new Schema(
     purpose: {
       type: String,
       required: true,
+    },
+    skills: {
+      type: String,
     },
     categories: {
       type: [{ type: String, enum: categories }], // allow for multiple categories

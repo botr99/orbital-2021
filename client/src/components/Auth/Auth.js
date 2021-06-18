@@ -158,6 +158,12 @@ const Auth = () => {
             />
             {isSignup && (
               <Input
+                helperText={
+                  formData.password !== formData.confirmPassword
+                    ? "Passwords do not match"
+                    : ""
+                }
+                handleError={formData.password !== formData.confirmPassword}
                 name="confirmPassword"
                 label="Repeat Password"
                 handleChange={handleChange}
