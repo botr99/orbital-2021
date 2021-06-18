@@ -11,6 +11,8 @@ import JobDetail from "./components/Jobs/Job/JobDetail";
 import Auth from "./components/Auth/Auth";
 import Admin from "./components/Auth/Admin";
 import Submissions from "./components/Submissions/Submissions";
+import Submission from "./components/Submissions/Submission";
+import SubmissionDetail from "./components/Submissions/SubmissionDetail";
 import NotFound from "./components/NotFound";
 
 function App() {
@@ -40,6 +42,13 @@ function App() {
                 exact
                 component={() =>
                   user?.result?.isAdmin ? <Submissions /> : <NotFound />
+                }
+              />
+              <Route
+                path="/submissions/:id"
+                exact
+                component={() =>
+                  user?.result?.isAdmin ? <SubmissionDetail /> : <NotFound />
                 }
               />
               <Route

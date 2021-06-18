@@ -26,9 +26,16 @@ const MenuProps = {
   },
 };
 
+const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
+
 const initialFormData = {
+  contactName: "",
+  telephoneNum: "",
+  mobileNum: "",
+  email: "",
   title: "",
   purpose: "",
+  skills: "",
   categories: [],
 };
 
@@ -40,7 +47,6 @@ const JobEdit = () => {
 
   const [organizer, setOrganizer] = useState("");
   const categories = useContext(JobsCategoryContext); // the categories retrieved from the database
-  const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
 
   let history = useHistory();
 
@@ -57,8 +63,13 @@ const JobEdit = () => {
         setOrganizer(res.data.organizer);
 
         setFormData({
+          contactName: res.data.contactName,
+          telephoneNum: res.data.telephoneNum,
+          mobileNum: res.data.mobileNum,
+          email: res.data.email,
           title: res.data.title,
           purpose: res.data.purpose,
+          skills: res.data.skills,
           categories: res.data.categories,
         });
       } catch (err) {
@@ -75,8 +86,14 @@ const JobEdit = () => {
     try {
       await JobsApi.patch(`/${id}`, {
         organizer: user?.result?.name,
+        registerNum: user?.result?.registerNum,
+        contactName: formData.contactName,
+        telephoneNum: formData.telephoneNum,
+        mobileNum: formData.telephoneNum,
+        email: formData.email,
         title: formData.title,
         purpose: formData.purpose,
+        skills: formData.skills,
         categories: formData.categories,
       });
       // redirect to the job detail page
@@ -142,8 +159,7 @@ const JobEdit = () => {
                     ))}
                   </div>
                 )}
-                MenuProps={MenuProps}
-              >
+                MenuProps={MenuProps}>
                 {categories.length > 0 &&
                   categories.map((category) => (
                     <MenuItem key={category} value={category}>
@@ -152,6 +168,62 @@ const JobEdit = () => {
                   ))}
               </Select>
             </FormControl>
+          </div>
+          <div className="mb-3">
+            <TextField
+              variant="outlined"
+              label="Name of Contact Person"
+              name="contactName"
+              value={formData.contactName}
+              onChange={handleChange}
+              fullWidth
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <TextField
+              variant="outlined"
+              label="Telephone Number"
+              name="telephoneNum"
+              value={formData.telephoneNum}
+              type="tel"
+              onChange={handleChange}
+              half
+              required
+            />
+            <TextField
+              variant="outlined"
+              label="Mobile Number"
+              name="mobileNum"
+              value={formData.mobileNum}
+              type="tel"
+              onChange={handleChange}
+              half
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <TextField
+              variant="outlined"
+              label="Email"
+              name="email"
+              value={formData.email}
+              type="email"
+              onChange={handleChange}
+              fullWidth
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <TextField
+              variant="outlined"
+              label="Skills Required"
+              name="skills"
+              value={formData.skills}
+              onChange={handleChange}
+              fullWidth
+              required
+            />
           </div>
           <Button variant="contained" color="primary" type="submit">
             Update Job
