@@ -46,11 +46,13 @@ const MenuProps = {
 };
 /* end styles */
 
+const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
+
 const initialFormData = {
   contactName: "",
-  telephoneNum: "",
-  mobileNum: "",
-  email: "",
+  telephoneNum: user?.result?.contactNum,
+  mobileNum: user?.result?.contactNum,
+  email: user?.result?.email,
   title: "",
   purpose: "",
   skills: "",
@@ -64,8 +66,6 @@ const AddJob = () => {
   const [agree, setAgree] = useState(false);
   const handleCheck = () => setAgree(!agree);
   const categories = useContext(JobsCategoryContext); // the categories retrieved from the database
-  const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
-  console.log(user);
 
   let history = useHistory();
 
@@ -161,7 +161,6 @@ const AddJob = () => {
               label="Name of Contact Person"
               name="contactName"
               value={formData.contactName}
-              type="tel"
               onChange={handleChange}
               fullWidth
               required
@@ -172,7 +171,6 @@ const AddJob = () => {
               variant="outlined"
               label="Telephone Number"
               name="telephoneNum"
-              defaultValue={user?.result?.contactNum}
               value={formData.telephoneNum}
               type="tel"
               onChange={handleChange}
@@ -183,7 +181,6 @@ const AddJob = () => {
               variant="outlined"
               label="Mobile Number"
               name="mobileNum"
-              defaultValue={user?.result?.contactNum}
               value={formData.mobileNum}
               type="tel"
               onChange={handleChange}
@@ -196,7 +193,6 @@ const AddJob = () => {
               variant="outlined"
               label="Email"
               name="email"
-              defaultValue={user?.result?.email}
               value={formData.email}
               type="email"
               onChange={handleChange}

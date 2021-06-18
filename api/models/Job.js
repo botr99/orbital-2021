@@ -12,8 +12,7 @@ const jobSchema = new Schema(
       type: String,
     },
     contactName: {
-      type: Number,
-      maxlength: 8,
+      type: String,
     },
 
     telephoneNum: {
