@@ -65,6 +65,7 @@ const AddJob = () => {
   const handleCheck = () => setAgree(!agree);
   const categories = useContext(JobsCategoryContext); // the categories retrieved from the database
   const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
+  console.log(user);
 
   let history = useHistory();
 
@@ -160,6 +161,7 @@ const AddJob = () => {
               label="Name of Contact Person"
               name="contactName"
               value={formData.contactName}
+              type="tel"
               onChange={handleChange}
               fullWidth
               required
