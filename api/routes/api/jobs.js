@@ -27,7 +27,7 @@ router.get("/", getJobs);
 
 router.get(
   "/:id/registrations",
-  checkAuth([ROLES.StudentGroup, ROLES.Organization]),
+  checkAuth([ROLES.Admin, ROLES.StudentGroup, ROLES.Organization]),
   getJobRegistrations
 );
 
@@ -41,14 +41,14 @@ router.post(
 
 router.post(
   "/",
-  checkAuth([ROLES.StudentGroup, ROLES.Organization]),
+  checkAuth([ROLES.Admin, ROLES.StudentGroup, ROLES.Organization]),
   validateJob,
   postJob
 );
 
 router.patch(
   "/:id",
-  checkAuth([ROLES.StudentGroup, ROLES.Organization]),
+  checkAuth([ROLES.Admin, ROLES.StudentGroup, ROLES.Organization]),
   validateJob,
   updateJob
 );

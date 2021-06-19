@@ -21,6 +21,8 @@ const checkAuth = (permissions) => async (req, res, next) => {
     }
 
     // req.userName = decodedData?.name;
+    req.id = decodedData.id;
+    console.log(req.id);
     console.log("valid access");
     next();
   } catch (err) {

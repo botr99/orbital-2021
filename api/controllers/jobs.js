@@ -59,6 +59,35 @@ export const getJobs = async (req, res) => {
   }
 };
 
+export const getJobRegistrations = async (req, res) => {
+  // console.log("Orgs/student groups (and admin) allowed here only");
+  try {
+    const job = await Job.findById(req.params.id).populate(
+      "registrations",
+      "name contactNum email -_id" // only retrieve certain fields, and exclude _id from being shown
+    );
+    // console.log(job);
+    res.status(200).json(job.registrations);
+  } catch (err) {
+    res.status(404).json({ message: "Job not found" });
+  }
+};
+/* Example of a response to an org wanting to find out which students
+register for a particular job that it posted.
+[
+    {
+        "name": "student1",
+        "contactNum": 12345678,
+        "email": "student1@gmail.com"
+    },
+    {
+        "name": "student2",
+        "contactNum": 87654321,
+        "email": "student2@gmail.com"
+    }
+]
+*/
+
 export const getJobDetail = (req, res) => {
   Job.findById(req.params.id)
     .then((job) => {
@@ -67,6 +96,23 @@ export const getJobDetail = (req, res) => {
         : res.status(404).json({ message: "Job not found" });
     })
     .catch((err) => res.status(404).json({ message: err.message }));
+};
+
+export const postJobRegistration = async (req, res) => {
+  // console.log("Students allowed here only");
+  try {
+    const studentId = req.id;
+    const updatedJob = await Job.findByIdAndUpdate(
+      req.params.id,
+      { $addToSet: { registrations: studentId } },
+      {
+        new: true,
+      }
+    );
+    res.status(200).json(updatedJob);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
 };
 
 export const postJob = async (req, res) => {
