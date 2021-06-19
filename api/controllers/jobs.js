@@ -64,7 +64,7 @@ export const getJobRegistrations = async (req, res) => {
   try {
     const job = await Job.findById(req.params.id).populate(
       "registrations",
-      "name contactNum email -_id" // only retrieve certain fields, and exclude _id from being shown
+      "name contactNum email" // only retrieve certain fields
     );
     // console.log(job);
     res.status(200).json(job.registrations);
@@ -72,15 +72,16 @@ export const getJobRegistrations = async (req, res) => {
     res.status(404).json({ message: "Job not found" });
   }
 };
-/* Example of a response to an org wanting to find out which students
-register for a particular job that it posted.
+/* Example of a response.
 [
     {
+        "_id": """ student1's id """,
         "name": "student1",
         "contactNum": 12345678,
         "email": "student1@gmail.com"
     },
     {
+        "_id": """ student2's id """,
         "name": "student2",
         "contactNum": 87654321,
         "email": "student2@gmail.com"

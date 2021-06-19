@@ -27,7 +27,12 @@ router.get("/", getJobs);
 
 router.get(
   "/:id/registrations",
-  checkAuth([ROLES.Admin, ROLES.StudentGroup, ROLES.Organization]),
+  checkAuth([
+    ROLES.Admin,
+    ROLES.StudentGroup,
+    ROLES.Organization,
+    ROLES.Student,
+  ]),
   getJobRegistrations
 );
 
