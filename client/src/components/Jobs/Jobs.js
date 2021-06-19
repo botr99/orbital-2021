@@ -81,6 +81,7 @@ const Jobs = () => {
             pageCount={pageCount}
             limit={limit}
             setLimit={setLimit}
+            itemName="Jobs"
           />
         </>
       )}
