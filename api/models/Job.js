@@ -8,16 +8,25 @@ const jobSchema = new Schema(
     organizer: {
       type: String,
     },
+    registerNum: {
+      type: String,
+    },
+    contactName: {
+      type: String,
+    },
 
-    // registerID: {
-    //   type: String,
-    //   // required: true,
-    // },
-    contact: {
+    telephoneNum: {
       type: Number,
       maxlength: 8,
-      // required: true,
     },
+    mobileNum: {
+      type: Number,
+      maxlength: 8,
+    },
+    email: {
+      type: String,
+    },
+
     title: {
       type: String,
       required: true,
@@ -25,6 +34,9 @@ const jobSchema = new Schema(
     purpose: {
       type: String,
       required: true,
+    },
+    skills: {
+      type: String,
     },
     categories: {
       type: [{ type: String, enum: categories }], // allow for multiple categories
@@ -50,6 +62,7 @@ const jobSchema = new Schema(
     //     ref: "Registration",
     //   },
     // ],
+    isApproved: { type: Boolean, default: false },
   },
   { timestamps: true } // assigns createdAt and updatedAt fields to the schema
 );

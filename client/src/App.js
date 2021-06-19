@@ -4,13 +4,20 @@ import Footer from "./components/partials/Footer";
 import Jobs from "./components/Jobs/Jobs";
 import { JobsContextProvider } from "./context/JobsContext";
 import { JobsCategoryContextProvider } from "./context/JobsCategoryContext";
-import { Route, Switch } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 import AddJob from "./components/AddJob";
 import JobEdit from "./components/Jobs/Job/JobEdit";
 import JobDetail from "./components/Jobs/Job/JobDetail";
 import Auth from "./components/Auth/Auth";
+import Admin from "./components/Auth/Admin";
+import Submissions from "./components/Submissions/Submissions";
+import Submission from "./components/Submissions/Submission";
+import SubmissionDetail from "./components/Submissions/SubmissionDetail";
+import NotFound from "./components/NotFound";
 
 function App() {
+  const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
+
   return (
     <div className="d-flex flex-column vh-100">
       <Navbar />
@@ -18,7 +25,8 @@ function App() {
         <JobsCategoryContextProvider>
           <main className="container mt-5">
             <Switch>
-              <Route path="/auth" exact component={Auth} />
+              <Route path="/" exact component={() => <Redirect to="/jobs" />} />
+              <Route path="/jobs" exact component={Jobs} />
               <Route path="/jobs/new" exact>
                 <AddJob />
               </Route>
@@ -28,9 +36,27 @@ function App() {
               <Route path="/jobs/:id" exact>
                 <JobDetail />
               </Route>
-              <Route path="/" exact>
-                <Jobs />
-              </Route>
+              <Route path="/admin" exact component={Admin} />
+              <Route
+                path="/submissions"
+                exact
+                component={() =>
+                  user?.result?.isAdmin ? <Submissions /> : <NotFound />
+                }
+              />
+              <Route
+                path="/submissions/:id"
+                exact
+                component={() =>
+                  user?.result?.isAdmin ? <SubmissionDetail /> : <NotFound />
+                }
+              />
+              <Route
+                path="/auth"
+                exact
+                component={() => (!user ? <Auth /> : <Redirect to="/jobs" />)}
+              />
+              <Route path="*" component={NotFound} />;
             </Switch>
           </main>
         </JobsCategoryContextProvider>

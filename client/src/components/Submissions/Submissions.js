@@ -2,13 +2,13 @@ import { useContext, useEffect, useState } from "react";
 import JobsApi from "../../apis/JobsApi";
 import { JobsContext } from "../../context/JobsContext";
 import { Link } from "react-router-dom";
-import Job from "./Job/Job";
+import Submission from "./Submission";
 import SearchBar from "../SearchBar";
 import CategoryFilter from "../CategoryFilter";
 import PaginationLimit from "../PaginationLimit/PaginationLimit";
 import { Box, Button, Grid } from "@material-ui/core";
 
-const Jobs = () => {
+const Submissions = () => {
   const user = JSON.parse(localStorage.getItem("profile"));
 
   const { jobs, setJobs } = useContext(JobsContext);
@@ -44,7 +44,7 @@ const Jobs = () => {
   return (
     <>
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <h1>Available Jobs</h1>
+        <h1>Submissions</h1>
         {user && (
           <Link to="/jobs/new">
             <Button variant="contained" color="primary">
@@ -72,7 +72,9 @@ const Jobs = () => {
             <Grid container spacing={6}>
               {jobs.map(
                 (job) =>
-                  job.isApproved ? <Job key={job._id} job={job} /> : null // only approved jobs
+                  !job.isApproved ? (
+                    <Submission key={job._id} job={job} />
+                  ) : null // all unapproved jobs
               )}
             </Grid>
           </Box>
@@ -89,4 +91,4 @@ const Jobs = () => {
   );
 };
 
-export default Jobs;
+export default Submissions;

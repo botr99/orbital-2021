@@ -24,9 +24,9 @@ router.get("/", getJobs);
 
 router.get("/:id", getJobDetail);
 
-router.post("/", validateJob, postJob);
+router.post("/", postJob);
 
-router.patch("/:id", validateJob, updateJob);
+router.patch("/:id", updateJob);
 
 router.delete("/:id", deleteJob);
 

@@ -10,12 +10,12 @@ import {
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import useStyles from "./styles";
-import JobsApi from "../../../apis/JobsApi";
+import JobsApi from "../../apis/JobsApi";
 
-const Job = ({ job }) => {
+const Submission = ({ job }) => {
   const classes = useStyles();
 
-  const { title, organizer, purpose, categories, _id } = job;
+  const { organizer, title, purpose, categories, _id } = job;
 
   // add a "..." if title or purpose is too long to be shown entirely
   // on the card
@@ -23,6 +23,17 @@ const Job = ({ job }) => {
     title.length > 40 ? title.substring(0, 40) + "..." : title;
   const truncatedPurpose =
     purpose.length > 150 ? purpose.substring(0, 150) + "..." : purpose;
+
+  const handleClick = async () => {
+    try {
+      await JobsApi.patch(`/${_id}`, {
+        ...job,
+        isApproved: true,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <Grid item xs={12} sm={6}>
@@ -53,8 +64,11 @@ const Job = ({ job }) => {
                 />
               ))}
             </Grid>
-            <Button component={Link} to={`/jobs/${_id}`} color="primary">
-              View Job
+            <Button component={Link} to={`/submissions/${_id}`} color="primary">
+              View Submission
+            </Button>
+            <Button onClick={handleClick} color="primary">
+              Approve
             </Button>
           </Grid>
         </CardActions>
@@ -63,4 +77,4 @@ const Job = ({ job }) => {
   );
 };
 
-export default Job;
+export default Submission;

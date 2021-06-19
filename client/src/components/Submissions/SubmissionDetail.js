@@ -13,10 +13,10 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
-import JobsApi from "../../../apis/JobsApi";
+import JobsApi from "../../apis/JobsApi";
 import useStyles from "./styles";
 
-const JobDetail = () => {
+const SubmissionDetail = () => {
   const classes = useStyles();
 
   const { id } = useParams();
@@ -38,6 +38,18 @@ const JobDetail = () => {
     fetchJobDetail();
   }, []);
 
+  const handleApprove = async () => {
+    try {
+      await JobsApi.patch(`/${id}`, {
+        ...jobDetail,
+        isApproved: true,
+      });
+      history.push("/submissions");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   // const handleSubmit = (e) => {
   //   e.preventDefault();
   //   console.log("Register form is submitted");
@@ -46,8 +58,7 @@ const JobDetail = () => {
   const handleDelete = async () => {
     try {
       await JobsApi.delete(`/${id}`);
-      // redirect to home page
-      history.push("/");
+      history.push("/submissions");
     } catch (err) {
       console.log(err);
     }
@@ -64,31 +75,6 @@ const JobDetail = () => {
   //     </div>
   //   );
   // }
-
-  const isCreator = () => {
-    if (user?.result?.name === jobDetail.organizer) {
-      return (
-        <Grid>
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<EditIcon />}
-            component={Link}
-            to={`/jobs/${jobDetail._id}/edit`}>
-            Edit
-          </Button>
-          <Button
-            variant="contained"
-            color="secondary"
-            className={classes.button}
-            startIcon={<DeleteIcon />}
-            onClick={handleDelete}>
-            Delete
-          </Button>
-        </Grid>
-      );
-    }
-  };
 
   return (
     <Container maxWidth="md">
@@ -119,9 +105,25 @@ const JobDetail = () => {
           </CardContent>
           <CardActions>
             <Grid>
-              {isCreator()}
-              <Button component={Link} to={`/`} color="primary">
-                Return to Board
+              <Grid>
+                <Button
+                  onClick={handleApprove}
+                  color="primary"
+                  className={classes.button}
+                  variant="contained">
+                  Approve
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  className={classes.button}
+                  startIcon={<DeleteIcon />}
+                  onClick={handleDelete}>
+                  Reject
+                </Button>
+              </Grid>
+              <Button component={Link} to={`/submissions`} color="primary">
+                Return to Submissions
               </Button>
             </Grid>
           </CardActions>
@@ -155,4 +157,4 @@ const JobDetail = () => {
   // </div>
 };
 
-export default JobDetail;
+export default SubmissionDetail;

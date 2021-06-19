@@ -47,7 +47,8 @@ export const getJobs = async (req, res) => {
     }
 
     // paginate the jobs, sort them by the latest job created
-    const jobs = await Job.find(searchQuery)
+    const jobs = await Job.find(searchQuery) // only show jobs that are approved
+      // .find({ $and: [categoriesQuery, { isApproved: true }] })
       .find(categoriesQuery)
       .skip(skip)
       .limit(limit)
@@ -74,6 +75,7 @@ export const postJob = async (req, res) => {
   try {
     await newJob.save();
     res.status(201).json(newJob);
+    console.log(newJob);
   } catch (err) {
     res.status(409).json({ message: err.message });
   }

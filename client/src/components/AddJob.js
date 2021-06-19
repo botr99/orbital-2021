@@ -12,7 +12,10 @@ import {
   Select,
   TextField,
   Typography,
+  FormControlLabel,
+  Checkbox,
 } from "@material-ui/core";
+import TnC from "./Auth/TnC";
 
 /* styles */
 import { makeStyles } from "@material-ui/core/styles";
@@ -43,9 +46,16 @@ const MenuProps = {
 };
 /* end styles */
 
+const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
+
 const initialFormData = {
+  contactName: "",
+  telephoneNum: user?.result?.contactNum,
+  mobileNum: user?.result?.contactNum,
+  email: user?.result?.email,
   title: "",
   purpose: "",
+  skills: "",
   categories: [],
 };
 
@@ -53,8 +63,9 @@ const AddJob = () => {
   const classes = useStyles();
 
   const [formData, setFormData] = useState(initialFormData);
+  const [agree, setAgree] = useState(false);
+  const handleCheck = () => setAgree(!agree);
   const categories = useContext(JobsCategoryContext); // the categories retrieved from the database
-  const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
 
   let history = useHistory();
 
@@ -65,9 +76,15 @@ const AddJob = () => {
     e.preventDefault();
     try {
       const res = await JobsApi.post("/", {
-        title: formData.title,
         organizer: user?.result?.name,
+        registerNum: user?.result?.registerNum,
+        contactName: formData.contactName,
+        telephoneNum: formData.telephoneNum,
+        mobileNum: formData.telephoneNum,
+        email: formData.email,
+        title: formData.title,
         purpose: formData.purpose,
+        skills: formData.skills,
         categories: formData.categories,
       });
       // redirect to the job detail page
@@ -129,8 +146,7 @@ const AddJob = () => {
                     ))}
                   </div>
                 )}
-                MenuProps={MenuProps}
-              >
+                MenuProps={MenuProps}>
                 {categories.map((category) => (
                   <MenuItem key={category} value={category}>
                     {category}
@@ -140,12 +156,88 @@ const AddJob = () => {
             </FormControl>
           </div>
           <div className="mb-3">
-            <Button variant="contained" color="primary" type="submit">
+            <TextField
+              variant="outlined"
+              label="Name of Contact Person"
+              name="contactName"
+              value={formData.contactName}
+              onChange={handleChange}
+              fullWidth
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <TextField
+              variant="outlined"
+              label="Telephone Number"
+              name="telephoneNum"
+              value={formData.telephoneNum}
+              type="tel"
+              onChange={handleChange}
+              half
+              required
+            />
+            <TextField
+              variant="outlined"
+              label="Mobile Number"
+              name="mobileNum"
+              value={formData.mobileNum}
+              type="tel"
+              onChange={handleChange}
+              half
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <TextField
+              variant="outlined"
+              label="Email"
+              name="email"
+              value={formData.email}
+              type="email"
+              onChange={handleChange}
+              fullWidth
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <TextField
+              variant="outlined"
+              label="Skills Required"
+              name="skills"
+              value={formData.skills}
+              onChange={handleChange}
+              fullWidth
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    color="primary"
+                    checked={agree}
+                    onChange={handleCheck}
+                    name="TnC"
+                  />
+                }
+                label="I agree to the"
+              />
+              <TnC setAgree={setAgree} />
+            </>
+            <Button
+              disabled={!agree}
+              variant="contained"
+              color="primary"
+              type="submit">
               Add Job
             </Button>
           </div>
         </form>
-        <Link to="/">Return to Board</Link>
+        <Button component={Link} to={`/`} color="primary">
+          Return to Board
+        </Button>
       </div>
     </div>
   );

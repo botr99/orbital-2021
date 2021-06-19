@@ -40,6 +40,11 @@ const Navbar = () => {
             <a className="nav-link" href="/">
               Home
             </a>
+            {user?.result?.isAdmin && (
+              <a className="nav-link" href="/submissions">
+                Submissions
+              </a>
+            )}
             {user && (
               <a className="nav-link" href="/jobs/new">
                 New Job
