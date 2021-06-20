@@ -56,12 +56,12 @@ const jobSchema = new Schema(
         // required: true,
       },
     },
-    // registrations: [
-    //   {
-    //     type: Schema.Types.ObjectId,
-    //     ref: "Registration",
-    //   },
-    // ],
+    registrations: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
     isApproved: { type: Boolean, default: false },
   },
   { timestamps: true } // assigns createdAt and updatedAt fields to the schema

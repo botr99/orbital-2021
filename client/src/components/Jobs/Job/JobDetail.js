@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import JobsApi from "../../../apis/JobsApi";
 import useStyles from "./styles";
+import Register from "../../Register/Register";
 
 const JobDetail = () => {
   const classes = useStyles();
@@ -91,43 +92,71 @@ const JobDetail = () => {
   };
 
   return (
-    <Container maxWidth="md">
-      {jobDetail && (
-        <Card className={classes.card}>
-          <CardMedia
-            className={classes.cardMedia}
-            image="https://source.unsplash.com/random"
-            title="Job Image"
+    <>
+      <Container maxWidth="md">
+        {jobDetail && (
+          <Card className={classes.card}>
+            <CardMedia
+              className={classes.cardMedia}
+              image="https://source.unsplash.com/random"
+              title="Job Image"
+            />
+            <CardContent className={classes.cardContent}>
+              <Typography gutterBottom variant="h5">
+                {jobDetail.title}
+              </Typography>
+              <Typography>Organized by: {jobDetail.organizer}</Typography>
+              <Typography>{jobDetail.purpose}</Typography>
+              <Grid>
+                {jobDetail.categories &&
+                  jobDetail.categories.map((category) => (
+                    <Chip
+                      key={category}
+                      label={category}
+                      clickable={true}
+                      style={{ margin: 2 }}
+                    />
+                  ))}
+              </Grid>
+            </CardContent>
+            <CardActions>
+              <Grid>
+                {user?.result?.name === jobDetail.organizer && (
+                  <Grid>
+                    <Button
+                      color="primary"
+                      startIcon={<EditIcon />}
+                      component={Link}
+                      to={`/jobs/${jobDetail._id}/edit`}>
+                      Edit
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      className={classes.button}
+                      startIcon={<DeleteIcon />}
+                      onClick={handleDelete}>
+                      Delete
+                    </Button>
+                  </Grid>
+                )}
+                <Button component={Link} to={`/`} color="primary">
+                  Return to Board
+                </Button>
+              </Grid>
+            </CardActions>
+          </Card>
+        )}
+      </Container>
+      {user && (
+        <Container maxWidth="md">
+          <Register
+            jobId={id}
+            isOrganizer={user?.result?.name === jobDetail.organizer}
           />
-          <CardContent className={classes.cardContent}>
-            <Typography gutterBottom variant="h5">
-              {jobDetail.title}
-            </Typography>
-            <Typography>Organized by: {jobDetail.organizer}</Typography>
-            <Typography>{jobDetail.purpose}</Typography>
-            <Grid>
-              {jobDetail.categories &&
-                jobDetail.categories.map((category) => (
-                  <Chip
-                    key={category}
-                    label={category}
-                    clickable={true}
-                    style={{ margin: 2 }}
-                  />
-                ))}
-            </Grid>
-          </CardContent>
-          <CardActions>
-            <Grid>
-              {isCreator()}
-              <Button component={Link} to={`/`} color="primary">
-                Return to Board
-              </Button>
-            </Grid>
-          </CardActions>
-        </Card>
+        </Container>
       )}
-    </Container>
+    </>
   );
 
   //  To be abstracted to Register component

@@ -2,13 +2,16 @@ import express from "express";
 import {
   getCategories,
   getJobs,
+  getJobRegistrations,
   getJobDetail,
+  postJobRegistration,
   postJob,
   updateJob,
   deleteJob,
 } from "../../controllers/jobs.js";
 import { validateJob } from "../../middleware/validateJob.js";
 import checkAuth from "../../middleware/checkAuth.js";
+import ROLES from "../../utils/roles.js";
 
 const router = express.Router();
 
@@ -22,12 +25,43 @@ router.get("/categories", getCategories);
 
 router.get("/", getJobs);
 
+router.get(
+  "/:id/registrations",
+  checkAuth([
+    ROLES.Admin,
+    ROLES.StudentGroup,
+    ROLES.Organization,
+    ROLES.Student,
+  ]),
+  getJobRegistrations
+);
+
 router.get("/:id", getJobDetail);
 
-router.post("/", postJob);
+router.post(
+  "/:id/registrations",
+  checkAuth([ROLES.Student]),
+  postJobRegistration
+); // only students can register
 
-router.patch("/:id", updateJob);
+router.post(
+  "/",
+  checkAuth([ROLES.Admin, ROLES.StudentGroup, ROLES.Organization]),
+  validateJob,
+  postJob
+);
 
-router.delete("/:id", deleteJob);
+router.patch(
+  "/:id",
+  checkAuth([ROLES.Admin, ROLES.StudentGroup, ROLES.Organization]),
+  validateJob,
+  updateJob
+);
+
+router.delete(
+  "/:id",
+  checkAuth([ROLES.Admin, ROLES.StudentGroup, ROLES.Organization]),
+  deleteJob
+);
 
 export default router;

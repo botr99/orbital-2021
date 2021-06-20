@@ -21,6 +21,7 @@ import { login, signup } from "../../actions/auth.js";
 import useStyles from "./styles";
 import Input from "./Input";
 import TnC from "./TnC";
+import ROLES from "../../utils/roles.js";
 
 const initialFormData = {
   role: "",
@@ -91,13 +92,13 @@ const Auth = () => {
                   onChange={handleChange}
                   autoFocus
                   label="role">
-                  <MenuItem value={"Student"}>Student</MenuItem>
-                  <MenuItem value={"Student Group"}>Student Group</MenuItem>
-                  <MenuItem value={"Organization"}>Organization</MenuItem>
+                  <MenuItem value={ROLES.Student}>Student</MenuItem>
+                  <MenuItem value={ROLES.StudentGroup}>Student Group</MenuItem>
+                  <MenuItem value={ROLES.Organization}>Organization</MenuItem>
                 </Select>
               </FormControl>
             )}
-            {isSignup && formData.role === "Student" && (
+            {isSignup && formData.role === ROLES.Student && (
               <>
                 <Input
                   name="firstName"
@@ -115,8 +116,8 @@ const Auth = () => {
               </>
             )}
             {isSignup &&
-              (formData.role === "Student Group" ||
-                formData.role === "Organization") && (
+              (formData.role === ROLES.StudentGroup ||
+                formData.role === ROLES.Organization) && (
                 <>
                   <Input
                     name="name"

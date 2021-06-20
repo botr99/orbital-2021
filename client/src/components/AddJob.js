@@ -47,7 +47,8 @@ const MenuProps = {
 /* end styles */
 
 const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
-
+console.log(user);
+console.log(user?.result?.name);
 const initialFormData = {
   contactName: "",
   telephoneNum: user?.result?.contactNum,
@@ -75,6 +76,7 @@ const AddJob = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      console.log(formData);
       const res = await JobsApi.post("/", {
         organizer: user?.result?.name,
         registerNum: user?.result?.registerNum,
@@ -226,6 +228,8 @@ const AddJob = () => {
               />
               <TnC setAgree={setAgree} />
             </>
+          </div>
+          <div className="mb-3">
             <Button
               disabled={!agree}
               variant="contained"

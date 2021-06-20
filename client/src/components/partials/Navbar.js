@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import ROLES from "../../utils/roles";
 
 const Navbar = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
@@ -40,7 +41,7 @@ const Navbar = () => {
             <a className="nav-link" href="/">
               Home
             </a>
-            {user?.result?.isAdmin && (
+            {user?.result?.role === ROLES.Admin && (
               <a className="nav-link" href="/submissions">
                 Submissions
               </a>

@@ -15,20 +15,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PaginationLimit = ({ page, setPage, pageCount, limit, setLimit }) => {
+const PaginationLimit = ({
+  page,
+  setPage,
+  pageCount,
+  limit,
+  setLimit,
+  itemName,
+}) => {
   const classes = useStyles();
 
-  const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+  // const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
   const handlePageChange = (e, value) => {
     setPage(value);
-    scrollToTop();
+    // scrollToTop();
   };
 
   const handleLimitChange = (e) => {
     setPage(1); // go back to the front page
     setLimit(e.target.value); // change the number of jobs per page
-    scrollToTop();
+    // scrollToTop();
   };
 
   return (
@@ -49,7 +56,7 @@ const PaginationLimit = ({ page, setPage, pageCount, limit, setLimit }) => {
           onChange={handlePageChange}
         />
         <FormControl className={classes.formControl}>
-          <InputLabel>Jobs per Page</InputLabel>
+          <InputLabel>{itemName || "Items"} per Page</InputLabel>
           <Select
             labelId="limit-select-label"
             value={limit}

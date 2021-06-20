@@ -14,6 +14,7 @@ import Submissions from "./components/Submissions/Submissions";
 import Submission from "./components/Submissions/Submission";
 import SubmissionDetail from "./components/Submissions/SubmissionDetail";
 import NotFound from "./components/NotFound";
+import ROLES from "./utils/roles";
 
 function App() {
   const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
@@ -41,14 +42,22 @@ function App() {
                 path="/submissions"
                 exact
                 component={() =>
-                  user?.result?.isAdmin ? <Submissions /> : <NotFound />
+                  user?.result?.role === ROLES.Admin ? (
+                    <Submissions />
+                  ) : (
+                    <NotFound />
+                  )
                 }
               />
               <Route
                 path="/submissions/:id"
                 exact
                 component={() =>
-                  user?.result?.isAdmin ? <SubmissionDetail /> : <NotFound />
+                  user?.result?.role === ROLES.Admin ? (
+                    <SubmissionDetail />
+                  ) : (
+                    <NotFound />
+                  )
                 }
               />
               <Route
