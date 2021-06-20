@@ -17,13 +17,20 @@ import {
 import { useHistory } from "react-router-dom";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 
-import { login, adminsignup } from "../../actions/auth.js";
+import { login, signup } from "../../actions/auth.js";
 import useStyles from "./styles";
 import Input from "./Input";
+import ROLES from "../../utils/roles";
 
 const initialFormData = {
+  role: ROLES.Admin,
+  firstName: "",
+  lastName: "",
+  name: "",
+  contactNum: "",
   email: "",
   password: "",
+  confirmPassword: "",
 };
 
 const Auth = () => {
@@ -46,7 +53,7 @@ const Auth = () => {
     console.log(formData);
 
     if (isSignup) {
-      dispatch(adminsignup(formData, history));
+      dispatch(signup(formData, history));
     } else {
       dispatch(login(formData, history));
     }
@@ -66,6 +73,9 @@ const Auth = () => {
         </Typography>
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
+            {isSignup && (
+              <Input name="name" label="Name" handleChange={handleChange} />
+            )}
             <Input
               name="email"
               label="Email Address"
