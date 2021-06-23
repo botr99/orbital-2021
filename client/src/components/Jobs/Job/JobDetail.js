@@ -147,6 +147,9 @@ const JobDetail = () => {
                 </Button>
               </Grid>
             </CardActions>
+            <Typography color="textSecondary" variant="subtitle2">
+              Last updated: {new Date(jobDetail.updatedAt).toDateString()}
+            </Typography>
           </Card>
         )}
       </Container>
