@@ -19,6 +19,9 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 120,
     maxWidth: 300,
   },
+  header: {
+    textDecoration: "underline",
+  },
   chips: {
     display: "flex",
     flexWrap: "wrap",

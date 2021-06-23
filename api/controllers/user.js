@@ -97,6 +97,7 @@ export const signup = async (req, res) => {
     email,
     password,
     regNum,
+    website,
   } = req.body;
 
   try {
@@ -116,6 +117,7 @@ export const signup = async (req, res) => {
       contactNum,
       email,
       password: hashedPassword,
+      website,
     });
 
     console.log(newUser);

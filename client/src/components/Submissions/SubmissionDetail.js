@@ -10,7 +10,6 @@ import {
   Typography,
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
-import EditIcon from "@material-ui/icons/Edit";
 import { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import JobsApi from "../../apis/JobsApi";
@@ -21,7 +20,6 @@ const SubmissionDetail = () => {
 
   const { id } = useParams();
   const [jobDetail, setJobDetail] = useState([]);
-  const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
 
   let history = useHistory();
 
@@ -82,15 +80,17 @@ const SubmissionDetail = () => {
         <Card className={classes.card}>
           <CardMedia
             className={classes.cardMedia}
-            image="https://source.unsplash.com/random"
+            image={
+              jobDetail.selectedFile || "https://source.unsplash.com/random"
+            }
             title="Job Image"
           />
           <CardContent className={classes.cardContent}>
             <Typography gutterBottom variant="h5">
               {jobDetail.title}
             </Typography>
-            <Typography>Organized by: {jobDetail.organizer}</Typography>
-            <Typography>{jobDetail.purpose}</Typography>
+            <Typography paragraph>{jobDetail.purpose}</Typography>
+            <Typography>Skills required: {jobDetail.skills}</Typography>
             <Grid>
               {jobDetail.categories &&
                 jobDetail.categories.map((category) => (
@@ -102,6 +102,39 @@ const SubmissionDetail = () => {
                   />
                 ))}
             </Grid>
+            <hr />
+            <Typography variant="h6" className={classes.header}>
+              Organizer Information
+            </Typography>
+            <Typography>Name of Organizer: {jobDetail.organizer}</Typography>
+            <Typography>
+              UEN/Charity Registration Number/Society Registration Number:{" "}
+              {jobDetail.regNum || "Not Applicable"}
+            </Typography>
+
+            <Typography variant="h6" className={classes.header}>
+              Contact Information
+            </Typography>
+            <Typography>
+              Name of Contact Person: {jobDetail.contactName}
+            </Typography>
+            <Typography>Telephone Number: {jobDetail.telephoneNum}</Typography>
+            <Typography>Mobile Number: {jobDetail.mobileNum}</Typography>
+            <Typography display="inline">Email Address: </Typography>
+            <Typography
+              display="inline"
+              component="a"
+              href={`mailto:${jobDetail.email}`}>
+              {jobDetail.email}
+            </Typography>
+            <br />
+            <Typography display="inline">Website: </Typography>
+            <Typography
+              display="inline"
+              component="a"
+              href={`https://${jobDetail.website}`}>
+              {jobDetail.website}
+            </Typography>
           </CardContent>
           <CardActions>
             <Grid>

@@ -23,18 +23,20 @@ import Input from "./Input";
 import TnC from "./TnC";
 import ROLES from "../../utils/roles.js";
 
-const initialFormData = {
-  role: "",
-  firstName: "",
-  lastName: "",
-  name: "",
-  contactNum: "",
-  email: "",
-  password: "",
-  confirmPassword: "",
-};
-
 const Auth = () => {
+  const initialFormData = {
+    role: "",
+    firstName: "",
+    lastName: "",
+    name: "",
+    website: "",
+    regNum: "",
+    contactNum: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  };
+
   const [formData, setFormData] = useState(initialFormData);
   const [agree, setAgree] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
@@ -52,7 +54,7 @@ const Auth = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    // console.log(formData);
 
     if (isSignup) {
       dispatch(signup(formData, history));
@@ -122,6 +124,12 @@ const Auth = () => {
                   <Input
                     name="name"
                     label="Group/Organization Name"
+                    handleChange={handleChange}
+                    fullWidth
+                  />
+                  <Input
+                    name="website"
+                    label="Group/Organization Website"
                     handleChange={handleChange}
                     fullWidth
                   />

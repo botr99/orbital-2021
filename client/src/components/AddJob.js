@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import JobsApi from "../apis/JobsApi";
 import { JobsCategoryContext } from "../context/JobsCategoryContext";
@@ -15,6 +15,7 @@ import {
   FormControlLabel,
   Checkbox,
 } from "@material-ui/core";
+import FileBase from "react-file-base64";
 import TnC from "./Auth/TnC";
 
 /* styles */
@@ -46,22 +47,24 @@ const MenuProps = {
 };
 /* end styles */
 
-const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
-console.log(user);
-console.log(user?.result?.name);
-const initialFormData = {
-  contactName: "",
-  telephoneNum: user?.result?.contactNum,
-  mobileNum: user?.result?.contactNum,
-  email: user?.result?.email,
-  title: "",
-  purpose: "",
-  skills: "",
-  categories: [],
-};
-
 const AddJob = () => {
   const classes = useStyles();
+
+  const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
+  // console.log(user);
+  // console.log(user?.result?.name);
+  const initialFormData = {
+    contactName: "",
+    telephoneNum: user?.result?.contactNum,
+    mobileNum: user?.result?.contactNum,
+    email: user?.result?.email,
+    website: user?.result?.website,
+    title: "",
+    purpose: "",
+    skills: "",
+    categories: [],
+    selectedFile: "",
+  };
 
   const [formData, setFormData] = useState(initialFormData);
   const [agree, setAgree] = useState(false);
@@ -84,10 +87,12 @@ const AddJob = () => {
         telephoneNum: formData.telephoneNum,
         mobileNum: formData.telephoneNum,
         email: formData.email,
+        website: user?.result?.website,
         title: formData.title,
         purpose: formData.purpose,
         skills: formData.skills,
         categories: formData.categories,
+        selectedFile: formData.selectedFile,
       });
       // redirect to home page
       history.push("/");
@@ -148,8 +153,7 @@ const AddJob = () => {
                     ))}
                   </div>
                 )}
-                MenuProps={MenuProps}
-              >
+                MenuProps={MenuProps}>
                 {categories.map((category) => (
                   <MenuItem key={category} value={category}>
                     {category}
@@ -206,12 +210,33 @@ const AddJob = () => {
           <div className="mb-3">
             <TextField
               variant="outlined"
+              label="Website"
+              name="website"
+              value={formData.website}
+              onChange={handleChange}
+              fullWidth
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <TextField
+              variant="outlined"
               label="Skills Required"
               name="skills"
               value={formData.skills}
               onChange={handleChange}
               fullWidth
               required
+            />
+          </div>
+          <div className="mb-3">
+            <p>Image:</p>
+            <FileBase
+              type="file"
+              multiple={false}
+              onDone={({ base64 }) =>
+                setFormData({ ...formData, selectedFile: base64 })
+              }
             />
           </div>
           <div className="mb-3">
@@ -235,8 +260,7 @@ const AddJob = () => {
               disabled={!agree}
               variant="contained"
               color="primary"
-              type="submit"
-            >
+              type="submit">
               Add Job
             </Button>
           </div>

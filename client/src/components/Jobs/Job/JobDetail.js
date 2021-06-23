@@ -69,8 +69,7 @@ const JobDetail = () => {
           color="primary"
           startIcon={<EditIcon />}
           component={Link}
-          to={`/jobs/${jobDetail._id}/edit`}
-        >
+          to={`/jobs/${jobDetail._id}/edit`}>
           Edit
         </Button>
         <Button
@@ -78,8 +77,7 @@ const JobDetail = () => {
           color="secondary"
           className={classes.button}
           startIcon={<DeleteIcon />}
-          onClick={handleDelete}
-        >
+          onClick={handleDelete}>
           Delete
         </Button>
       </Grid>
@@ -92,7 +90,9 @@ const JobDetail = () => {
           <Card className={classes.card}>
             <CardMedia
               className={classes.cardMedia}
-              image="https://source.unsplash.com/random"
+              image={
+                jobDetail.selectedFile || "https://source.unsplash.com/random"
+              }
               title="Job Image"
             />
             <CardContent className={classes.cardContent}>
@@ -100,7 +100,7 @@ const JobDetail = () => {
                 {jobDetail.title}
               </Typography>
               <Typography>Organized by: {jobDetail.organizer}</Typography>
-              <Typography>{jobDetail.purpose}</Typography>
+              <Typography paragraph>{jobDetail.purpose}</Typography>
               <Grid>
                 {jobDetail.categories &&
                   jobDetail.categories.map((category) => (
@@ -112,6 +112,32 @@ const JobDetail = () => {
                     />
                   ))}
               </Grid>
+              <hr />
+              <Typography variant="h6" className={classes.header}>
+                Contact Information
+              </Typography>
+              <Typography>
+                Name of Contact Person: {jobDetail.contactName}
+              </Typography>
+              <Typography>
+                Telephone Number: {jobDetail.telephoneNum}
+              </Typography>
+              <Typography>Mobile Number: {jobDetail.mobileNum}</Typography>
+              <Typography display="inline">Email Address: </Typography>
+              <Typography
+                display="inline"
+                component="a"
+                href={`mailto:${jobDetail.email}`}>
+                {jobDetail.email}
+              </Typography>
+              <br />
+              <Typography display="inline">Website: </Typography>
+              <Typography
+                display="inline"
+                component="a"
+                href={`https://${jobDetail.website}`}>
+                {jobDetail.website}
+              </Typography>
             </CardContent>
             <CardActions>
               <Grid>
@@ -121,6 +147,9 @@ const JobDetail = () => {
                 </Button>
               </Grid>
             </CardActions>
+            <Typography color="textSecondary" variant="subtitle2">
+              Last updated: {new Date(jobDetail.updatedAt).toDateString()}
+            </Typography>
           </Card>
         )}
       </Container>

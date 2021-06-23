@@ -24,7 +24,7 @@ function App() {
       <Navbar />
       <JobsContextProvider>
         <JobsCategoryContextProvider>
-          <main className="container mt-5">
+          <main className="container mt-5 mb-5">
             <Switch>
               <Route path="/" exact component={() => <Redirect to="/jobs" />} />
               <Route path="/jobs" exact component={Jobs} />
