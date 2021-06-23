@@ -26,6 +26,7 @@ const jobSchema = new Schema(
     email: {
       type: String,
     },
+    website: { type: String },
 
     title: {
       type: String,

@@ -23,18 +23,20 @@ import Input from "./Input";
 import TnC from "./TnC";
 import ROLES from "../../utils/roles.js";
 
-const initialFormData = {
-  role: "",
-  firstName: "",
-  lastName: "",
-  name: "",
-  contactNum: "",
-  email: "",
-  password: "",
-  confirmPassword: "",
-};
-
 const Auth = () => {
+  const initialFormData = {
+    role: "",
+    firstName: "",
+    lastName: "",
+    name: "",
+    website: "",
+    regNum: "",
+    contactNum: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  };
+
   const [formData, setFormData] = useState(initialFormData);
   const [agree, setAgree] = useState(false);
   const [isSignup, setIsSignup] = useState(false);

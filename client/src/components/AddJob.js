@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import JobsApi from "../apis/JobsApi";
 import { JobsCategoryContext } from "../context/JobsCategoryContext";
@@ -47,23 +47,24 @@ const MenuProps = {
 };
 /* end styles */
 
-const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
-console.log(user);
-console.log(user?.result?.name);
-const initialFormData = {
-  contactName: "",
-  telephoneNum: user?.result?.contactNum,
-  mobileNum: user?.result?.contactNum,
-  email: user?.result?.email,
-  title: "",
-  purpose: "",
-  skills: "",
-  categories: [],
-  selectedFile: "",
-};
-
 const AddJob = () => {
   const classes = useStyles();
+
+  const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
+  console.log(user);
+  // console.log(user?.result?.name);
+  const initialFormData = {
+    contactName: "",
+    telephoneNum: user?.result?.contactNum,
+    mobileNum: user?.result?.contactNum,
+    email: user?.result?.email,
+    website: user?.result?.website,
+    title: "",
+    purpose: "",
+    skills: "",
+    categories: [],
+    selectedFile: "",
+  };
 
   const [formData, setFormData] = useState(initialFormData);
   const [agree, setAgree] = useState(false);
@@ -86,6 +87,7 @@ const AddJob = () => {
         telephoneNum: formData.telephoneNum,
         mobileNum: formData.telephoneNum,
         email: formData.email,
+        website: user?.result?.website,
         title: formData.title,
         purpose: formData.purpose,
         skills: formData.skills,
@@ -200,6 +202,17 @@ const AddJob = () => {
               name="email"
               value={formData.email}
               type="email"
+              onChange={handleChange}
+              fullWidth
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <TextField
+              variant="outlined"
+              label="Website"
+              name="website"
+              value={formData.website}
               onChange={handleChange}
               fullWidth
               required
