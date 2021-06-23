@@ -102,6 +102,7 @@ const SubmissionDetail = () => {
                   />
                 ))}
             </Grid>
+            <hr />
             <Typography variant="h6" className={classes.header}>
               Organizer Information
             </Typography>
