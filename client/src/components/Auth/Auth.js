@@ -125,6 +125,12 @@ const Auth = () => {
                     handleChange={handleChange}
                     fullWidth
                   />
+                  <Input
+                    name="website"
+                    label="Group/Organization Website"
+                    handleChange={handleChange}
+                    fullWidth
+                  />
                   {formData.role === "Organization" && (
                     <Input
                       name="regNum"

@@ -6,6 +6,7 @@ const userSchema = mongoose.Schema(
     name: { type: String, required: true }, // Student, group, org
     regNum: { type: String }, // Only for org
     contactNum: { type: Number }, // group, org
+    website: { type: String }, // group, org
     email: { type: String, required: true },
     password: { type: String, required: true },
   },

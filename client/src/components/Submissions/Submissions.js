@@ -19,27 +19,31 @@ const Submissions = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredCategories, setFilteredCategories] = useState([]);
 
+  const fetchSubmissions = async () => {
+    try {
+      const categoriesString = filteredCategories.join(",");
+
+      const res = await JobsApi.get(
+        `/unapproved/?page=${page}&limit=${limit}&search=${encodeURIComponent(
+          searchTerm
+        )}&categories=${encodeURIComponent(categoriesString)}`
+      );
+      setSubmissions(res.data.data);
+      setPage(res.data.page);
+      setPageCount(res.data.pageCount);
+      setLimit(res.data.limit);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
-    const fetchSubmissions = async () => {
-      try {
-        const categoriesString = filteredCategories.join(",");
-
-        const res = await JobsApi.get(
-          `/unapproved/?page=${page}&limit=${limit}&search=${encodeURIComponent(
-            searchTerm
-          )}&categories=${encodeURIComponent(categoriesString)}`
-        );
-        setSubmissions(res.data.data);
-        setPage(res.data.page);
-        setPageCount(res.data.pageCount);
-        setLimit(res.data.limit);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
     fetchSubmissions();
   }, [page, limit, searchTerm, filteredCategories, setSubmissions]);
+
+  const handleApprove = () => {
+    fetchSubmissions();
+  };
 
   return (
     <>
@@ -71,7 +75,11 @@ const Submissions = () => {
           <Box marginTop={3}>
             <Grid container spacing={6}>
               {submissions.map((job) => (
-                <Submission key={job._id} job={job} />
+                <Submission
+                  key={job._id}
+                  job={job}
+                  handleApprove={handleApprove}
+                />
               ))}
             </Grid>
           </Box>

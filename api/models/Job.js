@@ -63,6 +63,7 @@ const jobSchema = new Schema(
       },
     ],
     isApproved: { type: Boolean, default: false },
+    selectedFile: { type: String }, // Base64 encoded image file
   },
   { timestamps: true } // assigns createdAt and updatedAt fields to the schema
 );

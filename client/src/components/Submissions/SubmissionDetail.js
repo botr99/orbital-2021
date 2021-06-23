@@ -10,7 +10,6 @@ import {
   Typography,
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
-import EditIcon from "@material-ui/icons/Edit";
 import { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import JobsApi from "../../apis/JobsApi";
@@ -82,7 +81,9 @@ const SubmissionDetail = () => {
         <Card className={classes.card}>
           <CardMedia
             className={classes.cardMedia}
-            image="https://source.unsplash.com/random"
+            image={
+              jobDetail.selectedFile || "https://source.unsplash.com/random"
+            }
             title="Job Image"
           />
           <CardContent className={classes.cardContent}>

@@ -15,7 +15,7 @@ import JobsApi from "../../../apis/JobsApi";
 const Job = ({ job }) => {
   const classes = useStyles();
 
-  const { title, organizer, purpose, categories, _id } = job;
+  const { title, organizer, purpose, categories, _id, selectedFile } = job;
 
   // add a "..." if title or purpose is too long to be shown entirely
   // on the card
@@ -29,7 +29,7 @@ const Job = ({ job }) => {
       <Card className={classes.card}>
         <CardMedia
           className={classes.cardMedia}
-          image="https://source.unsplash.com/random"
+          image={selectedFile || "https://source.unsplash.com/random"}
           title="Job Image"
         />
         <CardContent className={classes.cardContent}>

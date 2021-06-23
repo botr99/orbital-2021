@@ -69,8 +69,7 @@ const JobDetail = () => {
           color="primary"
           startIcon={<EditIcon />}
           component={Link}
-          to={`/jobs/${jobDetail._id}/edit`}
-        >
+          to={`/jobs/${jobDetail._id}/edit`}>
           Edit
         </Button>
         <Button
@@ -78,8 +77,7 @@ const JobDetail = () => {
           color="secondary"
           className={classes.button}
           startIcon={<DeleteIcon />}
-          onClick={handleDelete}
-        >
+          onClick={handleDelete}>
           Delete
         </Button>
       </Grid>
@@ -92,7 +90,9 @@ const JobDetail = () => {
           <Card className={classes.card}>
             <CardMedia
               className={classes.cardMedia}
-              image="https://source.unsplash.com/random"
+              image={
+                jobDetail.selectedFile || "https://source.unsplash.com/random"
+              }
               title="Job Image"
             />
             <CardContent className={classes.cardContent}>

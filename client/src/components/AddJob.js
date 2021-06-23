@@ -15,6 +15,7 @@ import {
   FormControlLabel,
   Checkbox,
 } from "@material-ui/core";
+import FileBase from "react-file-base64";
 import TnC from "./Auth/TnC";
 
 /* styles */
@@ -58,6 +59,7 @@ const initialFormData = {
   purpose: "",
   skills: "",
   categories: [],
+  selectedFile: "",
 };
 
 const AddJob = () => {
@@ -88,6 +90,7 @@ const AddJob = () => {
         purpose: formData.purpose,
         skills: formData.skills,
         categories: formData.categories,
+        selectedFile: formData.selectedFile,
       });
       // redirect to home page
       history.push("/");
@@ -148,8 +151,7 @@ const AddJob = () => {
                     ))}
                   </div>
                 )}
-                MenuProps={MenuProps}
-              >
+                MenuProps={MenuProps}>
                 {categories.map((category) => (
                   <MenuItem key={category} value={category}>
                     {category}
@@ -215,6 +217,16 @@ const AddJob = () => {
             />
           </div>
           <div className="mb-3">
+            <p>Image:</p>
+            <FileBase
+              type="file"
+              multiple={false}
+              onDone={({ base64 }) =>
+                setFormData({ ...formData, selectedFile: base64 })
+              }
+            />
+          </div>
+          <div className="mb-3">
             <>
               <FormControlLabel
                 control={
@@ -235,8 +247,7 @@ const AddJob = () => {
               disabled={!agree}
               variant="contained"
               color="primary"
-              type="submit"
-            >
+              type="submit">
               Add Job
             </Button>
           </div>

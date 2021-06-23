@@ -12,10 +12,10 @@ import { Link } from "react-router-dom";
 import useStyles from "./styles";
 import JobsApi from "../../apis/JobsApi";
 
-const Submission = ({ job }) => {
+const Submission = ({ job, handleApprove }) => {
   const classes = useStyles();
 
-  const { organizer, title, purpose, categories, _id } = job;
+  const { organizer, title, purpose, categories, _id, selectedFile } = job;
 
   // add a "..." if title or purpose is too long to be shown entirely
   // on the card
@@ -30,6 +30,7 @@ const Submission = ({ job }) => {
         ...job,
         isApproved: true,
       });
+      handleApprove(); // Refetch submissions
     } catch (err) {
       console.log(err);
     }
@@ -40,7 +41,7 @@ const Submission = ({ job }) => {
       <Card className={classes.card}>
         <CardMedia
           className={classes.cardMedia}
-          image="https://source.unsplash.com/random"
+          image={selectedFile || "https://source.unsplash.com/random"}
           title="Job Image"
         />
         <CardContent className={classes.cardContent}>
