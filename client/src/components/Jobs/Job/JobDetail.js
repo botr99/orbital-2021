@@ -39,11 +39,6 @@ const JobDetail = () => {
     fetchJobDetail();
   }, []);
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   console.log("Register form is submitted");
-  // };
-
   const handleDelete = async () => {
     try {
       await JobsApi.delete(`/${id}`);
@@ -66,30 +61,29 @@ const JobDetail = () => {
   //   );
   // }
 
-  const isCreator = () => {
-    if (user?.result?.name === jobDetail.organizer) {
-      return (
-        <Grid>
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<EditIcon />}
-            component={Link}
-            to={`/jobs/${jobDetail._id}/edit`}>
-            Edit
-          </Button>
-          <Button
-            variant="contained"
-            color="secondary"
-            className={classes.button}
-            startIcon={<DeleteIcon />}
-            onClick={handleDelete}>
-            Delete
-          </Button>
-        </Grid>
-      );
-    }
-  };
+  const isCreator = () =>
+    user?.result?.name === jobDetail.organizer && (
+      <Grid>
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<EditIcon />}
+          component={Link}
+          to={`/jobs/${jobDetail._id}/edit`}
+        >
+          Edit
+        </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          className={classes.button}
+          startIcon={<DeleteIcon />}
+          onClick={handleDelete}
+        >
+          Delete
+        </Button>
+      </Grid>
+    );
 
   return (
     <>
@@ -121,25 +115,7 @@ const JobDetail = () => {
             </CardContent>
             <CardActions>
               <Grid>
-                {user?.result?.name === jobDetail.organizer && (
-                  <Grid>
-                    <Button
-                      color="primary"
-                      startIcon={<EditIcon />}
-                      component={Link}
-                      to={`/jobs/${jobDetail._id}/edit`}>
-                      Edit
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      className={classes.button}
-                      startIcon={<DeleteIcon />}
-                      onClick={handleDelete}>
-                      Delete
-                    </Button>
-                  </Grid>
-                )}
+                {isCreator()}
                 <Button component={Link} to={`/`} color="primary">
                   Return to Board
                 </Button>
@@ -158,30 +134,6 @@ const JobDetail = () => {
       )}
     </>
   );
-
-  //  To be abstracted to Register component
-  // <div className="row" style={{ marginTop: "2em" }}>
-  //   <div className="col-6 offset-3">
-  //     <div className="card">
-  //       <form className="mb-3" onSubmit={handleSubmit}>
-  //         <div className="mb-3">
-  //           <label className="form-label" htmlFor="name">
-  //             Register
-  //           </label>
-  //           <input
-  //             className="form-control"
-  //             type="text"
-  //             name="name"
-  //             id="name"
-  //             required
-  //           />
-  //         </div>
-  //         <button className="btn btn-success">Submit</button>
-  //       </form>
-  //       <h5>Registered:</h5>
-  //     </div>
-  //   </div>
-  // </div>
 };
 
 export default JobDetail;

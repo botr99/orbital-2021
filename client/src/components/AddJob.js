@@ -77,7 +77,7 @@ const AddJob = () => {
     e.preventDefault();
     try {
       console.log(formData);
-      const res = await JobsApi.post("/", {
+      await JobsApi.post("/", {
         organizer: user?.result?.name,
         registerNum: user?.result?.registerNum,
         contactName: formData.contactName,
@@ -89,8 +89,8 @@ const AddJob = () => {
         skills: formData.skills,
         categories: formData.categories,
       });
-      // redirect to the job detail page
-      history.push(`/jobs/${res.data._id}`);
+      // redirect to home page
+      history.push("/");
     } catch (err) {
       console.log(err);
     }
@@ -148,7 +148,8 @@ const AddJob = () => {
                     ))}
                   </div>
                 )}
-                MenuProps={MenuProps}>
+                MenuProps={MenuProps}
+              >
                 {categories.map((category) => (
                   <MenuItem key={category} value={category}>
                     {category}
@@ -234,7 +235,8 @@ const AddJob = () => {
               disabled={!agree}
               variant="contained"
               color="primary"
-              type="submit">
+              type="submit"
+            >
               Add Job
             </Button>
           </div>

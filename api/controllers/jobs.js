@@ -1,4 +1,5 @@
 import Job from "../models/Job.js";
+import paginateQuery from "../middleware/paginateQuery.js";
 
 export const getCategories = async (req, res) => {
   try {
@@ -11,64 +12,62 @@ export const getCategories = async (req, res) => {
   }
 };
 
-export const getJobs = async (req, res) => {
-  try {
-    const searchQuery = req.query.search
-      ? {
-          // find all titles or organizers that contain the search query
-          $or: [
-            { title: { $regex: req.query.search.trim(), $options: "i" } },
-            { organizer: { $regex: req.query.search.trim(), $options: "i" } },
-          ],
-        }
-      : {};
+export const getApprovedJobs = (req, res) => {
+  const searchQuery = req.query.search
+    ? {
+        // find all titles or organizers that contain the search query
+        $or: [
+          { title: { $regex: req.query.search.trim(), $options: "i" } },
+          { organizer: { $regex: req.query.search.trim(), $options: "i" } },
+        ],
+      }
+    : {};
 
-    const categoriesQuery = req.query.categories
-      ? { categories: { $in: req.query.categories.split(",") } }
-      : {};
+  const categoriesQuery = req.query.categories
+    ? { categories: { $in: req.query.categories.split(",") } }
+    : {};
 
-    if (req.query.page <= 0 || req.query.limit <= 0) {
-      return res.status(404).json({ message: "Page not found" });
-    }
+  const filters = {
+    $and: [searchQuery, categoriesQuery, { isApproved: true }],
+  };
 
-    const page = parseInt(req.query.page) || 1; // current page
-    const limit = parseInt(req.query.limit) || 10; // max number of items in a page
-    const skip = (page - 1) * limit; // number of items to skip
+  const sort = { createdAt: "desc" };
 
-    const modelCount = await Job.find(searchQuery)
-      .find(categoriesQuery)
-      .countDocuments();
+  return paginateQuery(req, res, Job, filters, sort);
+};
 
-    const pageCount = Math.ceil(modelCount / limit); // number of pages
+export const getUnapprovedJobs = (req, res) => {
+  const searchQuery = req.query.search
+    ? {
+        // find all titles or organizers that contain the search query
+        $or: [
+          { title: { $regex: req.query.search.trim(), $options: "i" } },
+          { organizer: { $regex: req.query.search.trim(), $options: "i" } },
+        ],
+      }
+    : {};
 
-    if (page > pageCount) {
-      // page number is out of upper bound
-      return res.status(404).json({ message: "Page not found" });
-    }
+  const categoriesQuery = req.query.categories
+    ? { categories: { $in: req.query.categories.split(",") } }
+    : {};
 
-    // paginate the jobs, sort them by the latest job created
-    const jobs = await Job.find(searchQuery) // only show jobs that are approved
-      // .find({ $and: [categoriesQuery, { isApproved: true }] })
-      .find(categoriesQuery)
-      .skip(skip)
-      .limit(limit)
-      .sort({ createdAt: "desc" });
+  const filters = {
+    $and: [searchQuery, categoriesQuery, { isApproved: false }],
+  };
 
-    res.status(200).json({ page, limit, pageCount, data: jobs });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
+  return paginateQuery(req, res, Job, filters);
 };
 
 export const getJobRegistrations = async (req, res) => {
   // console.log("Orgs/student groups (and admin) allowed here only");
   try {
-    const job = await Job.findById(req.params.id).populate(
+    const job = await Job.find({
+      _id: req.params.id,
+    }).populate(
       "registrations",
       "name contactNum email" // only retrieve certain fields
     );
-    // console.log(job);
-    res.status(200).json(job.registrations);
+    res.status(200).json(job[0].registrations);
   } catch (err) {
     res.status(404).json({ message: "Job not found" });
   }
@@ -90,20 +89,12 @@ export const getJobRegistrations = async (req, res) => {
 ]
 */
 
-export const getJobDetail = (req, res) => {
-  Job.findById(req.params.id)
-    .then((job) => {
-      job
-        ? res.status(200).json(job)
-        : res.status(404).json({ message: "Job not found" });
-    })
-    .catch((err) => res.status(404).json({ message: err.message }));
-};
+export const getJobDetail = (req, res) => res.status(200).json(req.jobDetail);
 
 export const postJobRegistration = async (req, res) => {
   // console.log("Students allowed here only");
   try {
-    const studentId = req.id;
+    const studentId = req.user.id;
     const updatedJob = await Job.findByIdAndUpdate(
       req.params.id,
       { $addToSet: { registrations: studentId } },

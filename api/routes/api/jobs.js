@@ -1,7 +1,8 @@
 import express from "express";
 import {
   getCategories,
-  getJobs,
+  getApprovedJobs,
+  getUnapprovedJobs,
   getJobRegistrations,
   getJobDetail,
   postJobRegistration,
@@ -11,6 +12,7 @@ import {
 } from "../../controllers/jobs.js";
 import { validateJob } from "../../middleware/validateJob.js";
 import checkAuth from "../../middleware/checkAuth.js";
+import checkJobIsApproved from "../../middleware/checkJobIsApproved.js";
 import ROLES from "../../utils/roles.js";
 
 const router = express.Router();
@@ -23,7 +25,9 @@ const router = express.Router();
 // matched to categories, causing an error.
 router.get("/categories", getCategories);
 
-router.get("/", getJobs);
+router.get("/", getApprovedJobs);
+
+router.get("/unapproved", checkAuth([ROLES.Admin]), getUnapprovedJobs);
 
 router.get(
   "/:id/registrations",
@@ -33,14 +37,16 @@ router.get(
     ROLES.Organization,
     ROLES.Student,
   ]),
+  checkJobIsApproved,
   getJobRegistrations
 );
 
-router.get("/:id", getJobDetail);
+router.get("/:id", checkJobIsApproved, getJobDetail);
 
 router.post(
   "/:id/registrations",
   checkAuth([ROLES.Student]),
+  checkJobIsApproved,
   postJobRegistration
 ); // only students can register
 
@@ -54,6 +60,7 @@ router.post(
 router.patch(
   "/:id",
   checkAuth([ROLES.Admin, ROLES.StudentGroup, ROLES.Organization]),
+  checkJobIsApproved,
   validateJob,
   updateJob
 );
@@ -61,6 +68,7 @@ router.patch(
 router.delete(
   "/:id",
   checkAuth([ROLES.Admin, ROLES.StudentGroup, ROLES.Organization]),
+  checkJobIsApproved,
   deleteJob
 );
 

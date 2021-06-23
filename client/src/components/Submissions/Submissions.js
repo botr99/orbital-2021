@@ -1,6 +1,6 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import JobsApi from "../../apis/JobsApi";
-import { JobsContext } from "../../context/JobsContext";
+
 import { Link } from "react-router-dom";
 import Submission from "./Submission";
 import SearchBar from "../SearchBar";
@@ -11,7 +11,7 @@ import { Box, Button, Grid } from "@material-ui/core";
 const Submissions = () => {
   const user = JSON.parse(localStorage.getItem("profile"));
 
-  const { jobs, setJobs } = useContext(JobsContext);
+  const [submissions, setSubmissions] = useState([]);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -20,16 +20,16 @@ const Submissions = () => {
   const [filteredCategories, setFilteredCategories] = useState([]);
 
   useEffect(() => {
-    const fetchJobs = async () => {
+    const fetchSubmissions = async () => {
       try {
         const categoriesString = filteredCategories.join(",");
 
         const res = await JobsApi.get(
-          `/?page=${page}&limit=${limit}&search=${encodeURIComponent(
+          `/unapproved/?page=${page}&limit=${limit}&search=${encodeURIComponent(
             searchTerm
           )}&categories=${encodeURIComponent(categoriesString)}`
         );
-        setJobs(res.data.data);
+        setSubmissions(res.data.data);
         setPage(res.data.page);
         setPageCount(res.data.pageCount);
         setLimit(res.data.limit);
@@ -38,8 +38,8 @@ const Submissions = () => {
       }
     };
 
-    fetchJobs();
-  }, [page, limit, searchTerm, filteredCategories, setJobs]);
+    fetchSubmissions();
+  }, [page, limit, searchTerm, filteredCategories, setSubmissions]);
 
   return (
     <>
@@ -66,16 +66,13 @@ const Submissions = () => {
       />
       {/* DateFilter */}
 
-      {jobs && (
+      {submissions && (
         <>
           <Box marginTop={3}>
             <Grid container spacing={6}>
-              {jobs.map(
-                (job) =>
-                  !job.isApproved ? (
-                    <Submission key={job._id} job={job} />
-                  ) : null // all unapproved jobs
-              )}
+              {submissions.map((job) => (
+                <Submission key={job._id} job={job} />
+              ))}
             </Grid>
           </Box>
           <PaginationLimit
@@ -84,6 +81,7 @@ const Submissions = () => {
             pageCount={pageCount}
             limit={limit}
             setLimit={setLimit}
+            itemName="Submissions"
           />
         </>
       )}

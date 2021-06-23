@@ -19,6 +19,11 @@ const Jobs = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredCategories, setFilteredCategories] = useState([]);
 
+  const allowedToAddJob = () => {
+    const userRole = user?.result?.role;
+    return user && userRole && userRole !== "Student";
+  };
+
   useEffect(() => {
     const fetchJobs = async () => {
       try {
@@ -45,7 +50,7 @@ const Jobs = () => {
     <>
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <h1>Available Jobs</h1>
-        {user && (
+        {allowedToAddJob() && (
           <Link to="/jobs/new">
             <Button variant="contained" color="primary">
               Add Job
@@ -70,10 +75,9 @@ const Jobs = () => {
         <>
           <Box marginTop={3}>
             <Grid container spacing={6}>
-              {jobs.map(
-                (job) =>
-                  job.isApproved ? <Job key={job._id} job={job} /> : null // only approved jobs
-              )}
+              {jobs.map((job) => (
+                <Job key={job._id} job={job} />
+              ))}
             </Grid>
           </Box>
           <PaginationLimit
