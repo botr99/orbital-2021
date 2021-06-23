@@ -44,8 +44,7 @@ const PaginationLimit = ({
         display="flex"
         justifyContent="space-between"
         alignItems="center"
-        flexWrap="wrap"
-      >
+        flexWrap="wrap">
         <Pagination
           count={pageCount}
           page={page}
@@ -60,8 +59,7 @@ const PaginationLimit = ({
           <Select
             labelId="limit-select-label"
             value={limit}
-            onChange={handleLimitChange}
-          >
+            onChange={handleLimitChange}>
             <MenuItem value={6}>6</MenuItem>
             <MenuItem value={8}>8</MenuItem>
             <MenuItem value={10}>10</MenuItem>

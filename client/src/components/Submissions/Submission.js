@@ -48,9 +48,9 @@ const Submission = ({ job, handleApprove }) => {
           <Typography gutterBottom variant="h5">
             {truncatedTitle}
           </Typography>
-          <Typography>{organizer}</Typography>
+          <Typography variant="body2">Organized by: {organizer}</Typography>
           <Grid>
-            <Typography>{truncatedPurpose}</Typography>
+            <Typography paragraph>{truncatedPurpose}</Typography>
           </Grid>
         </CardContent>
         <CardActions>

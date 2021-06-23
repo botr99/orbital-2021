@@ -51,7 +51,7 @@ const AddJob = () => {
   const classes = useStyles();
 
   const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
-  console.log(user);
+  // console.log(user);
   // console.log(user?.result?.name);
   const initialFormData = {
     contactName: "",
