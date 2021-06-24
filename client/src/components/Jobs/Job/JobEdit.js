@@ -61,7 +61,7 @@ const JobEdit = () => {
     setFormData({
       ...formData,
       startDate: date,
-      endDate: formData.endDate < date ? date : formData.endDate,
+      endDate: date > formData.endDate ? date : formData.endDate,
     });
   };
 
