@@ -55,8 +55,10 @@ const SubmissionDetail = () => {
 
   const handleDelete = async () => {
     try {
-      await JobsApi.delete(`/${id}`);
-      history.push("/submissions");
+      if (window.confirm("Delete this submission?")) {
+        await JobsApi.delete(`/${id}`);
+        history.push("/submissions");
+      }
     } catch (err) {
       console.log(err);
     }
