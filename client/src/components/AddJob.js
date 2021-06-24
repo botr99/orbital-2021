@@ -19,7 +19,6 @@ import {
 import DateFnsUtils from "@date-io/date-fns";
 import {
   MuiPickersUtilsProvider,
-  KeyboardTimePicker,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 import FileBase from "react-file-base64";
@@ -71,11 +70,13 @@ const AddJob = () => {
     skills: "",
     categories: [],
     selectedFile: "",
+    startDate: Date.now(),
+    endDate: Date.now(),
     hours: "",
   };
 
-  const [startDate, setStartDate] = useState(Date.now());
-  const [endDate, setEndDate] = useState(Date.now());
+  // const [startDate, setStartDate] = useState(Date.now());
+  // const [endDate, setEndDate] = useState(Date.now());
 
   const [formData, setFormData] = useState(initialFormData);
   const [agree, setAgree] = useState(false);
@@ -85,13 +86,24 @@ const AddJob = () => {
   let history = useHistory();
 
   const handleStartDateChange = (date) => {
-    setStartDate(date);
-    setEndDate(endDate < date ? date : endDate);
+    setFormData({
+      ...formData,
+      startDate: date,
+      endDate: formData.endDate < date ? date : formData.endDate,
+    });
+
+    // setStartDate(date);
+    // setEndDate(endDate < date ? date : endDate);
   };
 
   const handleEndDateChange = (date) => {
-    setEndDate(date);
-    setStartDate(startDate > date ? date : startDate);
+    setFormData({
+      ...formData,
+      endDate: date,
+      startDate: formData.startDate > date ? date : formData.startDate,
+    });
+    // setEndDate(date);
+    // setStartDate(startDate > date ? date : startDate);
   };
 
   const handleChange = (e) =>
@@ -114,8 +126,8 @@ const AddJob = () => {
         skills: formData.skills,
         categories: formData.categories,
         selectedFile: formData.selectedFile,
-        startDate,
-        endDate,
+        startDate: formData.startDate,
+        endDate: formData.endDate,
         hours: formData.hours,
       });
       // redirect to home page
@@ -262,7 +274,7 @@ const AddJob = () => {
                   id="start-date-picker"
                   label="Start Date"
                   format="MM/dd/yyyy"
-                  value={startDate}
+                  value={formData.startDate}
                   onChange={handleStartDateChange}
                   KeyboardButtonProps={{
                     "aria-label": "change start date",
@@ -274,7 +286,7 @@ const AddJob = () => {
                   id="end-date-picker"
                   label="End Date"
                   format="MM/dd/yyyy"
-                  value={endDate}
+                  value={formData.endDate}
                   onChange={handleEndDateChange}
                   KeyboardButtonProps={{
                     "aria-label": "change end date",

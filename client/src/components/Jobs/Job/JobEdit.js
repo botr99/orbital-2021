@@ -12,7 +12,13 @@ import {
   Select,
   TextField,
   Typography,
+  Grid,
 } from "@material-ui/core";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
 import useStyles from "./styles";
 
 const ITEM_HEIGHT = 48;
@@ -26,25 +32,45 @@ const MenuProps = {
   },
 };
 
-const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
-
-const initialFormData = {
-  contactName: "",
-  telephoneNum: "",
-  mobileNum: "",
-  email: "",
-  website: "",
-  title: "",
-  purpose: "",
-  skills: "",
-  categories: [],
-};
-
 const JobEdit = () => {
+  const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
+
+  const initialFormData = {
+    contactName: "",
+    telephoneNum: "",
+    mobileNum: "",
+    email: "",
+    website: "",
+    title: "",
+    purpose: "",
+    skills: "",
+    categories: [],
+    selectedFile: "",
+    startDate: "",
+    endDate: "",
+    hours: "",
+  };
+
   const { id } = useParams();
   const classes = useStyles();
 
   const [formData, setFormData] = useState(initialFormData);
+
+  const handleStartDateChange = (date) => {
+    setFormData({
+      ...formData,
+      startDate: date,
+      endDate: formData.endDate < date ? date : formData.endDate,
+    });
+  };
+
+  const handleEndDateChange = (date) => {
+    setFormData({
+      ...formData,
+      endDate: date,
+      startDate: formData.startDate > date ? date : formData.startDate,
+    });
+  };
 
   const [organizer, setOrganizer] = useState("");
   const categories = useContext(JobsCategoryContext); // the categories retrieved from the database
@@ -76,7 +102,7 @@ const JobEdit = () => {
     e.preventDefault();
 
     try {
-      // console.log(formData);
+      console.log(formData);
       await JobsApi.patch(`/${id}`, formData);
       // redirect to the job detail page
       history.push(`/jobs/${id}`);
@@ -170,7 +196,6 @@ const JobEdit = () => {
               value={formData.telephoneNum}
               type="tel"
               onChange={handleChange}
-              half
               required
             />
             <TextField
@@ -180,7 +205,6 @@ const JobEdit = () => {
               value={formData.mobileNum}
               type="tel"
               onChange={handleChange}
-              half
               required
             />
           </div>
@@ -216,6 +240,48 @@ const JobEdit = () => {
               onChange={handleChange}
               fullWidth
               required
+            />
+          </div>
+          <div className="mb-3">
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <Grid container justify="space-between">
+                <KeyboardDatePicker
+                  minDate={Date.now()}
+                  margin="normal"
+                  id="start-date-picker"
+                  label="Start Date"
+                  format="MM/dd/yyyy"
+                  value={formData.startDate}
+                  onChange={handleStartDateChange}
+                  KeyboardButtonProps={{
+                    "aria-label": "change start date",
+                  }}
+                />
+                <KeyboardDatePicker
+                  minDate={Date.now()}
+                  margin="normal"
+                  id="end-date-picker"
+                  label="End Date"
+                  format="MM/dd/yyyy"
+                  value={formData.endDate}
+                  onChange={handleEndDateChange}
+                  KeyboardButtonProps={{
+                    "aria-label": "change end date",
+                  }}
+                />
+              </Grid>
+            </MuiPickersUtilsProvider>
+          </div>
+          <div className="mb-3">
+            <TextField
+              variant="outlined"
+              label="Number of Hours Required"
+              name="hours"
+              value={formData.hours}
+              onChange={handleChange}
+              fullWidth
+              required
+              type="number"
             />
           </div>
           <Button variant="contained" color="primary" type="submit">

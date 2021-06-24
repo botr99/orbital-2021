@@ -104,6 +104,16 @@ const JobDetail = () => {
               </Typography>
               <Typography>Organized by: {jobDetail.organizer}</Typography>
               <Typography paragraph>{jobDetail.purpose}</Typography>
+              <Typography>Skills required: {jobDetail.skills}</Typography>
+              <Typography>
+                Start Date: {new Date(jobDetail.startDate).toDateString()}
+              </Typography>
+              <Typography>
+                End Date: {new Date(jobDetail.endDate).toDateString()}
+              </Typography>
+              <Typography>
+                Number of Hours Required: {jobDetail.hours}
+              </Typography>
               <Grid>
                 {jobDetail.categories &&
                   jobDetail.categories.map((category) => (
