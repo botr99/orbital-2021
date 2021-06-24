@@ -11,18 +11,18 @@ import {
 } from "@material-ui/core";
 import PaginationLimit from "../PaginationLimit/PaginationLimit";
 
-const Registrations = ({ registrations, isOrganizer }) => {
+const Registrations = ({ registrations, isOrganizerOrAdmin }) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const pageCount = Math.ceil(registrations.length / limit);
 
   // uncomment this to view the registrations for each job post,
   // provided you are logged in.
-  // isOrganizer = true;
+  // isOrganizerOrAdmin = true;
 
   return (
     <>
-      {isOrganizer && (
+      {isOrganizerOrAdmin && (
         <>
           <Typography variant="h5" align="center" gutterBottom>
             Registrations
