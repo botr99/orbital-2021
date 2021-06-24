@@ -14,7 +14,14 @@ import {
   Typography,
   FormControlLabel,
   Checkbox,
+  Grid,
 } from "@material-ui/core";
+import DateFnsUtils from "@date-io/date-fns";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardTimePicker,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
 import FileBase from "react-file-base64";
 import TnC from "./Auth/TnC";
 
@@ -66,12 +73,25 @@ const AddJob = () => {
     selectedFile: "",
   };
 
+  const [startDate, setStartDate] = useState(Date.now());
+  const [endDate, setEndDate] = useState(Date.now());
+
   const [formData, setFormData] = useState(initialFormData);
   const [agree, setAgree] = useState(false);
   const handleCheck = () => setAgree(!agree);
   const categories = useContext(JobsCategoryContext); // the categories retrieved from the database
 
   let history = useHistory();
+
+  const handleStartDateChange = (date) => {
+    setStartDate(date);
+    setEndDate(endDate < date ? date : endDate);
+  };
+
+  const handleEndDateChange = (date) => {
+    setEndDate(date);
+    setStartDate(startDate > date ? date : startDate);
+  };
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -174,26 +194,26 @@ const AddJob = () => {
             />
           </div>
           <div className="mb-3">
-            <TextField
-              variant="outlined"
-              label="Telephone Number"
-              name="telephoneNum"
-              value={formData.telephoneNum}
-              type="tel"
-              onChange={handleChange}
-              half
-              required
-            />
-            <TextField
-              variant="outlined"
-              label="Mobile Number"
-              name="mobileNum"
-              value={formData.mobileNum}
-              type="tel"
-              onChange={handleChange}
-              half
-              required
-            />
+            <Grid container justify="space-between">
+              <TextField
+                variant="outlined"
+                label="Telephone Number"
+                name="telephoneNum"
+                value={formData.telephoneNum}
+                type="tel"
+                onChange={handleChange}
+                required
+              />
+              <TextField
+                variant="outlined"
+                label="Mobile Number"
+                name="mobileNum"
+                value={formData.mobileNum}
+                type="tel"
+                onChange={handleChange}
+                required
+              />
+            </Grid>
           </div>
           <div className="mb-3">
             <TextField
@@ -229,6 +249,37 @@ const AddJob = () => {
               required
             />
           </div>
+          <div className="mb-3">
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <Grid container justify="space-between">
+                <KeyboardDatePicker
+                  minDate={Date.now()}
+                  margin="normal"
+                  id="start-date-picker"
+                  label="Start Date"
+                  format="MM/dd/yyyy"
+                  value={startDate}
+                  onChange={handleStartDateChange}
+                  KeyboardButtonProps={{
+                    "aria-label": "change start date",
+                  }}
+                />
+                <KeyboardDatePicker
+                  minDate={Date.now()}
+                  margin="normal"
+                  id="end-date-picker"
+                  label="End Date"
+                  format="MM/dd/yyyy"
+                  value={endDate}
+                  onChange={handleEndDateChange}
+                  KeyboardButtonProps={{
+                    "aria-label": "change end date",
+                  }}
+                />
+              </Grid>
+            </MuiPickersUtilsProvider>
+          </div>
+
           <div className="mb-3">
             <p>Image:</p>
             <FileBase
