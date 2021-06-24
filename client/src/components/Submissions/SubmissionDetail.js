@@ -34,15 +34,17 @@ const SubmissionDetail = () => {
     };
 
     fetchJobDetail();
-  }, []);
+  }, [id]);
 
   const handleApprove = async () => {
     try {
-      await JobsApi.patch(`/${id}`, {
-        ...jobDetail,
-        isApproved: true,
-      });
-      history.push("/submissions");
+      if (window.confirm("Approve this submission?")) {
+        await JobsApi.patch(`/${id}`, {
+          ...jobDetail,
+          isApproved: true,
+        });
+        history.push("/submissions");
+      }
     } catch (err) {
       console.log(err);
     }
@@ -55,7 +57,7 @@ const SubmissionDetail = () => {
 
   const handleDelete = async () => {
     try {
-      if (window.confirm("Delete this submission?")) {
+      if (window.confirm("Reject this submission?")) {
         await JobsApi.delete(`/${id}`);
         history.push("/submissions");
       }

@@ -37,7 +37,7 @@ const JobDetail = () => {
     };
 
     fetchJobDetail();
-  }, []);
+  }, [id]);
 
   const handleDelete = async () => {
     try {

@@ -7,12 +7,6 @@ import {
   Grid,
   Typography,
   Container,
-  Select,
-  InputLabel,
-  MenuItem,
-  FormControl,
-  FormControlLabel,
-  Checkbox,
 } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";

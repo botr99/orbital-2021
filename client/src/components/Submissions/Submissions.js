@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import JobsApi from "../../apis/JobsApi";
 
 import { Link } from "react-router-dom";
@@ -19,7 +19,7 @@ const Submissions = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredCategories, setFilteredCategories] = useState([]);
 
-  const fetchSubmissions = async () => {
+  const fetchSubmissions = useCallback(async () => {
     try {
       const categoriesString = filteredCategories.join(",");
 
@@ -35,11 +35,11 @@ const Submissions = () => {
     } catch (err) {
       console.log(err);
     }
-  };
+  }, [page, limit, searchTerm, filteredCategories, setSubmissions]);
 
   useEffect(() => {
     fetchSubmissions();
-  }, [page, limit, searchTerm, filteredCategories, setSubmissions]);
+  }, [fetchSubmissions]);
 
   const handleApprove = () => {
     fetchSubmissions();
