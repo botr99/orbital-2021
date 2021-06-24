@@ -110,6 +110,7 @@ export const postJobRegistration = async (req, res) => {
 
 export const postJob = async (req, res) => {
   const newJob = new Job({ ...req.body });
+  console.log(newJob);
   try {
     await newJob.save();
     res.status(201).json(newJob);

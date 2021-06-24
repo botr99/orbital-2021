@@ -71,6 +71,7 @@ const AddJob = () => {
     skills: "",
     categories: [],
     selectedFile: "",
+    hours: "",
   };
 
   const [startDate, setStartDate] = useState(Date.now());
@@ -113,6 +114,9 @@ const AddJob = () => {
         skills: formData.skills,
         categories: formData.categories,
         selectedFile: formData.selectedFile,
+        startDate,
+        endDate,
+        hours: formData.hours,
       });
       // redirect to home page
       history.push("/");
@@ -279,7 +283,18 @@ const AddJob = () => {
               </Grid>
             </MuiPickersUtilsProvider>
           </div>
-
+          <div className="mb-3">
+            <TextField
+              variant="outlined"
+              label="Number of Hours Required"
+              name="hours"
+              value={formData.hours}
+              onChange={handleChange}
+              fullWidth
+              required
+              type="number"
+            />
+          </div>
           <div className="mb-3">
             <p>Image:</p>
             <FileBase
