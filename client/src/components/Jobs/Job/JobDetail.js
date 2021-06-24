@@ -41,9 +41,12 @@ const JobDetail = () => {
 
   const handleDelete = async () => {
     try {
-      await JobsApi.delete(`/${id}`);
-      // redirect to home page
-      history.push("/");
+      if (window.confirm("Delete this job?")) {
+        // Confirmation message
+        await JobsApi.delete(`/${id}`);
+        // redirect to home page
+        history.push("/");
+      }
     } catch (err) {
       console.log(err);
     }

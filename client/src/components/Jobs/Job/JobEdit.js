@@ -76,7 +76,7 @@ const JobEdit = () => {
     e.preventDefault();
 
     try {
-      console.log(formData);
+      // console.log(formData);
       await JobsApi.patch(`/${id}`, formData);
       // redirect to the job detail page
       history.push(`/jobs/${id}`);
