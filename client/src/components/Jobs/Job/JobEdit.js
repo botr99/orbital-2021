@@ -33,6 +33,7 @@ const initialFormData = {
   telephoneNum: "",
   mobileNum: "",
   email: "",
+  website: "",
   title: "",
   purpose: "",
   skills: "",
@@ -62,40 +63,21 @@ const JobEdit = () => {
         // as that of the job retrieved.
         setOrganizer(res.data.organizer);
 
-        setFormData({
-          contactName: res.data.contactName,
-          telephoneNum: res.data.telephoneNum,
-          mobileNum: res.data.mobileNum,
-          email: res.data.email,
-          title: res.data.title,
-          purpose: res.data.purpose,
-          skills: res.data.skills,
-          categories: res.data.categories,
-        });
+        setFormData(res.data);
       } catch (err) {
         console.log(err);
       }
     };
 
     fetchJob();
-  }, []);
+  }, [id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      await JobsApi.patch(`/${id}`, {
-        organizer: user?.result?.name,
-        registerNum: user?.result?.registerNum,
-        contactName: formData.contactName,
-        telephoneNum: formData.telephoneNum,
-        mobileNum: formData.telephoneNum,
-        email: formData.email,
-        title: formData.title,
-        purpose: formData.purpose,
-        skills: formData.skills,
-        categories: formData.categories,
-      });
+      console.log(formData);
+      await JobsApi.patch(`/${id}`, formData);
       // redirect to the job detail page
       history.push(`/jobs/${id}`);
     } catch (err) {
@@ -209,6 +191,17 @@ const JobEdit = () => {
               name="email"
               value={formData.email}
               type="email"
+              onChange={handleChange}
+              fullWidth
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <TextField
+              variant="outlined"
+              label="Website"
+              name="website"
+              value={formData.website}
               onChange={handleChange}
               fullWidth
               required
