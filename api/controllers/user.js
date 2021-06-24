@@ -7,14 +7,13 @@ const secret = "test";
 
 export const getRegisteredJobs = async (req, res) => {
   try {
-    const student = await User.findById(req.id).populate(
-      "registeredJobs",
-      "-createdAt -updatedAt -__v" // exclude these fields from being shown
+    const student = await User.findById(req.params.id).populate(
+      "registeredJobs"
     );
     const registeredJobs = student.registeredJobs;
     res.status(200).json(registeredJobs);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(404).json({ message: "User not found" });
   }
 };
 /* Example of a response to a student wanting to find out which jobs
@@ -74,6 +73,7 @@ export const login = async (req, res) => {
         email: existingUser.email,
         id: existingUser._id,
         role: existingUser.role,
+        name: existingUser.name,
       },
       secret,
       {
@@ -123,7 +123,12 @@ export const signup = async (req, res) => {
     console.log(newUser);
 
     const token = jwt.sign(
-      { email: newUser.email, id: newUser._id, role: newUser.role },
+      {
+        email: newUser.email,
+        id: newUser._id,
+        role: newUser.role,
+        name: newUser.name,
+      },
       secret,
       {
         expiresIn: "1h",

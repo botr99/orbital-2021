@@ -7,6 +7,7 @@ import SearchBar from "../SearchBar";
 import CategoryFilter from "../CategoryFilter";
 import PaginationLimit from "../PaginationLimit/PaginationLimit";
 import { Box, Button, Grid } from "@material-ui/core";
+import ROLES from "../../utils/roles";
 
 const Jobs = () => {
   const user = JSON.parse(localStorage.getItem("profile"));
@@ -21,7 +22,7 @@ const Jobs = () => {
 
   const allowedToAddJob = () => {
     const userRole = user?.result?.role;
-    return user && userRole && userRole !== "Student";
+    return user && userRole && userRole !== ROLES.Student;
   };
 
   useEffect(() => {

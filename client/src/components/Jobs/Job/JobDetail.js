@@ -16,6 +16,7 @@ import { Link, useHistory, useParams } from "react-router-dom";
 import JobsApi from "../../../apis/JobsApi";
 import useStyles from "./styles";
 import Register from "../../Register/Register";
+import ROLES from "../../../utils/roles";
 
 const JobDetail = () => {
   const classes = useStyles();
@@ -72,7 +73,8 @@ const JobDetail = () => {
           color="primary"
           startIcon={<EditIcon />}
           component={Link}
-          to={`/jobs/${jobDetail._id}/edit`}>
+          to={`/jobs/${jobDetail._id}/edit`}
+        >
           Edit
         </Button>
         <Button
@@ -80,7 +82,8 @@ const JobDetail = () => {
           color="secondary"
           className={classes.button}
           startIcon={<DeleteIcon />}
-          onClick={handleDelete}>
+          onClick={handleDelete}
+        >
           Delete
         </Button>
       </Grid>
@@ -140,7 +143,8 @@ const JobDetail = () => {
               <Typography
                 display="inline"
                 component="a"
-                href={`mailto:${jobDetail.email}`}>
+                href={`mailto:${jobDetail.email}`}
+              >
                 {jobDetail.email}
               </Typography>
               <br />
@@ -148,7 +152,8 @@ const JobDetail = () => {
               <Typography
                 display="inline"
                 component="a"
-                href={`https://${jobDetail.website}`}>
+                href={`https://${jobDetail.website}`}
+              >
                 {jobDetail.website}
               </Typography>
             </CardContent>
@@ -172,7 +177,10 @@ const JobDetail = () => {
         <Container maxWidth="md">
           <Register
             jobId={id}
-            isOrganizer={user?.result?.name === jobDetail.organizer}
+            isOrganizerOrAdmin={
+              user?.result?.name === jobDetail.organizer ||
+              user?.result?.role === ROLES.Admin
+            }
           />
         </Container>
       )}

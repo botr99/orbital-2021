@@ -11,8 +11,10 @@ import {
   deleteJob,
 } from "../../controllers/jobs.js";
 import { validateJob } from "../../middleware/validateJob.js";
+import assignUser from "../../middleware/assignUser.js";
 import checkAuth from "../../middleware/checkAuth.js";
 import checkJobIsApproved from "../../middleware/checkJobIsApproved.js";
+import validateOrganizer from "../../middleware/validateOrganizer.js";
 import ROLES from "../../utils/roles.js";
 
 const router = express.Router();
@@ -27,10 +29,16 @@ router.get("/categories", getCategories);
 
 router.get("/", getApprovedJobs);
 
-router.get("/unapproved", checkAuth([ROLES.Admin]), getUnapprovedJobs);
+router.get(
+  "/unapproved",
+  assignUser,
+  checkAuth([ROLES.Admin]),
+  getUnapprovedJobs
+);
 
 router.get(
   "/:id/registrations",
+  assignUser,
   checkAuth([
     ROLES.Admin,
     ROLES.StudentGroup,
@@ -41,10 +49,11 @@ router.get(
   getJobRegistrations
 );
 
-router.get("/:id", checkJobIsApproved, getJobDetail);
+router.get("/:id", assignUser, checkJobIsApproved, getJobDetail);
 
 router.post(
   "/:id/registrations",
+  assignUser,
   checkAuth([ROLES.Student]),
   checkJobIsApproved,
   postJobRegistration
@@ -52,6 +61,7 @@ router.post(
 
 router.post(
   "/",
+  assignUser,
   checkAuth([ROLES.Admin, ROLES.StudentGroup, ROLES.Organization]),
   validateJob,
   postJob
@@ -59,16 +69,20 @@ router.post(
 
 router.patch(
   "/:id",
+  assignUser,
   checkAuth([ROLES.Admin, ROLES.StudentGroup, ROLES.Organization]),
   checkJobIsApproved,
+  validateOrganizer,
   validateJob,
   updateJob
 );
 
 router.delete(
   "/:id",
+  assignUser,
   checkAuth([ROLES.Admin, ROLES.StudentGroup, ROLES.Organization]),
   checkJobIsApproved,
+  validateOrganizer,
   deleteJob
 );
 
