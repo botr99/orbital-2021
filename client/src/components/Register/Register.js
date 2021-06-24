@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import JobsApi from "../../apis/JobsApi";
 import ROLES from "../../utils/roles";
 
-const Register = ({ jobId, isOrganizer }) => {
+const Register = ({ jobId, isOrganizerOrAdmin }) => {
   const [registrations, setRegistrations] = useState([]);
   const [isRegistered, setIsRegistered] = useState(true);
   const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
@@ -15,6 +15,7 @@ const Register = ({ jobId, isOrganizer }) => {
     const fetchRegistrations = async () => {
       try {
         const res = await JobsApi.get(`/${jobId}/registrations`);
+        console.log(res);
         setRegistrations(res.data);
         if (role === ROLES.Student) {
           setIsRegistered(res.data.some((reg) => reg._id === userId));
@@ -39,7 +40,7 @@ const Register = ({ jobId, isOrganizer }) => {
         ) : (
           <Registrations
             registrations={registrations}
-            isOrganizer={isOrganizer}
+            isOrganizerOrAdmin={isOrganizerOrAdmin}
           />
         ))}
     </>

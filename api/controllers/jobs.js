@@ -59,15 +59,12 @@ export const getUnapprovedJobs = (req, res) => {
 };
 
 export const getJobRegistrations = async (req, res) => {
-  // console.log("Orgs/student groups (and admin) allowed here only");
   try {
-    const job = await Job.find({
-      _id: req.params.id,
-    }).populate(
+    const job = await Job.findById(req.params.id).populate(
       "registrations",
       "name contactNum email" // only retrieve certain fields
     );
-    res.status(200).json(job[0].registrations);
+    res.status(200).json(job.registrations);
   } catch (err) {
     res.status(404).json({ message: "Job not found" });
   }
@@ -113,7 +110,6 @@ export const postJob = async (req, res) => {
   try {
     await newJob.save();
     res.status(201).json(newJob);
-    console.log(newJob);
   } catch (err) {
     res.status(409).json({ message: err.message });
   }

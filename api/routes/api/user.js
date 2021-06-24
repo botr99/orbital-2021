@@ -1,11 +1,19 @@
 import express from "express";
 import { getRegisteredJobs, login, signup } from "../../controllers/user.js";
+import assignUser from "../../middleware/assignUser.js";
 import checkAuth from "../../middleware/checkAuth.js";
+import validateUser from "../../middleware/validateUser.js";
 import ROLES from "../../utils/roles.js";
 
 const router = express.Router();
 
-router.get("/registeredJobs", checkAuth([ROLES.Student]), getRegisteredJobs);
+router.get(
+  "/:id/registeredJobs",
+  assignUser,
+  checkAuth([ROLES.Admin, ROLES.Student]),
+  validateUser,
+  getRegisteredJobs
+);
 
 router.post("/login", login);
 

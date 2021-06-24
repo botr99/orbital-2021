@@ -4,7 +4,6 @@ import express from "express";
 import mongoose from "mongoose";
 import jobRoutes from "./routes/api/jobs.js";
 import userRoutes from "./routes/api/user.js";
-import assignUser from "./middleware/assignUser.js";
 import cors from "cors";
 
 dotenv.config();
@@ -32,7 +31,7 @@ app.use(express.json({ limit: "5mb" }));
 app.use(express.urlencoded({ limit: "5mb", extended: true }));
 
 // routes set up
-app.use("/api/jobs", assignUser, jobRoutes);
+app.use("/api/jobs", jobRoutes);
 app.use("/api/user", userRoutes);
 
 const port = process.env.PORT || 5000;
