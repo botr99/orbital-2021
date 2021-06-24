@@ -33,7 +33,8 @@ const Navbar = () => {
           data-bs-target="#navbarNavAltMarkup"
           aria-controls="navbarNavAltMarkup"
           aria-expanded="false"
-          aria-label="Toggle navigation">
+          aria-label="Toggle navigation"
+        >
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
@@ -46,7 +47,17 @@ const Navbar = () => {
                 Submissions
               </a>
             )}
-            {user && (
+            {user?.result?.role === ROLES.Student && (
+              <a
+                className="nav-link"
+                href={`/registrations/${user.result._id}`}
+              >
+                Registered Jobs
+              </a>
+            )}
+            {[ROLES.Admin, ROLES.StudentGroup, ROLES.Organization].includes(
+              user?.result?.role
+            ) && (
               <a className="nav-link" href="/jobs/new">
                 New Job
               </a>
