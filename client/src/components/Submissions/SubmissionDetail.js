@@ -34,15 +34,17 @@ const SubmissionDetail = () => {
     };
 
     fetchJobDetail();
-  }, []);
+  }, [id]);
 
   const handleApprove = async () => {
     try {
-      await JobsApi.patch(`/${id}`, {
-        ...jobDetail,
-        isApproved: true,
-      });
-      history.push("/submissions");
+      if (window.confirm("Approve this submission?")) {
+        await JobsApi.patch(`/${id}`, {
+          ...jobDetail,
+          isApproved: true,
+        });
+        history.push("/submissions");
+      }
     } catch (err) {
       console.log(err);
     }
@@ -55,8 +57,10 @@ const SubmissionDetail = () => {
 
   const handleDelete = async () => {
     try {
-      await JobsApi.delete(`/${id}`);
-      history.push("/submissions");
+      if (window.confirm("Reject this submission?")) {
+        await JobsApi.delete(`/${id}`);
+        history.push("/submissions");
+      }
     } catch (err) {
       console.log(err);
     }
@@ -91,6 +95,13 @@ const SubmissionDetail = () => {
             </Typography>
             <Typography paragraph>{jobDetail.purpose}</Typography>
             <Typography>Skills required: {jobDetail.skills}</Typography>
+            <Typography>
+              Start Date: {new Date(jobDetail.startDate).toDateString()}
+            </Typography>
+            <Typography>
+              End Date: {new Date(jobDetail.endDate).toDateString()}
+            </Typography>
+            <Typography>Number of Hours Required: {jobDetail.hours}</Typography>
             <Grid>
               {jobDetail.categories &&
                 jobDetail.categories.map((category) => (

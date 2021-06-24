@@ -38,13 +38,16 @@ const JobDetail = () => {
     };
 
     fetchJobDetail();
-  }, []);
+  }, [id]);
 
   const handleDelete = async () => {
     try {
-      await JobsApi.delete(`/${id}`);
-      // redirect to home page
-      history.push("/");
+      if (window.confirm("Delete this job?")) {
+        // Confirmation message
+        await JobsApi.delete(`/${id}`);
+        // redirect to home page
+        history.push("/");
+      }
     } catch (err) {
       console.log(err);
     }
@@ -104,6 +107,16 @@ const JobDetail = () => {
               </Typography>
               <Typography>Organized by: {jobDetail.organizer}</Typography>
               <Typography paragraph>{jobDetail.purpose}</Typography>
+              <Typography>Skills required: {jobDetail.skills}</Typography>
+              <Typography>
+                Start Date: {new Date(jobDetail.startDate).toDateString()}
+              </Typography>
+              <Typography>
+                End Date: {new Date(jobDetail.endDate).toDateString()}
+              </Typography>
+              <Typography>
+                Number of Hours Required: {jobDetail.hours}
+              </Typography>
               <Grid>
                 {jobDetail.categories &&
                   jobDetail.categories.map((category) => (
@@ -152,9 +165,11 @@ const JobDetail = () => {
                 </Button>
               </Grid>
             </CardActions>
-            <Typography color="textSecondary" variant="subtitle2">
-              Last updated: {new Date(jobDetail.updatedAt).toDateString()}
-            </Typography>
+            <CardContent className={classes.cardContent}>
+              <Typography color="textSecondary" variant="subtitle2">
+                Last updated: {new Date(jobDetail.updatedAt).toDateString()}
+              </Typography>
+            </CardContent>
           </Card>
         )}
       </Container>

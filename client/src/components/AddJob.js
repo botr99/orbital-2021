@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import JobsApi from "../apis/JobsApi";
 import { JobsCategoryContext } from "../context/JobsCategoryContext";
@@ -14,7 +14,13 @@ import {
   Typography,
   FormControlLabel,
   Checkbox,
+  Grid,
 } from "@material-ui/core";
+import DateFnsUtils from "@date-io/date-fns";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
 import FileBase from "react-file-base64";
 import TnC from "./Auth/TnC";
 
@@ -64,7 +70,13 @@ const AddJob = () => {
     skills: "",
     categories: [],
     selectedFile: "",
+    startDate: Date.now(),
+    endDate: Date.now(),
+    hours: "",
   };
+
+  // const [startDate, setStartDate] = useState(Date.now());
+  // const [endDate, setEndDate] = useState(Date.now());
 
   const [formData, setFormData] = useState(initialFormData);
   const [agree, setAgree] = useState(false);
@@ -72,6 +84,27 @@ const AddJob = () => {
   const categories = useContext(JobsCategoryContext); // the categories retrieved from the database
 
   let history = useHistory();
+
+  const handleStartDateChange = (date) => {
+    setFormData({
+      ...formData,
+      startDate: date,
+      endDate: formData.endDate < date ? date : formData.endDate,
+    });
+
+    // setStartDate(date);
+    // setEndDate(endDate < date ? date : endDate);
+  };
+
+  const handleEndDateChange = (date) => {
+    setFormData({
+      ...formData,
+      endDate: date,
+      startDate: formData.startDate > date ? date : formData.startDate,
+    });
+    // setEndDate(date);
+    // setStartDate(startDate > date ? date : startDate);
+  };
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -93,6 +126,9 @@ const AddJob = () => {
         skills: formData.skills,
         categories: formData.categories,
         selectedFile: formData.selectedFile,
+        startDate: formData.startDate,
+        endDate: formData.endDate,
+        hours: formData.hours,
       });
       // redirect to home page
       history.push("/");
@@ -174,26 +210,26 @@ const AddJob = () => {
             />
           </div>
           <div className="mb-3">
-            <TextField
-              variant="outlined"
-              label="Telephone Number"
-              name="telephoneNum"
-              value={formData.telephoneNum}
-              type="tel"
-              onChange={handleChange}
-              half
-              required
-            />
-            <TextField
-              variant="outlined"
-              label="Mobile Number"
-              name="mobileNum"
-              value={formData.mobileNum}
-              type="tel"
-              onChange={handleChange}
-              half
-              required
-            />
+            <Grid container justify="space-between">
+              <TextField
+                variant="outlined"
+                label="Telephone Number"
+                name="telephoneNum"
+                value={formData.telephoneNum}
+                type="tel"
+                onChange={handleChange}
+                required
+              />
+              <TextField
+                variant="outlined"
+                label="Mobile Number"
+                name="mobileNum"
+                value={formData.mobileNum}
+                type="tel"
+                onChange={handleChange}
+                required
+              />
+            </Grid>
           </div>
           <div className="mb-3">
             <TextField
@@ -227,6 +263,48 @@ const AddJob = () => {
               onChange={handleChange}
               fullWidth
               required
+            />
+          </div>
+          <div className="mb-3">
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <Grid container justify="space-between">
+                <KeyboardDatePicker
+                  minDate={Date.now()}
+                  margin="normal"
+                  id="start-date-picker"
+                  label="Start Date"
+                  format="MM/dd/yyyy"
+                  value={formData.startDate}
+                  onChange={handleStartDateChange}
+                  KeyboardButtonProps={{
+                    "aria-label": "change start date",
+                  }}
+                />
+                <KeyboardDatePicker
+                  minDate={Date.now()}
+                  margin="normal"
+                  id="end-date-picker"
+                  label="End Date"
+                  format="MM/dd/yyyy"
+                  value={formData.endDate}
+                  onChange={handleEndDateChange}
+                  KeyboardButtonProps={{
+                    "aria-label": "change end date",
+                  }}
+                />
+              </Grid>
+            </MuiPickersUtilsProvider>
+          </div>
+          <div className="mb-3">
+            <TextField
+              variant="outlined"
+              label="Number of Hours Required"
+              name="hours"
+              value={formData.hours}
+              onChange={handleChange}
+              fullWidth
+              required
+              type="number"
             />
           </div>
           <div className="mb-3">

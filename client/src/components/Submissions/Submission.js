@@ -26,11 +26,13 @@ const Submission = ({ job, handleApprove }) => {
 
   const handleClick = async () => {
     try {
-      await JobsApi.patch(`/${_id}`, {
-        ...job,
-        isApproved: true,
-      });
-      handleApprove(); // Refetch submissions
+      if (window.confirm("Approve this submission?")) {
+        await JobsApi.patch(`/${_id}`, {
+          ...job,
+          isApproved: true,
+        });
+        handleApprove(); // Refetch submissions
+      }
     } catch (err) {
       console.log(err);
     }
