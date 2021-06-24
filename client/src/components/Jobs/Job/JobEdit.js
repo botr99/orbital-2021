@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import JobsApi from "../../../apis/JobsApi";
+import FileBase from "react-file-base64";
 import { JobsCategoryContext } from "../../../context/JobsCategoryContext";
 import {
   Button,
@@ -282,6 +283,16 @@ const JobEdit = () => {
               fullWidth
               required
               type="number"
+            />
+          </div>
+          <div className="mb-3">
+            <p>Image:</p>
+            <FileBase
+              type="file"
+              multiple={false}
+              onDone={({ base64 }) =>
+                setFormData({ ...formData, selectedFile: base64 })
+              }
             />
           </div>
           <Button variant="contained" color="primary" type="submit">
