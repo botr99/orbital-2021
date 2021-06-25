@@ -45,7 +45,7 @@ const Auth = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const classes = useStyles();
-  // const [isInvalidForm, setIsInvalidForm] = useState(true); // Disable form submission if invalid form data
+  const [isInvalidForm, setIsInvalidForm] = useState(true); // Disable form submission if invalid form data
 
   const handleShowPassword = () => setShowPassword(!showPassword);
 
@@ -84,24 +84,27 @@ const Auth = () => {
     return validator.equals(formData.password, formData.confirmPassword);
   };
 
+  const validateEmail = () => {
+    return validator.isEmail(formData.email);
+  };
+
   const validateWebsite = () => {
     return validator.isURL(formData.website);
   };
 
-  // const validateSignup = () => {
-  //   console.log(agree);
-  //   console.log(validateContact());
-  //   if (
-  //     agree &&
-  //     validateContact() &&
-  //     validatePassword() &&
-  //     validator.isEmail(formData.email)
-  //   ) {
-  //     setIsInvalidForm(false);
-  //   } else {
-  //     setIsInvalidForm(true);
-  //   }
-  // };
+  const validateSignup = () => {
+    if (
+      agree &&
+      validateContact() &&
+      validatePassword() &&
+      validateWebsite() &&
+      validateEmail()
+    ) {
+      setIsInvalidForm(false);
+    } else {
+      setIsInvalidForm(true);
+    }
+  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -207,7 +210,7 @@ const Auth = () => {
               )}
             <Input
               helperText={
-                !validator.isEmail(formData.email)
+                !validateEmail()
                   ? "Please enter a valid email address"
                   : requireNUSEmail()
                   ? validateNUSEmail()
@@ -216,8 +219,7 @@ const Auth = () => {
                   : ""
               }
               handleError={
-                !validator.isEmail(formData.email) ||
-                (requireNUSEmail() && !validateNUSEmail())
+                !validateEmail() || (requireNUSEmail() && !validateNUSEmail())
               }
               name="email"
               label="Email Address"
