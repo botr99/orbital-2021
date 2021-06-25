@@ -67,7 +67,7 @@ const JobDetail = () => {
 
   const isCreator = () =>
     (user?.result?.name === jobDetail.organizer ||
-      user.result.role === ROLES.Admin) && (
+      user?.result?.role === ROLES.Admin) && (
       <Grid>
         <Button
           variant="contained"
