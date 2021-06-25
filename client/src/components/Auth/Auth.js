@@ -56,10 +56,8 @@ const Auth = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // console.log(formData);
 
     if (isSignup) {
-      window.alert("Signed up successfully!");
       dispatch(signup(formData, history));
     } else {
       dispatch(login(formData, history));
@@ -84,6 +82,10 @@ const Auth = () => {
 
   const validateRepeatPassword = () => {
     return validator.equals(formData.password, formData.confirmPassword);
+  };
+
+  const validateWebsite = () => {
+    return validator.isURL(formData.website);
   };
 
   // const validateSignup = () => {
@@ -169,6 +171,10 @@ const Auth = () => {
                     fullWidth
                   />
                   <Input
+                    helperText={
+                      !validateWebsite() ? "Please enter a valid website." : ""
+                    }
+                    handleError={!validateWebsite()}
                     name="website"
                     label="Group/Organization Website"
                     handleChange={handleChange}
