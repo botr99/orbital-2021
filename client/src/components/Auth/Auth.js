@@ -45,7 +45,7 @@ const Auth = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const classes = useStyles();
-  // const [invalidForm, setInvalidForm] = useState(false); // Disable form submission if invalid form data
+  // const [isInvalidForm, setIsInvalidForm] = useState(true); // Disable form submission if invalid form data
 
   const handleShowPassword = () => setShowPassword(!showPassword);
 
@@ -59,16 +59,12 @@ const Auth = () => {
     // console.log(formData);
 
     if (isSignup) {
+      window.alert("Signed up successfully!");
       dispatch(signup(formData, history));
     } else {
       dispatch(login(formData, history));
     }
   };
-
-  const handleChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-
-  const handleCheck = () => setAgree(!agree);
 
   const requireNUSEmail = () => {
     return isSignup && formData.role === ROLES.Student;
@@ -86,11 +82,32 @@ const Auth = () => {
     return validator.isStrongPassword(formData.password);
   };
 
-  // const signUpValidation = () => {
-  //   if (!isSignup) {
-  //     return true;
+  const validateRepeatPassword = () => {
+    return validator.equals(formData.password, formData.confirmPassword);
+  };
+
+  // const validateSignup = () => {
+  //   console.log(agree);
+  //   console.log(validateContact());
+  //   if (
+  //     agree &&
+  //     validateContact() &&
+  //     validatePassword() &&
+  //     validator.isEmail(formData.email)
+  //   ) {
+  //     setIsInvalidForm(false);
+  //   } else {
+  //     setIsInvalidForm(true);
   //   }
   // };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleCheck = () => {
+    setAgree(!agree);
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -217,11 +234,9 @@ const Auth = () => {
             {isSignup && (
               <Input
                 helperText={
-                  formData.password !== formData.confirmPassword
-                    ? "Passwords do not match"
-                    : ""
+                  !validateRepeatPassword() ? "Passwords do not match" : ""
                 }
-                handleError={formData.password !== formData.confirmPassword}
+                handleError={!validateRepeatPassword()}
                 name="confirmPassword"
                 label="Repeat Password"
                 handleChange={handleChange}
