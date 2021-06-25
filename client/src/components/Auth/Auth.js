@@ -16,6 +16,7 @@ import {
 } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import validator from "validator";
 
 import { login, signup } from "../../actions/auth.js";
 import useStyles from "./styles";
@@ -44,6 +45,7 @@ const Auth = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const classes = useStyles();
+  // const [isInvalidForm, setIsInvalidForm] = useState(true); // Disable form submission if invalid form data
 
   const handleShowPassword = () => setShowPassword(!showPassword);
 
@@ -54,7 +56,6 @@ const Auth = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // console.log(formData);
 
     if (isSignup) {
       dispatch(signup(formData, history));
@@ -63,10 +64,52 @@ const Auth = () => {
     }
   };
 
-  const handleChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const requireNUSEmail = () => {
+    return isSignup && formData.role === ROLES.Student;
+  };
 
-  const handleCheck = () => setAgree(!agree);
+  const validateNUSEmail = () => {
+    return formData.email.split("@")[1] === "u.nus.edu";
+  };
+
+  const validateContact = () => {
+    return validator.isMobilePhone(formData.contactNum, "en-SG");
+  };
+
+  const validatePassword = () => {
+    return validator.isStrongPassword(formData.password);
+  };
+
+  const validateRepeatPassword = () => {
+    return validator.equals(formData.password, formData.confirmPassword);
+  };
+
+  const validateWebsite = () => {
+    return validator.isURL(formData.website);
+  };
+
+  // const validateSignup = () => {
+  //   console.log(agree);
+  //   console.log(validateContact());
+  //   if (
+  //     agree &&
+  //     validateContact() &&
+  //     validatePassword() &&
+  //     validator.isEmail(formData.email)
+  //   ) {
+  //     setIsInvalidForm(false);
+  //   } else {
+  //     setIsInvalidForm(true);
+  //   }
+  // };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleCheck = () => {
+    setAgree(!agree);
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -128,12 +171,16 @@ const Auth = () => {
                     fullWidth
                   />
                   <Input
+                    helperText={
+                      !validateWebsite() ? "Please enter a valid website." : ""
+                    }
+                    handleError={!validateWebsite()}
                     name="website"
                     label="Group/Organization Website"
                     handleChange={handleChange}
                     fullWidth
                   />
-                  {formData.role === "Organization" && (
+                  {formData.role === ROLES.Organization && (
                     <Input
                       name="regNum"
                       label="UEN/Charity or Society Registration Number"
@@ -141,8 +188,14 @@ const Auth = () => {
                       fullWidth
                     />
                   )}
-                  {formData.role === "Organization" && (
+                  {formData.role === ROLES.Organization && (
                     <Input
+                      helperText={
+                        !validateContact()
+                          ? "Please enter a valid phone number"
+                          : ""
+                      }
+                      handleError={!validateContact()}
                       name="contactNum"
                       label="Contact Number"
                       handleChange={handleChange}
@@ -153,12 +206,31 @@ const Auth = () => {
                 </>
               )}
             <Input
+              helperText={
+                !validator.isEmail(formData.email)
+                  ? "Please enter a valid email address"
+                  : requireNUSEmail()
+                  ? validateNUSEmail()
+                    ? ""
+                    : "Please sign up using your NUS email address ending in 'u.nus.edu'"
+                  : ""
+              }
+              handleError={
+                !validator.isEmail(formData.email) ||
+                (requireNUSEmail() && !validateNUSEmail())
+              }
               name="email"
               label="Email Address"
               handleChange={handleChange}
               type="email"
             />
             <Input
+              helperText={
+                isSignup && !validatePassword()
+                  ? "Please use a stronger password with a minimum length of 8 characters with at least 1 lowercase, uppercase, number and symbol"
+                  : ""
+              }
+              handleError={isSignup && !validatePassword()}
               name="password"
               label="Password"
               handleChange={handleChange}
@@ -168,11 +240,9 @@ const Auth = () => {
             {isSignup && (
               <Input
                 helperText={
-                  formData.password !== formData.confirmPassword
-                    ? "Passwords do not match"
-                    : ""
+                  !validateRepeatPassword() ? "Passwords do not match" : ""
                 }
-                handleError={formData.password !== formData.confirmPassword}
+                handleError={!validateRepeatPassword()}
                 name="confirmPassword"
                 label="Repeat Password"
                 handleChange={handleChange}
@@ -197,7 +267,7 @@ const Auth = () => {
             </>
           )}
           <Button
-            disabled={isSignup && !agree ? true : false}
+            disabled={isSignup && !agree}
             type="submit"
             fullWidth
             variant="contained"

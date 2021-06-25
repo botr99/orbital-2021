@@ -112,9 +112,9 @@ const JobEdit = () => {
     }
   };
 
-  if (user?.result?.name !== organizer) {
-    return null;
-  }
+  // if (user?.result?.name !== organizer) {
+  //   return null;
+  // }
 
   return (
     <div className="row">
