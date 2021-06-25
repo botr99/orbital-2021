@@ -16,6 +16,7 @@ import {
 } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import validator from "validator";
 
 import { login, signup } from "../../actions/auth.js";
 import useStyles from "./styles";
@@ -44,6 +45,7 @@ const Auth = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const classes = useStyles();
+  // const [invalidForm, setInvalidForm] = useState(false); // Disable form submission if invalid form data
 
   const handleShowPassword = () => setShowPassword(!showPassword);
 
@@ -67,6 +69,28 @@ const Auth = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleCheck = () => setAgree(!agree);
+
+  const requireNUSEmail = () => {
+    return isSignup && formData.role === ROLES.Student;
+  };
+
+  const validateNUSEmail = () => {
+    return formData.email.split("@")[1] === "u.nus.edu";
+  };
+
+  const validateContact = () => {
+    return validator.isMobilePhone(formData.contactNum, "en-SG");
+  };
+
+  const validatePassword = () => {
+    return validator.isStrongPassword(formData.password);
+  };
+
+  // const signUpValidation = () => {
+  //   if (!isSignup) {
+  //     return true;
+  //   }
+  // };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -133,7 +157,7 @@ const Auth = () => {
                     handleChange={handleChange}
                     fullWidth
                   />
-                  {formData.role === "Organization" && (
+                  {formData.role === ROLES.Organization && (
                     <Input
                       name="regNum"
                       label="UEN/Charity or Society Registration Number"
@@ -141,8 +165,14 @@ const Auth = () => {
                       fullWidth
                     />
                   )}
-                  {formData.role === "Organization" && (
+                  {formData.role === ROLES.Organization && (
                     <Input
+                      helperText={
+                        !validateContact()
+                          ? "Please enter a valid phone number"
+                          : ""
+                      }
+                      handleError={!validateContact()}
                       name="contactNum"
                       label="Contact Number"
                       handleChange={handleChange}
@@ -153,12 +183,31 @@ const Auth = () => {
                 </>
               )}
             <Input
+              helperText={
+                !validator.isEmail(formData.email)
+                  ? "Please enter a valid email address"
+                  : requireNUSEmail()
+                  ? validateNUSEmail()
+                    ? ""
+                    : "Please sign up using your NUS email address ending in 'u.nus.edu'"
+                  : ""
+              }
+              handleError={
+                !validator.isEmail(formData.email) ||
+                (requireNUSEmail() && !validateNUSEmail())
+              }
               name="email"
               label="Email Address"
               handleChange={handleChange}
               type="email"
             />
             <Input
+              helperText={
+                isSignup && !validatePassword()
+                  ? "Please use a stronger password with a minimum length of 8 characters with at least 1 lowercase, uppercase, number and symbol"
+                  : ""
+              }
+              handleError={isSignup && !validatePassword()}
               name="password"
               label="Password"
               handleChange={handleChange}
@@ -197,7 +246,7 @@ const Auth = () => {
             </>
           )}
           <Button
-            disabled={isSignup && !agree ? true : false}
+            disabled={isSignup && !agree}
             type="submit"
             fullWidth
             variant="contained"
