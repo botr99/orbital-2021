@@ -33,8 +33,7 @@ const Navbar = () => {
           data-bs-target="#navbarNavAltMarkup"
           aria-controls="navbarNavAltMarkup"
           aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
+          aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
@@ -50,8 +49,7 @@ const Navbar = () => {
             {user?.result?.role === ROLES.Student && (
               <a
                 className="nav-link"
-                href={`/registrations/${user.result._id}`}
-              >
+                href={`/registrations/${user.result._id}`}>
                 Registered Jobs
               </a>
             )}

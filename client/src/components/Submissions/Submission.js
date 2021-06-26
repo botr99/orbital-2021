@@ -11,11 +11,25 @@ import {
 import { Link } from "react-router-dom";
 import useStyles from "./styles";
 import JobsApi from "../../apis/JobsApi";
+import DateRangeIcon from "@material-ui/icons/DateRange";
+import SettingsIcon from "@material-ui/icons/Settings";
+import QueryBuilderIcon from "@material-ui/icons/QueryBuilder";
 
 const Submission = ({ job, handleApprove }) => {
   const classes = useStyles();
 
-  const { organizer, title, purpose, categories, _id, selectedFile } = job;
+  const {
+    title,
+    organizer,
+    purpose,
+    categories,
+    _id,
+    selectedFile,
+    startDate,
+    endDate,
+    skills,
+    hours,
+  } = job;
 
   // add a "..." if title or purpose is too long to be shown entirely
   // on the card
@@ -23,6 +37,12 @@ const Submission = ({ job, handleApprove }) => {
     title.length > 40 ? title.substring(0, 40) + "..." : title;
   const truncatedPurpose =
     purpose.length > 150 ? purpose.substring(0, 150) + "..." : purpose;
+
+  const formatDate = () => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    return `${start.getDay()}/${start.getMonth()}/${start.getFullYear()} - ${end.getDay()}/${end.getMonth()}/${end.getFullYear()}`;
+  };
 
   const handleClick = async () => {
     try {
@@ -47,16 +67,29 @@ const Submission = ({ job, handleApprove }) => {
           title="Job Image"
         />
         <CardContent className={classes.cardContent}>
-          <Typography gutterBottom variant="h5">
-            {truncatedTitle}
+          <Typography variant="h5">{truncatedTitle}</Typography>
+          <Typography gutterBottom variant="subtitle1" color="textSecondary">
+            {organizer}
           </Typography>
-          <Typography variant="body2">Organized by: {organizer}</Typography>
           <Grid>
-            <Typography paragraph>{truncatedPurpose}</Typography>
+            <Typography variant="body1">{truncatedPurpose}</Typography>
           </Grid>
         </CardContent>
         <CardActions>
           <Grid>
+            <Grid container direction="row" alignItems="center">
+              <DateRangeIcon />
+              &nbsp; {formatDate()}
+            </Grid>
+            <Grid container direction="row" alignItems="center">
+              <SettingsIcon />
+              &nbsp; {skills}
+            </Grid>
+            <Grid container direction="row" alignItems="center">
+              <QueryBuilderIcon />
+              &nbsp; {hours} {"hours"}
+            </Grid>
+
             <Grid>
               {categories.map((category) => (
                 <Chip
