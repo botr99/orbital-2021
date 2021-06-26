@@ -9,7 +9,7 @@
     "testEnvironment": "node"
   },
   "scripts": {
-    "start": "cross-env NODE_ENV=production node server.js",
+    "start": "node server.js",
     "devstart": "cross-env NODE_ENV=dev nodemon server.js",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules NODE_ENV=test npx jest --verbose --runInBand",
     "test:watch": "cross-env NODE_OPTIONS=--experimental-vm-modules NODE_ENV=test npx jest --watch --verbose --runInBand"
