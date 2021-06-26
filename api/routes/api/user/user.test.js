@@ -6,7 +6,9 @@ import User from "../../../models/User.js";
 import { users } from "../../../seeds/seedHelpers";
 
 describe("POST /login", () => {
-  beforeAll(async () => {
+  beforeEach(async () => {
+    // clear all the documents in the model
+    await User.deleteMany({});
     // add a random user into the database
     await request(app).post("/api/user/signup").send(users[0]);
   });
@@ -85,10 +87,44 @@ describe("POST /login", () => {
       expect(res.body.token).toBeTruthy();
     });
   });
+});
 
-  afterAll(async () => {
-    // clear the user from the database
-    await User.remove();
+describe("POST /signup", () => {
+  beforeEach(async () => {
+    await User.deleteMany({});
+  });
+
+  describe("given an existing email", () => {
+    beforeEach(async () => {
+      await request(app).post("/api/user/signup").send(users[1]);
+    });
+
+    test("should find that user with the email already exists", async () => {
+      const user = await User.findOne({ email: users[1].email });
+      expect(user).toBeTruthy();
+    });
+
+    test("should respond with a 400 status code", async () => {
+      const res = await request(app).post("/api/user/signup").send(users[1]);
+      expect(res.statusCode).toBe(400);
+    });
+  });
+
+  describe("given a non-existing email", () => {
+    test("should not be able to find any user with the email", async () => {
+      const user = await User.findOne({ email: users[1].email });
+      expect(user).toBeNull();
+    });
+
+    test("should respond wth a 201 status code", async () => {
+      const res = await request(app).post("/api/user/signup").send(users[1]);
+      expect(res.statusCode).toBe(201);
+    });
+
+    test("should respond wth a JWT token", async () => {
+      const res = await request(app).post("/api/user/signup").send(users[1]);
+      expect(res.body.token).toBeTruthy();
+    });
   });
 });
 
