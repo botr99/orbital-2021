@@ -7,7 +7,6 @@ import {
   Chip,
   Grid,
   Typography,
-  Box,
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import useStyles from "./styles";
@@ -55,11 +54,11 @@ const Job = ({ job }) => {
         />
         <CardContent className={classes.cardContent}>
           <Typography variant="h5">{truncatedTitle}</Typography>
-          <Typography variant="h6">{organizer}</Typography>
+          <Typography gutterBottom variant="subtitle1" color="textSecondary">
+            {organizer}
+          </Typography>
           <Grid>
-            <Typography variant="body1" color="textSecondary">
-              {truncatedPurpose}
-            </Typography>
+            <Typography variant="body1">{truncatedPurpose}</Typography>
           </Grid>
         </CardContent>
         <CardActions>
