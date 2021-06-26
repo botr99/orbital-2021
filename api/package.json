@@ -4,9 +4,15 @@
   "private": true,
   "main": "app.js",
   "type": "module",
+  "jest": {
+    "transform": {},
+    "testEnvironment": "node"
+  },
   "scripts": {
-    "start": "node app.js",
-    "devstart": "nodemon app.js"
+    "start": "node server.js",
+    "devstart": "nodemon server.js",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules NODE_ENV=test npx jest --verbose --runInBand",
+    "test:watch": "cross-env NODE_OPTIONS=--experimental-vm-modules NODE_ENV=test npx jest --watch --verbose --runInBand"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -22,6 +28,9 @@
     "morgan": "~1.9.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.7"
+    "cross-env": "^7.0.3",
+    "jest": "^27.0.5",
+    "nodemon": "^2.0.7",
+    "supertest": "^6.1.3"
   }
 }

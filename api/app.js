@@ -3,13 +3,16 @@ import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
 import jobRoutes from "./routes/api/jobs.js";
-import userRoutes from "./routes/api/user.js";
+import userRoutes from "./routes/api/user/user.js";
 import cors from "cors";
 
 dotenv.config();
 
 // set up db connection
-const uri = process.env.DB_URI;
+const uri =
+  process.env.NODE_ENV === "test"
+    ? process.env.DB_URI_TEST
+    : process.env.DB_URI;
 mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -37,8 +40,4 @@ app.get("/", (req, res) => {
   res.send("SERVER IS RUNNING");
 });
 
-const port = process.env.PORT || 5000;
-
-app.listen(port, () =>
-  console.log(`Server started on http://localhost:${port}/`)
-);
+export default app;
