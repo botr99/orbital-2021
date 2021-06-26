@@ -1,6 +1,9 @@
+import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 
-const secret = "test";
+dotenv.config({ path: "../.env" });
+
+const secret = process.env.SECRET;
 
 const assignUser = async (req, res, next) => {
   if (!req.headers.authorization) {

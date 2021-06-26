@@ -1,9 +1,11 @@
 import bcrypt from "bcryptjs";
+import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
-
 import User from "../models/User.js";
 
-const secret = "test";
+dotenv.config({ path: "../.env" });
+
+const secret = process.env.SECRET;
 
 export const getRegisteredJobs = async (req, res) => {
   try {
