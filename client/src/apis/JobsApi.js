@@ -1,11 +1,13 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API = axios.create({ baseURL: 'http://localhost:5000/api/jobs' });
+const API = axios.create({
+  baseURL: "https://nus-volunteer.herokuapp.com/api/jobs",
+});
 
 API.interceptors.request.use((req) => {
-  if (localStorage.getItem('profile')) {
+  if (localStorage.getItem("profile")) {
     req.headers.authorization = `Bearer ${
-      JSON.parse(localStorage.getItem('profile')).token
+      JSON.parse(localStorage.getItem("profile")).token
     }`;
   }
 
