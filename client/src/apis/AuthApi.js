@@ -1,6 +1,8 @@
 import axios from "axios";
 
-export const API = axios.create({ baseURL: "http://localhost:5000/api/user" });
+export const API = axios.create({
+  baseURL: "https://nus-volunteer.herokuapp.com/api/user",
+});
 
 API.interceptors.request.use((req) => {
   if (localStorage.getItem("profile")) {
