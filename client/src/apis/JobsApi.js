@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://nus-volunteer.herokuapp.com/api/jobs",
+  baseURL: "https://nus-ccsgp.herokuapp.com/api/jobs",
 });
 
 API.interceptors.request.use((req) => {
