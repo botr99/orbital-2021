@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
 import jobRoutes from "./routes/api/jobs.js";
-import userRoutes from "./routes/api/user.js";
+import userRoutes from "./routes/api/user/user.js";
 import cors from "cors";
 
 dotenv.config();
@@ -34,8 +34,4 @@ app.use(express.urlencoded({ limit: "5mb", extended: true }));
 app.use("/api/jobs", jobRoutes);
 app.use("/api/user", userRoutes);
 
-const port = process.env.PORT || 5000;
-
-app.listen(port, () =>
-  console.log(`Server started on http://localhost:${port}/`)
-);
+export default app;
