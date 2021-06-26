@@ -17,11 +17,8 @@ const assignUser = async (req, res, next) => {
 
     req.user = decodedData;
 
-    // console.log(req.user);
-    console.log("valid access");
     next();
   } catch (err) {
-    console.log(err);
     res.status(401).json({ message: "Token expired" });
   }
 };

@@ -10,9 +10,12 @@ dotenv.config();
 
 // set up db connection
 const uri =
-  process.env.NODE_ENV === "test"
+  process.env.NODE_ENV === "production"
+    ? process.env.DB_URI_PRODUCTION
+    : process.env.NODE_ENV === "test"
     ? process.env.DB_URI_TEST
-    : process.env.DB_URI;
+    : process.env.DB_URI_DEV;
+
 mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
