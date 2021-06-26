@@ -9,7 +9,10 @@ import cors from "cors";
 dotenv.config();
 
 // set up db connection
-const uri = process.env.DB_URI;
+const uri =
+  process.env.NODE_ENV === "test"
+    ? process.env.DB_URI_TEST
+    : process.env.DB_URI;
 mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
