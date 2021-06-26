@@ -33,6 +33,9 @@ app.use(express.urlencoded({ limit: "5mb", extended: true }));
 // routes set up
 app.use("/api/jobs", jobRoutes);
 app.use("/api/user", userRoutes);
+app.get("/", (req, res) => {
+  res.send("SERVER IS RUNNING");
+});
 
 const port = process.env.PORT || 5000;
 
