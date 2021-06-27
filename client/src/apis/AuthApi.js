@@ -1,7 +1,8 @@
 import axios from "axios";
+import url from "../config/url";
 
 export const API = axios.create({
-  baseURL: "https://nus-ccsgp.herokuapp.com/api/user",
+  baseURL: `${url}/api/user`,
 });
 
 API.interceptors.request.use((req) => {

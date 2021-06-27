@@ -13,7 +13,7 @@ const assignUser = async (req, res, next) => {
   const token = req.headers.authorization.split(" ")[1];
 
   try {
-    const decodedData = jwt.verify(token, secret);
+    const decodedData = jwt.verify(token, `${secret}`);
 
     req.user = decodedData;
 
