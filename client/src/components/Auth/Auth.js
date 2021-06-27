@@ -188,23 +188,21 @@ const Auth = () => {
                       fullWidth
                     />
                   )}
-                  {formData.role === ROLES.Organization && (
-                    <Input
-                      helperText={
-                        !validateContact()
-                          ? "Please enter a valid phone number"
-                          : ""
-                      }
-                      handleError={!validateContact()}
-                      name="contactNum"
-                      label="Contact Number"
-                      handleChange={handleChange}
-                      fullWidth
-                      type="tel"
-                    />
-                  )}
                 </>
               )}
+            {isSignup && (
+              <Input
+                helperText={
+                  !validateContact() ? "Please enter a valid phone number" : ""
+                }
+                handleError={!validateContact()}
+                name="contactNum"
+                label="Contact Number"
+                handleChange={handleChange}
+                fullWidth
+                type="tel"
+              />
+            )}
             <Input
               helperText={
                 !validator.isEmail(formData.email)
