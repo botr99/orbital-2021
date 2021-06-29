@@ -77,7 +77,7 @@ export const login = async (req, res) => {
         role: existingUser.role,
         name: existingUser.name,
       },
-      secret,
+      `${secret}`,
       {
         expiresIn: "1h",
       }
@@ -131,7 +131,7 @@ export const signup = async (req, res) => {
         role: newUser.role,
         name: newUser.name,
       },
-      secret,
+      `${secret}`,
       {
         expiresIn: "1h",
       }

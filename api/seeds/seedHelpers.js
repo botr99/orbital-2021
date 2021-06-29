@@ -48,13 +48,13 @@ export const users = [
     role: "Admin",
     name: "admin1",
     email: "admin1@gmail.com",
-    password: "admin1gmail",
+    password: "admin1gmail!",
   },
   {
     role: "Student",
     name: "student1",
     email: "student1@u.nus.edu",
-    password: "student1nus",
+    password: "student1nus!",
   },
   {
     role: "StudentGroup",
@@ -62,7 +62,7 @@ export const users = [
     email: "studentGroup1@gmail.com",
     contactNum: 87654321,
     website: "https://nus.campuslabs.com/engage/organization/student-group-1",
-    password: "studentGroup1gmail",
+    password: "studentGroup1gmail!",
   },
   {
     role: "Organization",
@@ -71,6 +71,6 @@ export const users = [
     contactNum: 12345678,
     website: "https://organization1.com",
     email: "organization1@gmail.com",
-    password: "organization1gmail",
+    password: "organization1gmail!",
   },
 ];
