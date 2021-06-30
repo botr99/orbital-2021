@@ -1,7 +1,6 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import JobsApi from "../apis/JobsApi";
-import { JobsCategoryContext } from "../context/JobsCategoryContext";
+import { getCategories, postJob } from "../apis/JobsApi";
 import {
   Button,
   Chip,
@@ -23,6 +22,8 @@ import {
 } from "@material-ui/pickers";
 import FileBase from "react-file-base64";
 import TnC from "./Auth/TnC";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import LoadingSpinner from "./LoadingSpinner";
 
 /* styles */
 import { makeStyles } from "@material-ui/core/styles";
@@ -55,6 +56,7 @@ const MenuProps = {
 
 const AddJob = () => {
   const classes = useStyles();
+  const queryClient = useQueryClient();
 
   const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
   // console.log(user);
@@ -81,7 +83,14 @@ const AddJob = () => {
   const [formData, setFormData] = useState(initialFormData);
   const [agree, setAgree] = useState(false);
   const handleCheck = () => setAgree(!agree);
-  const categories = useContext(JobsCategoryContext); // the categories retrieved from the database
+
+  const { data: categories } = useQuery("categories", getCategories);
+  const { mutate, isLoading: postJobLoading } = useMutation(postJob, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("unapprovedJobs");
+      history.push("/");
+    },
+  });
 
   let history = useHistory();
 
@@ -109,32 +118,26 @@ const AddJob = () => {
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      console.log(formData);
-      await JobsApi.post("/", {
-        organizer: user?.result?.name,
-        registerNum: user?.result?.registerNum,
-        contactName: formData.contactName,
-        telephoneNum: formData.telephoneNum,
-        mobileNum: formData.telephoneNum,
-        email: formData.email,
-        website: user?.result?.website,
-        title: formData.title,
-        purpose: formData.purpose,
-        skills: formData.skills,
-        categories: formData.categories,
-        selectedFile: formData.selectedFile,
-        startDate: formData.startDate,
-        endDate: formData.endDate,
-        hours: formData.hours,
-      });
-      // redirect to home page
-      history.push("/");
-    } catch (err) {
-      console.log(err);
-    }
+    // console.log(formData);
+    mutate({
+      organizer: user?.result?.name,
+      registerNum: user?.result?.registerNum,
+      contactName: formData.contactName,
+      telephoneNum: formData.telephoneNum,
+      mobileNum: formData.telephoneNum,
+      email: formData.email,
+      website: user?.result?.website,
+      title: formData.title,
+      purpose: formData.purpose,
+      skills: formData.skills,
+      categories: formData.categories,
+      selectedFile: formData.selectedFile,
+      startDate: formData.startDate,
+      endDate: formData.endDate,
+      hours: formData.hours,
+    });
   };
 
   return (
@@ -189,8 +192,9 @@ const AddJob = () => {
                     ))}
                   </div>
                 )}
-                MenuProps={MenuProps}>
-                {categories.map((category) => (
+                MenuProps={MenuProps}
+              >
+                {categories?.map((category) => (
                   <MenuItem key={category} value={category}>
                     {category}
                   </MenuItem>
@@ -338,8 +342,9 @@ const AddJob = () => {
               disabled={!agree}
               variant="contained"
               color="primary"
-              type="submit">
-              Add Job
+              type="submit"
+            >
+              {postJobLoading ? <LoadingSpinner /> : "Add Job"}
             </Button>
           </div>
         </form>
