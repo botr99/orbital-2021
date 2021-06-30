@@ -22,7 +22,7 @@ export const getCategories = async () => {
 
 export const getApprovedJobs = async ({ queryKey }) => {
   // const [, { page, limit, searchTerm, categoriesString }] = queryKey;
-  const [_key, { page, limit, searchData }] = queryKey;
+  const [, { page, limit, searchData }] = queryKey;
 
   const { searchTerm, categoriesString } = searchData;
 
@@ -36,7 +36,7 @@ export const getApprovedJobs = async ({ queryKey }) => {
 };
 
 export const getUnapprovedJobs = async ({ queryKey }) => {
-  const [_key, { page, limit, searchData }] = queryKey;
+  const [, { page, limit, searchData }] = queryKey;
 
   const { searchTerm, categoriesString } = searchData;
 
