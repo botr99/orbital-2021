@@ -1,7 +1,7 @@
 import axios from "axios";
 import url from "../config/url";
 
-const JobsApi = axios.create({
+export const JobsApi = axios.create({
   baseURL: `${url}/api/jobs`,
 });
 
@@ -20,13 +20,32 @@ export const getCategories = async () => {
   return data;
 };
 
-export const getApprovedJobs = async () => {
-  const { data } = await JobsApi.get("/");
+export const getApprovedJobs = async ({ queryKey }) => {
+  // const [, { page, limit, searchTerm, categoriesString }] = queryKey;
+  const [_key, { page, limit, searchData }] = queryKey;
+
+  const { searchTerm, categoriesString } = searchData;
+
+  const { data } = await JobsApi.get(
+    `/?page=${page}&limit=${limit}&search=${encodeURIComponent(
+      searchTerm
+    )}&categories=${encodeURIComponent(categoriesString)}`
+  );
+
   return data;
 };
 
-export const getUnapprovedJobs = async () => {
-  const { data } = await JobsApi.get("/unapproved");
+export const getUnapprovedJobs = async ({ queryKey }) => {
+  const [_key, { page, limit, searchData }] = queryKey;
+
+  const { searchTerm, categoriesString } = searchData;
+
+  const { data } = await JobsApi.get(
+    `/unapproved/?page=${page}&limit=${limit}&search=${encodeURIComponent(
+      searchTerm
+    )}&categories=${encodeURIComponent(categoriesString)}`
+  );
+
   return data;
 };
 
@@ -45,13 +64,13 @@ export const postJobRegistration = async (jobId) => {
   return data;
 };
 
-export const postJob = async () => {
-  const { data } = await JobsApi.post("/");
+export const postJob = async (jobFields) => {
+  const { data } = await JobsApi.post("/", jobFields);
   return data;
 };
 
-export const updateJob = async (jobId) => {
-  const { data } = await JobsApi.patch(`/${jobId}`);
+export const updateJob = async ({ jobId, jobFields }) => {
+  const { data } = await JobsApi.patch(`/${jobId}`, jobFields);
   return data;
 };
 
