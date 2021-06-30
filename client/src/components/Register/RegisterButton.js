@@ -1,14 +1,23 @@
 import { Box, Button } from "@material-ui/core";
-import JobsApi from "../../apis/JobsApi";
+import { useMutation } from "react-query";
+import { postJobRegistration } from "../../apis/JobsApi";
+import LoadingSpinner from "../LoadingSpinner";
 
 const RegisterButton = ({ jobId, isRegistered, setIsRegistered }) => {
+  // const { error, isError, isLoading, isSuccess, mutateAsync } =
+  //   useMutation(postJobRegistration);
+
+  const { isLoading, mutateAsync } = useMutation(postJobRegistration);
+
   const handleRegister = async () => {
-    try {
-      await JobsApi.post(`/${jobId}/registrations`);
-      setIsRegistered(true);
-    } catch (err) {
-      console.log(err);
-    }
+    await mutateAsync(jobId);
+    setIsRegistered(true);
+    // try {
+    //   // await JobsApi.post(`/${jobId}/registrations`);
+    //   setIsRegistered(true);
+    // } catch (err) {
+    //   console.log(err);
+    // }
   };
 
   return (
@@ -19,7 +28,13 @@ const RegisterButton = ({ jobId, isRegistered, setIsRegistered }) => {
         disabled={isRegistered}
         onClick={handleRegister}
       >
-        Register
+        {isLoading ? (
+          <LoadingSpinner />
+        ) : isRegistered ? (
+          "Registered"
+        ) : (
+          "Register"
+        )}
       </Button>
     </Box>
   );
