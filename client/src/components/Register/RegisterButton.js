@@ -4,20 +4,17 @@ import { postJobRegistration } from "../../apis/JobsApi";
 import LoadingSpinner from "../LoadingSpinner";
 
 const RegisterButton = ({ jobId, isRegistered, setIsRegistered }) => {
-  // const { error, isError, isLoading, isSuccess, mutateAsync } =
+  // const { error, isError, isLoading, isSuccess, mutate } =
   //   useMutation(postJobRegistration);
 
-  const { isLoading, mutateAsync } = useMutation(postJobRegistration);
+  const { isLoading, mutate } = useMutation(postJobRegistration, {
+    onSuccess: () => {
+      setIsRegistered(true);
+    },
+  });
 
-  const handleRegister = async () => {
-    await mutateAsync(jobId);
-    setIsRegistered(true);
-    // try {
-    //   // await JobsApi.post(`/${jobId}/registrations`);
-    //   setIsRegistered(true);
-    // } catch (err) {
-    //   console.log(err);
-    // }
+  const handleRegister = () => {
+    mutate(jobId);
   };
 
   return (
