@@ -1,8 +1,7 @@
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
-import JobsApi from "../../../apis/JobsApi";
+import { getCategories, getJobDetail, updateJob } from "../../../apis/JobsApi";
 import FileBase from "react-file-base64";
-import { JobsCategoryContext } from "../../../context/JobsCategoryContext";
 import {
   Button,
   Chip,
@@ -22,6 +21,11 @@ import {
 import DateFnsUtils from "@date-io/date-fns";
 import useStyles from "./styles";
 
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import LoadingSpinner from "../../LoadingSpinner";
+import LoadingContainer from "../../LoadingContainer";
+import NotFound from "../../NotFound";
+
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -36,6 +40,7 @@ const MenuProps = {
 const JobEdit = () => {
   const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
 
+  const queryClient = useQueryClient();
   const initialFormData = {
     contactName: "",
     telephoneNum: "",
@@ -74,47 +79,52 @@ const JobEdit = () => {
   };
 
   const [organizer, setOrganizer] = useState("");
-  const categories = useContext(JobsCategoryContext); // the categories retrieved from the database
 
   let history = useHistory();
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  useEffect(() => {
-    const fetchJob = async () => {
-      try {
-        const res = await JobsApi.get(`/${id}`);
-
-        // set title, purpose, categories to be the same
-        // as that of the job retrieved.
-        setOrganizer(res.data.organizer);
-
-        setFormData(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    fetchJob();
-  }, [id]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      console.log(formData);
-      await JobsApi.patch(`/${id}`, formData);
-      // redirect to the job detail page
-      history.push(`/jobs/${id}`);
-    } catch (err) {
-      console.log(err);
+  const { data: categories } = useQuery("categories", getCategories);
+  const { isLoading: loadingJobDetail, isError } = useQuery(
+    ["jobs", id],
+    () => getJobDetail(id),
+    {
+      onSuccess: (job) => {
+        setOrganizer(job.organizer);
+        // console.log(job);
+        setFormData(job);
+        //setFormData({ ...job, startDate: "2021-06-15" });
+      },
     }
+  );
+
+  const { mutate, isLoading: updateJobLoading } = useMutation(updateJob, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["jobs", id]);
+      history.push(`/jobs/${id}`);
+    },
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    mutate({
+      jobId: id,
+      jobFields: formData,
+    });
   };
 
   // if (user?.result?.name !== organizer) {
   //   return null;
   // }
+
+  if (loadingJobDetail) {
+    return <LoadingContainer />;
+  }
+
+  if (isError) {
+    return <NotFound />;
+  }
 
   return (
     <div className="row">
@@ -168,13 +178,13 @@ const JobEdit = () => {
                     ))}
                   </div>
                 )}
-                MenuProps={MenuProps}>
-                {categories.length > 0 &&
-                  categories.map((category) => (
-                    <MenuItem key={category} value={category}>
-                      {category}
-                    </MenuItem>
-                  ))}
+                MenuProps={MenuProps}
+              >
+                {categories?.map((category) => (
+                  <MenuItem key={category} value={category}>
+                    {category}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </div>
@@ -296,7 +306,7 @@ const JobEdit = () => {
             />
           </div>
           <Button variant="contained" color="primary" type="submit">
-            Update Job
+            {updateJobLoading ? <LoadingSpinner /> : "Update Job"}
           </Button>
         </form>
         <Button component={Link} to={`/jobs/${id}`} color="primary">

@@ -19,59 +19,42 @@ import PhoneIcon from "@material-ui/icons/Phone";
 import PhoneAndroidIcon from "@material-ui/icons/PhoneAndroid";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
 
-import { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
-import JobsApi from "../../../apis/JobsApi";
+import { getJobDetail, deleteJob } from "../../../apis/JobsApi";
 import useStyles from "./styles";
 import Register from "../../Register/Register";
 import ROLES from "../../../utils/roles";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import LoadingContainer from "../../LoadingContainer";
+import NotFound from "../../NotFound";
 
 const JobDetail = () => {
   const classes = useStyles();
 
   const { id } = useParams();
-  const [jobDetail, setJobDetail] = useState([]);
+  const queryClient = useQueryClient();
   const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
 
   let history = useHistory();
 
-  useEffect(() => {
-    const fetchJobDetail = async () => {
-      try {
-        const res = await JobsApi.get(`/${id}`);
-        setJobDetail(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
+  const {
+    data: jobDetail,
+    isLoading: loadingJobDetail,
+    isError,
+  } = useQuery(["jobs", id], () => getJobDetail(id));
 
-    fetchJobDetail();
-  }, [id]);
+  const { mutate, isLoading: deleteJobLoading } = useMutation(deleteJob, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("jobs");
+      history.push("/");
+    },
+  });
 
-  const handleDelete = async () => {
-    try {
-      if (window.confirm("Delete this job?")) {
-        // Confirmation message
-        await JobsApi.delete(`/${id}`);
-        // redirect to home page
-        history.push("/");
-      }
-    } catch (err) {
-      console.log(err);
+  const handleDelete = () => {
+    if (window.confirm("Delete this job?")) {
+      mutate(id);
     }
   };
-
-  // no such job (can be abstracted out to a 404 page)
-  // if (jobDetail.length === 0) {
-  //   return (
-  //     <div>
-  //       <h1>Job not found</h1>
-  //       <div className="card-footer">
-  //         <Link to="/">Return to Board</Link>
-  //       </div>
-  //     </div>
-  //   );
-  // }
 
   const isCreator = () =>
     (user?.result?.name === jobDetail.organizer ||
@@ -82,7 +65,8 @@ const JobDetail = () => {
           color="primary"
           startIcon={<EditIcon />}
           component={Link}
-          to={`/jobs/${jobDetail._id}/edit`}>
+          to={`/jobs/${jobDetail._id}/edit`}
+        >
           Edit
         </Button>
         <Button
@@ -90,7 +74,8 @@ const JobDetail = () => {
           color="secondary"
           className={classes.button}
           startIcon={<DeleteIcon />}
-          onClick={handleDelete}>
+          onClick={handleDelete}
+        >
           Delete
         </Button>
       </Grid>
@@ -102,9 +87,14 @@ const JobDetail = () => {
     return `${start.getDay()}/${start.getMonth()}/${start.getFullYear()} - ${end.getDay()}/${end.getMonth()}/${end.getFullYear()}`;
   };
 
+  if (isError) {
+    return <NotFound />;
+  }
+
   return (
     <>
       <Container maxWidth="md">
+        {loadingJobDetail && <LoadingContainer />}
         {jobDetail && (
           <Card className={classes.card}>
             <CardMedia
@@ -186,7 +176,8 @@ const JobDetail = () => {
                 <LanguageIcon />
                 <Typography
                   display="inline"
-                  href={`https://${jobDetail.website}`}>
+                  href={`https://${jobDetail.website}`}
+                >
                   &nbsp; {jobDetail.website}
                 </Typography>
               </Grid>
@@ -209,12 +200,12 @@ const JobDetail = () => {
           </Card>
         )}
       </Container>
-      {user && (
+      {user && jobDetail && (
         <Container maxWidth="md">
           <Register
             jobId={id}
             isOrganizerOrAdmin={
-              user?.result?.name === jobDetail.organizer ||
+              user?.result?.name === jobDetail?.organizer ||
               user?.result?.role === ROLES.Admin
             }
           />
