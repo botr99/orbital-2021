@@ -45,6 +45,7 @@ const JobDetail = () => {
 
   const { mutate, isLoading: deleteJobLoading } = useMutation(deleteJob, {
     onSuccess: () => {
+      queryClient.removeQueries(["jobs", id]);
       queryClient.invalidateQueries("jobs");
       history.push("/");
     },

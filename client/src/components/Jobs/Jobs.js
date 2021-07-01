@@ -44,7 +44,6 @@ const Jobs = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    setJobs(null);
     setPage(1);
     setSearchData({
       searchTerm: searchInput,
