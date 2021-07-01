@@ -1,7 +1,7 @@
 import axios from "axios";
 import url from "../config/url";
 
-export const JobsApi = axios.create({
+const JobsApi = axios.create({
   baseURL: `${url}/api/jobs`,
 });
 
@@ -21,7 +21,6 @@ export const getCategories = async () => {
 };
 
 export const getApprovedJobs = async ({ queryKey }) => {
-  // const [, { page, limit, searchTerm, categoriesString }] = queryKey;
   const [, { page, limit, searchData }] = queryKey;
 
   const { searchTerm, categoriesString } = searchData;
