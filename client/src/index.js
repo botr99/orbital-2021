@@ -9,9 +9,17 @@ import { createStore, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
 import authReducer from "./reducers/auth";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 const store = createStore(authReducer, compose(applyMiddleware(thunk)));
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: process.env.NODE_ENV === "production" ? 3 : false,
+      refetchOnWindowFocus: process.env.NODE_ENV === "production",
+    },
+  },
+});
 
 ReactDOM.render(
   <React.StrictMode>
@@ -21,6 +29,7 @@ ReactDOM.render(
           <App />
         </Provider>
       </BrowserRouter>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   </React.StrictMode>,
   document.getElementById("root")
