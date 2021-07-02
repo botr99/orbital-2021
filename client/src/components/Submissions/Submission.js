@@ -10,13 +10,16 @@ import {
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import useStyles from "./styles";
-import JobsApi from "../../apis/JobsApi";
+import { updateJob } from "../../apis/JobsApi";
 import DateRangeIcon from "@material-ui/icons/DateRange";
 import SettingsIcon from "@material-ui/icons/Settings";
 import QueryBuilderIcon from "@material-ui/icons/QueryBuilder";
+import { useMutation, useQueryClient } from "react-query";
+import LoadingSpinner from "../LoadingSpinner";
 
-const Submission = ({ job, handleApprove }) => {
+const Submission = ({ job }) => {
   const classes = useStyles();
+  const queryClient = useQueryClient();
 
   const {
     title,
@@ -31,6 +34,13 @@ const Submission = ({ job, handleApprove }) => {
     hours,
   } = job;
 
+  const { mutate, isLoading } = useMutation(updateJob, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("unapprovedJobs");
+      queryClient.invalidateQueries("jobs");
+    },
+  });
+
   // add a "..." if title or purpose is too long to be shown entirely
   // on the card
   const truncatedTitle =
@@ -44,17 +54,15 @@ const Submission = ({ job, handleApprove }) => {
     return `${start.getDay()}/${start.getMonth()}/${start.getFullYear()} - ${end.getDay()}/${end.getMonth()}/${end.getFullYear()}`;
   };
 
-  const handleClick = async () => {
-    try {
-      if (window.confirm("Approve this submission?")) {
-        await JobsApi.patch(`/${_id}`, {
+  const handleClick = () => {
+    if (window.confirm("Approve this submission?")) {
+      mutate({
+        jobId: _id,
+        jobFields: {
           ...job,
           isApproved: true,
-        });
-        handleApprove(); // Refetch submissions
-      }
-    } catch (err) {
-      console.log(err);
+        },
+      });
     }
   };
 
@@ -100,11 +108,16 @@ const Submission = ({ job, handleApprove }) => {
                 />
               ))}
             </Grid>
-            <Button component={Link} to={`/submissions/${_id}`} color="primary">
+            <Button
+              component={Link}
+              to={`/submissions/${_id}`}
+              color="primary"
+              disabled={isLoading}
+            >
               View Submission
             </Button>
-            <Button onClick={handleClick} color="primary">
-              Approve
+            <Button onClick={handleClick} color="primary" disabled={isLoading}>
+              {isLoading ? <LoadingSpinner /> : "Approve"}
             </Button>
           </Grid>
         </CardActions>

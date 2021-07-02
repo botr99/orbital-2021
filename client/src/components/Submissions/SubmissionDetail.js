@@ -18,54 +18,64 @@ import QueryBuilderIcon from "@material-ui/icons/QueryBuilder";
 import PhoneIcon from "@material-ui/icons/Phone";
 import PhoneAndroidIcon from "@material-ui/icons/PhoneAndroid";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
-import { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
-import JobsApi from "../../apis/JobsApi";
+import { deleteJob, getJobDetail, updateJob } from "../../apis/JobsApi";
 import useStyles from "./styles";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import LoadingContainer from "../LoadingContainer";
+import NotFound from "../NotFound";
 
 const SubmissionDetail = () => {
   const classes = useStyles();
 
   const { id } = useParams();
-  const [jobDetail, setJobDetail] = useState([]);
+  const queryClient = useQueryClient();
 
   let history = useHistory();
 
-  useEffect(() => {
-    const fetchJobDetail = async () => {
-      try {
-        const res = await JobsApi.get(`/${id}`);
-        setJobDetail(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
+  const {
+    data: jobDetail,
+    isLoading: loadingJobDetail,
+    isError,
+  } = useQuery(["jobs", id], () => getJobDetail(id));
 
-    fetchJobDetail();
-  }, [id]);
+  const { mutate: mutatePatch, isLoading: updateJobLoading } = useMutation(
+    updateJob,
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("unapprovedJobs");
+        queryClient.invalidateQueries("jobs");
+        history.push("/submissions");
+      },
+    }
+  );
 
-  const handleApprove = async () => {
-    try {
-      if (window.confirm("Approve this submission?")) {
-        await JobsApi.patch(`/${id}`, {
+  const { mutate: mutateDelete, isLoading: deleteJobLoading } = useMutation(
+    deleteJob,
+    {
+      onSuccess: () => {
+        queryClient.removeQueries(["jobs", id]);
+        queryClient.invalidateQueries("unapprovedJobs");
+        history.push("/submissions");
+      },
+    }
+  );
+
+  const handleApprove = () => {
+    if (window.confirm("Approve this submission?")) {
+      mutatePatch({
+        jobId: id,
+        jobFields: {
           ...jobDetail,
           isApproved: true,
-        });
-        history.push("/submissions");
-      }
-    } catch (err) {
-      console.log(err);
+        },
+      });
     }
   };
 
-  const handleDelete = async () => {
-    try {
-      if (window.confirm("Reject this submission?")) {
-        await JobsApi.delete(`/${id}`);
-        history.push("/submissions");
-      }
-    } catch (err) {
-      console.log(err);
+  const handleDelete = () => {
+    if (window.confirm("Reject this submission?")) {
+      mutateDelete(id);
     }
   };
 
@@ -75,8 +85,13 @@ const SubmissionDetail = () => {
     return `${start.getDay()}/${start.getMonth()}/${start.getFullYear()} - ${end.getDay()}/${end.getMonth()}/${end.getFullYear()}`;
   };
 
+  if (isError) {
+    return <NotFound />;
+  }
+
   return (
     <Container maxWidth="md">
+      {loadingJobDetail && <LoadingContainer />}
       {jobDetail && (
         <Card className={classes.card}>
           <CardMedia
@@ -158,7 +173,8 @@ const SubmissionDetail = () => {
               <LanguageIcon />
               <Typography
                 display="inline"
-                href={`https://${jobDetail.website}`}>
+                href={`https://${jobDetail.website}`}
+              >
                 &nbsp; {jobDetail.website}
               </Typography>
             </Grid>
@@ -172,7 +188,8 @@ const SubmissionDetail = () => {
                   onClick={handleApprove}
                   color="primary"
                   className={classes.button}
-                  variant="contained">
+                  variant="contained"
+                >
                   Approve
                 </Button>
                 <Button
@@ -180,7 +197,8 @@ const SubmissionDetail = () => {
                   color="secondary"
                   className={classes.button}
                   startIcon={<DeleteIcon />}
-                  onClick={handleDelete}>
+                  onClick={handleDelete}
+                >
                   Reject
                 </Button>
               </Grid>

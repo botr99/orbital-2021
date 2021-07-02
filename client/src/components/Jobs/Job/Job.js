@@ -10,7 +10,6 @@ import {
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import useStyles from "./styles";
-import JobsApi from "../../../apis/JobsApi";
 import DateRangeIcon from "@material-ui/icons/DateRange";
 import SettingsIcon from "@material-ui/icons/Settings";
 import QueryBuilderIcon from "@material-ui/icons/QueryBuilder";
