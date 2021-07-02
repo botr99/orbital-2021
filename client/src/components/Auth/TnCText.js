@@ -5,11 +5,11 @@ const TnCText = () => {
     <div>
       <h4>1. Agreement to Terms</h4>
       <p>
-        All access of any area of INSERT URL("The Website") is governed by the
-        terms and conditions below ("Terms"). If you do not accept any of these
-        Terms, exit immediately. Continue only if you accept these Terms. In
-        these Terms, the words "we", "our" and "us" refers to the Government of
-        Singapore.
+        All access of any area of https://nus-ccsgp.netlify.app ("The Website")
+        is governed by the terms and conditions below ("Terms"). If you do not
+        accept any of these Terms, exit immediately. Continue only if you accept
+        these Terms. In these Terms, the words "we", "our" and "us" refers to
+        the Government of Singapore.
       </p>
       <h4>2. Access To The Website </h4>
       <p>
