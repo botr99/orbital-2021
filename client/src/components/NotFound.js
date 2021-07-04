@@ -1,11 +1,11 @@
 import React from "react";
-import { Typography, Button } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
 const NotFound = () => {
   return (
     <>
-      <Typography>Page not found</Typography>
+      <h1>Page not found</h1>
       <Button component={Link} to={`/`} color="primary">
         Return to Board
       </Button>

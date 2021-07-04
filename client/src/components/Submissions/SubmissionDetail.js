@@ -23,7 +23,7 @@ import { deleteJob, getJobDetail, updateJob } from "../../apis/JobsApi";
 import useStyles from "./styles";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import LoadingContainer from "../LoadingContainer";
-import NotFound from "../NotFound";
+import Error from "../Error";
 
 const SubmissionDetail = () => {
   const classes = useStyles();
@@ -37,6 +37,7 @@ const SubmissionDetail = () => {
     data: jobDetail,
     isLoading: loadingJobDetail,
     isError,
+    error,
   } = useQuery(["jobs", id], () => getJobDetail(id));
 
   const { mutate: mutatePatch, isLoading: updateJobLoading } = useMutation(
@@ -86,7 +87,7 @@ const SubmissionDetail = () => {
   };
 
   if (isError) {
-    return <NotFound />;
+    return <Error error={error} />;
   }
 
   return (
@@ -173,8 +174,7 @@ const SubmissionDetail = () => {
               <LanguageIcon />
               <Typography
                 display="inline"
-                href={`https://${jobDetail.website}`}
-              >
+                href={`https://${jobDetail.website}`}>
                 &nbsp; {jobDetail.website}
               </Typography>
             </Grid>
@@ -188,8 +188,7 @@ const SubmissionDetail = () => {
                   onClick={handleApprove}
                   color="primary"
                   className={classes.button}
-                  variant="contained"
-                >
+                  variant="contained">
                   Approve
                 </Button>
                 <Button
@@ -197,8 +196,7 @@ const SubmissionDetail = () => {
                   color="secondary"
                   className={classes.button}
                   startIcon={<DeleteIcon />}
-                  onClick={handleDelete}
-                >
+                  onClick={handleDelete}>
                   Reject
                 </Button>
               </Grid>

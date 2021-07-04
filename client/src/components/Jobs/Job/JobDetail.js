@@ -26,7 +26,7 @@ import Register from "../../Register/Register";
 import ROLES from "../../../utils/roles";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import LoadingContainer from "../../LoadingContainer";
-import NotFound from "../../NotFound";
+import Error from "../../Error";
 
 const JobDetail = () => {
   const classes = useStyles();
@@ -41,6 +41,7 @@ const JobDetail = () => {
     data: jobDetail,
     isLoading: loadingJobDetail,
     isError,
+    error,
   } = useQuery(["jobs", id], () => getJobDetail(id));
 
   const { mutate, isLoading: deleteJobLoading } = useMutation(deleteJob, {
@@ -66,8 +67,7 @@ const JobDetail = () => {
           color="primary"
           startIcon={<EditIcon />}
           component={Link}
-          to={`/jobs/${jobDetail._id}/edit`}
-        >
+          to={`/jobs/${jobDetail._id}/edit`}>
           Edit
         </Button>
         <Button
@@ -75,8 +75,7 @@ const JobDetail = () => {
           color="secondary"
           className={classes.button}
           startIcon={<DeleteIcon />}
-          onClick={handleDelete}
-        >
+          onClick={handleDelete}>
           Delete
         </Button>
       </Grid>
@@ -89,7 +88,7 @@ const JobDetail = () => {
   };
 
   if (isError) {
-    return <NotFound />;
+    return <Error error={error} />;
   }
 
   return (
@@ -177,8 +176,7 @@ const JobDetail = () => {
                 <LanguageIcon />
                 <Typography
                   display="inline"
-                  href={`https://${jobDetail.website}`}
-                >
+                  href={`https://${jobDetail.website}`}>
                   &nbsp; {jobDetail.website}
                 </Typography>
               </Grid>
