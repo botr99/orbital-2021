@@ -11,11 +11,9 @@ import {
 import { Link } from "react-router-dom";
 import useStyles from "./styles";
 import { updateJob } from "../../apis/JobsApi";
-import DateRangeIcon from "@material-ui/icons/DateRange";
-import SettingsIcon from "@material-ui/icons/Settings";
-import QueryBuilderIcon from "@material-ui/icons/QueryBuilder";
 import { useMutation, useQueryClient } from "react-query";
 import LoadingSpinner from "../LoadingSpinner";
+import JobIcons from "../JobIcons";
 
 const Submission = ({ job }) => {
   const classes = useStyles();
@@ -48,12 +46,6 @@ const Submission = ({ job }) => {
   const truncatedPurpose =
     purpose.length > 150 ? purpose.substring(0, 150) + "..." : purpose;
 
-  const formatDate = () => {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    return `${start.getDay()}/${start.getMonth()}/${start.getFullYear()} - ${end.getDay()}/${end.getMonth()}/${end.getFullYear()}`;
-  };
-
   const handleClick = () => {
     if (window.confirm("Approve this submission?")) {
       mutate({
@@ -85,19 +77,12 @@ const Submission = ({ job }) => {
         </CardContent>
         <CardActions>
           <Grid>
-            <Grid container direction="row" alignItems="center">
-              <DateRangeIcon />
-              &nbsp; {formatDate()}
-            </Grid>
-            <Grid container direction="row" alignItems="center">
-              <SettingsIcon />
-              &nbsp; {skills}
-            </Grid>
-            <Grid container direction="row" alignItems="center">
-              <QueryBuilderIcon />
-              &nbsp; {hours} {"hours"}
-            </Grid>
-
+            <JobIcons
+              skills={skills}
+              hours={hours}
+              startDate={startDate}
+              endDate={endDate}
+            />
             <Grid>
               {categories.map((category) => (
                 <Chip
@@ -112,8 +97,7 @@ const Submission = ({ job }) => {
               component={Link}
               to={`/submissions/${_id}`}
               color="primary"
-              disabled={isLoading}
-            >
+              disabled={isLoading}>
               View Submission
             </Button>
             <Button onClick={handleClick} color="primary" disabled={isLoading}>
