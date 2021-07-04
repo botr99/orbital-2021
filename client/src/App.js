@@ -11,7 +11,6 @@ import Admin from "./components/Auth/Admin";
 import Submissions from "./components/Submissions/Submissions";
 import SubmissionDetail from "./components/Submissions/SubmissionDetail";
 import RegisteredJobs from "./components/RegisteredJobs";
-import NotFound from "./components/NotFound";
 import Error from "./components/Error";
 import ROLES from "./utils/roles";
 
