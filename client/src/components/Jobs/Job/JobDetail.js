@@ -27,6 +27,7 @@ import ROLES from "../../../utils/roles";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import LoadingContainer from "../../LoadingContainer";
 import Error from "../../Error";
+import ContactInfo from "../../ContactInfo";
 
 const JobDetail = () => {
   const classes = useStyles();
@@ -180,7 +181,7 @@ const JobDetail = () => {
                   &nbsp; {jobDetail.website}
                 </Typography>
               </Grid>
-
+              <ContactInfo jobDetail={jobDetail} />
               <hr />
             </CardContent>
             <CardActions>

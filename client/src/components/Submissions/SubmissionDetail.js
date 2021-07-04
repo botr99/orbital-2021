@@ -10,7 +10,6 @@ import {
   Typography,
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
-import EditIcon from "@material-ui/icons/Edit";
 import PersonIcon from "@material-ui/icons/Person";
 import DateRangeIcon from "@material-ui/icons/DateRange";
 import LanguageIcon from "@material-ui/icons/Language";

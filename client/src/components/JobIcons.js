@@ -11,7 +11,7 @@ const formatDate = (startDate, endDate) => {
 };
 
 const useStyles = makeStyles({
-  icons: {
+  icon: {
     marginRight: 8,
   },
   iconText: {
@@ -27,15 +27,15 @@ const JobIcons = ({ skills, hours, startDate, endDate }) => {
   return (
     <div>
       <Grid className={classes.iconText}>
-        <DateRangeIcon className={classes.icons} />
+        <DateRangeIcon className={classes.icon} />
         {formatDate(startDate, endDate)}
       </Grid>
       <Grid className={classes.iconText}>
-        <SettingsIcon className={classes.icons} />
+        <SettingsIcon className={classes.icon} />
         {skills}
       </Grid>
       <Grid className={classes.iconText}>
-        <QueryBuilderIcon className={classes.icons} />
+        <QueryBuilderIcon className={classes.icon} />
         {hours} {"hours"}
       </Grid>
     </div>
