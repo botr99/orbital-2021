@@ -8,6 +8,7 @@ import {
   Container,
   Grid,
   Typography,
+  Divider,
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
@@ -28,6 +29,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import LoadingContainer from "../../LoadingContainer";
 import Error from "../../Error";
 import ContactInfo from "../../ContactInfo";
+import JobIcons from "../../JobIcons";
 
 const JobDetail = () => {
   const classes = useStyles();
@@ -94,65 +96,68 @@ const JobDetail = () => {
 
   return (
     <>
-      <Container maxWidth="md">
+      <Container maxWidth="lg">
         {loadingJobDetail && <LoadingContainer />}
         {jobDetail && (
-          <Card className={classes.card}>
-            <CardMedia
-              className={classes.cardMedia}
-              image={
-                jobDetail.selectedFile || "https://source.unsplash.com/random"
-              }
-              title="Job Image"
-            />
-            <CardContent className={classes.cardContent}>
-              <Typography variant="h4">
-                <b>{jobDetail.title}</b>
-              </Typography>
-              <Typography gutterBottom variant="h6" color="textSecondary">
-                By {jobDetail.organizer}
-              </Typography>
-              <hr />
+          <Grid container spacing={3}>
+            <Grid item lg={8}>
+              <Card className={classes.card}>
+                <CardMedia
+                  className={classes.cardMedia}
+                  image={
+                    jobDetail.selectedFile ||
+                    "https://source.unsplash.com/random"
+                  }
+                  title="Job Image"
+                />
+                <CardContent className={classes.cardContent}>
+                  <Typography variant="h4">
+                    <b>{jobDetail.title}</b>
+                  </Typography>
+                  <Typography gutterBottom variant="h6" color="textSecondary">
+                    by {jobDetail.organizer}
+                  </Typography>
+                  <hr />
 
-              <Typography variant="h5">
-                <b>About</b>
-              </Typography>
-              <Typography paragraph>{jobDetail.purpose}</Typography>
+                  <Typography variant="h5">
+                    <b>About</b>
+                  </Typography>
+                  <Typography paragraph>{jobDetail.purpose}</Typography>
 
-              <Typography variant="h5">
-                <b>Skills Required</b>
-              </Typography>
-              <Typography paragraph>{jobDetail.skills}</Typography>
+                  <Typography variant="h5">
+                    <b>Skills Required</b>
+                  </Typography>
+                  <Typography paragraph>{jobDetail.skills}</Typography>
 
-              <Typography variant="h5">
-                <b>Dates and Duration</b>
-              </Typography>
-              <Grid container direction="row" alignItems="center">
+                  <Typography variant="h5">
+                    <b>Dates and Duration</b>
+                  </Typography>
+                  {/* <Grid container direction="row" alignItems="center">
                 <DateRangeIcon />
                 <Typography>&nbsp; {formatDate()}</Typography>
               </Grid>
               <Grid container direction="row" alignItems="center">
                 <QueryBuilderIcon />
                 <Typography>&nbsp; {jobDetail.hours} hours</Typography>
-              </Grid>
-              <br></br>
-              <Typography variant="h5">
-                <b>Causes</b>
-              </Typography>
-              <Grid>
-                {jobDetail.categories &&
-                  jobDetail.categories.map((category) => (
-                    <Chip
-                      key={category}
-                      label={category}
-                      clickable={true}
-                      style={{ margin: 2 }}
-                    />
-                  ))}
-              </Grid>
-              <hr />
+              </Grid> */}
+                  <br></br>
+                  <Typography variant="h5">
+                    <b>Causes</b>
+                  </Typography>
+                  <Grid>
+                    {jobDetail.categories &&
+                      jobDetail.categories.map((category) => (
+                        <Chip
+                          key={category}
+                          label={category}
+                          clickable={true}
+                          style={{ margin: 2 }}
+                        />
+                      ))}
+                  </Grid>
+                  <hr />
 
-              <Typography gutterBottom variant="h5">
+                  {/* <Typography gutterBottom variant="h5">
                 <b>Contact Information</b>
               </Typography>
               <Grid container direction="row" alignItems="center">
@@ -180,24 +185,38 @@ const JobDetail = () => {
                   href={`https://${jobDetail.website}`}>
                   &nbsp; {jobDetail.website}
                 </Typography>
-              </Grid>
-              <ContactInfo jobDetail={jobDetail} />
-              <hr />
-            </CardContent>
-            <CardActions>
-              <Grid>
-                {isCreator()}
-                <Button component={Link} to={`/`} color="primary">
-                  Return to Board
-                </Button>
-              </Grid>
-            </CardActions>
-            <CardContent className={classes.cardContent}>
-              <Typography color="textSecondary" variant="subtitle1">
-                Last updated: {new Date(jobDetail.updatedAt).toDateString()}
+              </Grid> */}
+                  <ContactInfo jobDetail={jobDetail} />
+                  <hr />
+                </CardContent>
+                <CardActions>
+                  <Grid>
+                    {isCreator()}
+                    <Button component={Link} to={`/`} color="primary">
+                      Return to Board
+                    </Button>
+                  </Grid>
+                </CardActions>
+                <CardContent className={classes.cardContent}>
+                  <Typography color="textSecondary" variant="subtitle1">
+                    Last updated: {new Date(jobDetail.updatedAt).toDateString()}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item lg={4}>
+              <Typography variant="h5">
+                <b>Dates and Duration</b>
               </Typography>
-            </CardContent>
-          </Card>
+              <JobIcons
+                skills={jobDetail.skills}
+                hours={jobDetail.hours}
+                startDate={jobDetail.startDate}
+                endDate={jobDetail.endDate}
+              />
+              <ContactInfo jobDetail={jobDetail} />
+            </Grid>
+          </Grid>
         )}
       </Container>
       {user && jobDetail && (

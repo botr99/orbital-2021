@@ -73,38 +73,6 @@ const ContactInfo = ({ jobDetail }) => {
       </CardContent>
     </Card>
   );
-  /*
-  return (
-    <div>
-      <Typography gutterBottom variant="h5">
-        <b>Contact Information</b>
-      </Typography>
-      <Grid container direction="row" alignItems="center">
-        <PersonIcon />
-        <Typography>&nbsp; {jobDetail.contactName}</Typography>
-      </Grid>
-      <Grid container direction="row" alignItems="center">
-        <PhoneIcon />
-        <Typography>&nbsp; {jobDetail.telephoneNum}</Typography>
-      </Grid>
-      <Grid container direction="row" alignItems="center">
-        <PhoneAndroidIcon />
-        <Typography>&nbsp; {jobDetail.mobileNum}</Typography>
-      </Grid>
-      <Grid container direction="row" alignItems="center">
-        <MailOutlineIcon />
-        <Typography display="inline" href={`mailto:${jobDetail.email}`}>
-          &nbsp; {jobDetail.email}
-        </Typography>
-      </Grid>
-      <Grid container direction="row" alignItems="center">
-        <LanguageIcon />
-        <Typography display="inline" href={`https://${jobDetail.website}`}>
-          &nbsp; {jobDetail.website}
-        </Typography>
-      </Grid>
-    </div>
-  ); */
 };
 
 export default ContactInfo;
