@@ -8,17 +8,9 @@ import {
   Container,
   Grid,
   Typography,
-  Divider,
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
-import PersonIcon from "@material-ui/icons/Person";
-import DateRangeIcon from "@material-ui/icons/DateRange";
-import LanguageIcon from "@material-ui/icons/Language";
-import QueryBuilderIcon from "@material-ui/icons/QueryBuilder";
-import PhoneIcon from "@material-ui/icons/Phone";
-import PhoneAndroidIcon from "@material-ui/icons/PhoneAndroid";
-import MailOutlineIcon from "@material-ui/icons/MailOutline";
 
 import { Link, useHistory, useParams } from "react-router-dom";
 import { getJobDetail, deleteJob } from "../../../apis/JobsApi";
@@ -29,6 +21,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import LoadingContainer from "../../LoadingContainer";
 import Error from "../../Error";
 import ContactInfo from "../../ContactInfo";
+import OrganizerInfo from "../../OrganizerInfo";
 import JobIcons from "../../JobIcons";
 
 const JobDetail = () => {
@@ -205,6 +198,7 @@ const JobDetail = () => {
               </Card>
             </Grid>
             <Grid item lg={4}>
+              <OrganizerInfo jobDetail={jobDetail} />
               <Typography variant="h5">
                 <b>Dates and Duration</b>
               </Typography>

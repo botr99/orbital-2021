@@ -1,8 +1,10 @@
 import React from "react";
 import { Button } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const Error = ({ error }) => {
+  let history = useHistory();
+
   return (
     <div>
       {!error && (
@@ -17,8 +19,8 @@ const Error = ({ error }) => {
         </>
       )}
       <br></br>
-      <Button component={Link} to={`/`} color="primary">
-        Return to Board
+      <Button size="large" onClick={() => history.goBack()} color="primary">
+        Return to previous page
       </Button>
     </div>
   );
