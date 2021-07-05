@@ -15,9 +15,10 @@ const useStyles = makeStyles({
     alignItems: "center",
     item: true,
   },
-  text: {
+  link: {
     textDecoration: "none",
-    color: "inherit",
+    // color: "inherit",
+    color: "#003062",
   },
 });
 
@@ -37,7 +38,7 @@ const ContactInfo = ({ jobDetail }) => {
         <Grid className={classes.iconText}>
           <PhoneIcon className={classes.icon} />
           <Typography
-            className={classes.text}
+            className={classes.link}
             component="a"
             href={`tel: ${jobDetail.telephoneNum}`}>
             {jobDetail.telephoneNum}
@@ -46,7 +47,7 @@ const ContactInfo = ({ jobDetail }) => {
         <Grid className={classes.iconText}>
           <PhoneAndroidIcon className={classes.icon} />
           <Typography
-            className={classes.text}
+            className={classes.link}
             component="a"
             href={`tel: ${jobDetail.mobileNum}`}>
             {jobDetail.mobileNum}
@@ -55,7 +56,7 @@ const ContactInfo = ({ jobDetail }) => {
         <Grid className={classes.iconText}>
           <MailOutlineIcon className={classes.icon} />
           <Typography
-            className={classes.text}
+            className={classes.link}
             component="a"
             href={`mailto: ${jobDetail.email}`}>
             {jobDetail.email}
@@ -64,7 +65,7 @@ const ContactInfo = ({ jobDetail }) => {
         <Grid className={classes.iconText}>
           <LanguageIcon className={classes.icon} />
           <Typography
-            className={classes.text}
+            className={classes.link}
             component="a"
             href={`https://${jobDetail.website}`}>
             {jobDetail.website}

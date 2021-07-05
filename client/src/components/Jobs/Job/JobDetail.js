@@ -23,6 +23,7 @@ import Error from "../../Error";
 import ContactInfo from "../../ContactInfo";
 import OrganizerInfo from "../../OrganizerInfo";
 import JobIcons from "../../JobIcons";
+import ReportJob from "../../ReportJob";
 
 const JobDetail = () => {
   const classes = useStyles();
@@ -77,12 +78,6 @@ const JobDetail = () => {
       </Grid>
     );
 
-  const formatDate = () => {
-    const start = new Date(jobDetail.startDate);
-    const end = new Date(jobDetail.endDate);
-    return `${start.getDay()}/${start.getMonth()}/${start.getFullYear()} - ${end.getDay()}/${end.getMonth()}/${end.getFullYear()}`;
-  };
-
   if (isError) {
     return <Error error={error} />;
   }
@@ -93,7 +88,7 @@ const JobDetail = () => {
         {loadingJobDetail && <LoadingContainer />}
         {jobDetail && (
           <Grid container spacing={3}>
-            <Grid item lg={8}>
+            <Grid item md={8} xs={12}>
               <Card className={classes.card}>
                 <CardMedia
                   className={classes.cardMedia}
@@ -108,7 +103,12 @@ const JobDetail = () => {
                     <b>{jobDetail.title}</b>
                   </Typography>
                   <Typography gutterBottom variant="h6" color="textSecondary">
-                    by {jobDetail.organizer}
+                    by{" "}
+                    <Link
+                      className={classes.link}
+                      to={`/${jobDetail.organizer}`}>
+                      {jobDetail.organizer}
+                    </Link>
                   </Typography>
                   <hr />
 
@@ -116,26 +116,16 @@ const JobDetail = () => {
                     <b>About</b>
                   </Typography>
                   <Typography paragraph>{jobDetail.purpose}</Typography>
+                  <hr />
 
                   <Typography variant="h5">
                     <b>Skills Required</b>
                   </Typography>
                   <Typography paragraph>{jobDetail.skills}</Typography>
+                  <hr />
 
                   <Typography variant="h5">
-                    <b>Dates and Duration</b>
-                  </Typography>
-                  {/* <Grid container direction="row" alignItems="center">
-                <DateRangeIcon />
-                <Typography>&nbsp; {formatDate()}</Typography>
-              </Grid>
-              <Grid container direction="row" alignItems="center">
-                <QueryBuilderIcon />
-                <Typography>&nbsp; {jobDetail.hours} hours</Typography>
-              </Grid> */}
-                  <br></br>
-                  <Typography variant="h5">
-                    <b>Causes</b>
+                    <b>Supported Causes</b>
                   </Typography>
                   <Grid>
                     {jobDetail.categories &&
@@ -149,38 +139,13 @@ const JobDetail = () => {
                       ))}
                   </Grid>
                   <hr />
-
-                  {/* <Typography gutterBottom variant="h5">
-                <b>Contact Information</b>
-              </Typography>
-              <Grid container direction="row" alignItems="center">
-                <PersonIcon />
-                <Typography>&nbsp; {jobDetail.contactName}</Typography>
-              </Grid>
-              <Grid container direction="row" alignItems="center">
-                <PhoneIcon />
-                <Typography>&nbsp; {jobDetail.telephoneNum}</Typography>
-              </Grid>
-              <Grid container direction="row" alignItems="center">
-                <PhoneAndroidIcon />
-                <Typography>&nbsp; {jobDetail.mobileNum}</Typography>
-              </Grid>
-              <Grid container direction="row" alignItems="center">
-                <MailOutlineIcon />
-                <Typography display="inline" href={`mailto:${jobDetail.email}`}>
-                  &nbsp; {jobDetail.email}
-                </Typography>
-              </Grid>
-              <Grid container direction="row" alignItems="center">
-                <LanguageIcon />
-                <Typography
-                  display="inline"
-                  href={`https://${jobDetail.website}`}>
-                  &nbsp; {jobDetail.website}
-                </Typography>
-              </Grid> */}
-                  <ContactInfo jobDetail={jobDetail} />
-                  <hr />
+                  <Typography variant="h5">
+                    <b>Things to note</b>
+                  </Typography>
+                  <Typography paragraph>
+                    Optional Information maybe not pertaining to job itself but
+                    registration and others
+                  </Typography>
                 </CardContent>
                 <CardActions>
                   <Grid>
@@ -197,7 +162,8 @@ const JobDetail = () => {
                 </CardContent>
               </Card>
             </Grid>
-            <Grid item lg={4}>
+
+            <Grid item md={4} xs={12}>
               <OrganizerInfo jobDetail={jobDetail} />
               <Typography variant="h5">
                 <b>Dates and Duration</b>
@@ -209,6 +175,10 @@ const JobDetail = () => {
                 endDate={jobDetail.endDate}
               />
               <ContactInfo jobDetail={jobDetail} />
+              <ReportJob />
+              {/* <Button component={Link} to={`/`}>
+                Report
+              </Button> */}
             </Grid>
           </Grid>
         )}

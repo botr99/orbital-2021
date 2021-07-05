@@ -1,10 +1,6 @@
 import { makeStyles } from "@material-ui/core/styles";
-import { Card, CardContent, Grid, Typography } from "@material-ui/core";
+import { Card, CardContent, Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import LanguageIcon from "@material-ui/icons/Language";
-import PhoneIcon from "@material-ui/icons/Phone";
-import PhoneAndroidIcon from "@material-ui/icons/PhoneAndroid";
-import MailOutlineIcon from "@material-ui/icons/MailOutline";
 
 const useStyles = makeStyles({
   icon: {
@@ -16,9 +12,10 @@ const useStyles = makeStyles({
     alignItems: "center",
     item: true,
   },
-  text: {
+  link: {
     textDecoration: "none",
-    color: "inherit",
+    // color: "inherit",
+    color: "#003062",
   },
 });
 
@@ -29,7 +26,7 @@ const OrganizerInfo = ({ jobDetail }) => {
     <Card variant="outlined">
       <CardContent>
         <Typography
-          className={classes.text}
+          className={classes.link}
           component={Link}
           to={`/${jobDetail.organizer}`}
           variant="h5">
