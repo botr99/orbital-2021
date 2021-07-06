@@ -1,33 +1,38 @@
-import React from "react";
-// import Button from "@material-ui/core/Button";
-// import TextField from "@material-ui/core/TextField";
+import { useState } from "react";
 import {
+  Typography,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
   Button,
-  TextareaAutosize,
   TextField,
 } from "@material-ui/core";
-// import Dialog from "@material-ui/core/Dialog";
-// import DialogActions from "@material-ui/core/DialogActions";
-// import DialogContent from "@material-ui/core/DialogContent";
-// import DialogContentText from "@material-ui/core/DialogContentText";
-// import DialogTitle from "@material-ui/core/DialogTitle";
 import OutlinedFlagRoundedIcon from "@material-ui/icons/OutlinedFlagRounded";
+import { useForm, ValidationError } from "@formspree/react";
 
-const ReportJob = () => {
-  const [open, setOpen] = React.useState(false);
+const ReportJob = ({ jobDetail }) => {
+  const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
 
+  // For dialog form
+  const [open, setOpen] = useState(false);
   const handleClickOpen = () => {
     setOpen(true);
   };
-
   const handleClose = () => {
     setOpen(false);
   };
+
+  // const handleSubmit = () => {
+  //   setOpen(false);
+  // };
+
+  // For formspree
+  const [state, handleSubmit] = useForm("mnqlzynr");
+  if (state.succeeded) {
+    return <Typography>Thank you for your feedback!</Typography>;
+  }
 
   return (
     <div>
@@ -39,6 +44,7 @@ const ReportJob = () => {
         Report
       </Button>
       <Dialog
+        style={{ textAlign: "center" }}
         maxWidth="md"
         open={open}
         onClose={handleClose}
@@ -51,33 +57,58 @@ const ReportJob = () => {
             This event will be temporarily suspended while your report is being
             investigated.
           </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Email Address"
-            type="email"
-            fullWidth
-            required
-          />
-          <TextField
-            margin="dense"
-            id="name"
-            label="Feedback"
-            rows="10"
-            multiline
-            fullWidth
-            required
-          />
+          <form onSubmit={handleSubmit}>
+            <TextField
+              value={jobDetail.organizer}
+              id="organizer"
+              name="organizer"
+              hidden
+            />
+            <TextField value={jobDetail.title} id="title" name="title" hidden />
+            <TextField
+              value={user?.result?.email}
+              autoFocus
+              id="email"
+              name="email"
+              label="Your Email Address"
+              type="email"
+              fullWidth
+              required
+            />
+            <ValidationError
+              prefix="Email"
+              field="email"
+              errors={state.errors}
+            />
+            <TextField
+              id="feedback"
+              name="feedback"
+              label="Your Feedback"
+              rows="10"
+              multiline
+              fullWidth
+              required
+            />
+            <ValidationError
+              prefix="Feedback"
+              field="feedback"
+              errors={state.errors}
+            />
+
+            <DialogActions>
+              <Button type="button" onClick={handleClose} color="primary">
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                onClick={handleClose}
+                disabled={state.submitting}
+                color="primary">
+                Submit
+              </Button>
+            </DialogActions>
+          </form>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleClose} color="primary">
-            Submit
-          </Button>
-        </DialogActions>
       </Dialog>
     </div>
   );

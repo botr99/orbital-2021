@@ -175,7 +175,7 @@ const JobDetail = () => {
                 endDate={jobDetail.endDate}
               />
               <ContactInfo jobDetail={jobDetail} />
-              <ReportJob />
+              <ReportJob jobDetail={jobDetail} />
               {/* <Button component={Link} to={`/`}>
                 Report
               </Button> */}
