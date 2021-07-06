@@ -10,9 +10,7 @@ import {
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import useStyles from "./styles";
-import DateRangeIcon from "@material-ui/icons/DateRange";
-import SettingsIcon from "@material-ui/icons/Settings";
-import QueryBuilderIcon from "@material-ui/icons/QueryBuilder";
+import JobIcons from "../../JobIcons";
 
 const Job = ({ job }) => {
   const classes = useStyles();
@@ -37,12 +35,6 @@ const Job = ({ job }) => {
   const truncatedPurpose =
     purpose.length > 150 ? purpose.substring(0, 150) + "..." : purpose;
 
-  const formatDate = () => {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    return `${start.getDay()}/${start.getMonth()}/${start.getFullYear()} - ${end.getDay()}/${end.getMonth()}/${end.getFullYear()}`;
-  };
-
   return (
     <Grid item xs={12} sm={6}>
       <Card className={classes.card}>
@@ -62,19 +54,12 @@ const Job = ({ job }) => {
         </CardContent>
         <CardActions>
           <Grid>
-            <Grid container direction="row" alignItems="center">
-              <DateRangeIcon />
-              &nbsp; {formatDate()}
-            </Grid>
-            <Grid container direction="row" alignItems="center">
-              <SettingsIcon />
-              &nbsp; {skills}
-            </Grid>
-            <Grid container direction="row" alignItems="center">
-              <QueryBuilderIcon />
-              &nbsp; {hours} {"hours"}
-            </Grid>
-
+            <JobIcons
+              skills={skills}
+              hours={hours}
+              startDate={startDate}
+              endDate={endDate}
+            />
             <Grid>
               {categories.map((category) => (
                 <Chip

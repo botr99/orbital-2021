@@ -11,7 +11,7 @@ import Admin from "./components/Auth/Admin";
 import Submissions from "./components/Submissions/Submissions";
 import SubmissionDetail from "./components/Submissions/SubmissionDetail";
 import RegisteredJobs from "./components/RegisteredJobs";
-import NotFound from "./components/NotFound";
+import Error from "./components/Error";
 import ROLES from "./utils/roles";
 
 function App() {
@@ -33,7 +33,7 @@ function App() {
               ) ? (
                 <AddJob />
               ) : (
-                <NotFound />
+                <Error />
               )
             }
           />
@@ -46,7 +46,7 @@ function App() {
               user?.result?.role === ROLES.Student ? (
                 <RegisteredJobs />
               ) : (
-                <NotFound />
+                <Error />
               )
             }
           />
@@ -55,11 +55,7 @@ function App() {
             path="/submissions"
             exact
             component={() =>
-              user?.result?.role === ROLES.Admin ? (
-                <Submissions />
-              ) : (
-                <NotFound />
-              )
+              user?.result?.role === ROLES.Admin ? <Submissions /> : <Error />
             }
           />
           <Route
@@ -69,7 +65,7 @@ function App() {
               user?.result?.role === ROLES.Admin ? (
                 <SubmissionDetail />
               ) : (
-                <NotFound />
+                <Error />
               )
             }
           />
@@ -78,7 +74,7 @@ function App() {
             exact
             component={() => (!user ? <Auth /> : <Redirect to="/jobs" />)}
           />
-          <Route path="*" component={NotFound} />;
+          <Route path="*" component={Error} />;
         </Switch>
       </main>
       <Footer />

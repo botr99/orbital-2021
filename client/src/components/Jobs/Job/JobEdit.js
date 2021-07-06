@@ -24,7 +24,7 @@ import useStyles from "./styles";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import LoadingSpinner from "../../LoadingSpinner";
 import LoadingContainer from "../../LoadingContainer";
-import NotFound from "../../NotFound";
+import Error from "../../Error";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -86,18 +86,18 @@ const JobEdit = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const { data: categories } = useQuery("categories", getCategories);
-  const { isLoading: loadingJobDetail, isError } = useQuery(
-    ["jobs", id],
-    () => getJobDetail(id),
-    {
-      onSuccess: (job) => {
-        setOrganizer(job.organizer);
-        // console.log(job);
-        setFormData(job);
-        //setFormData({ ...job, startDate: "2021-06-15" });
-      },
-    }
-  );
+  const {
+    isLoading: loadingJobDetail,
+    isError,
+    error,
+  } = useQuery(["jobs", id], () => getJobDetail(id), {
+    onSuccess: (job) => {
+      setOrganizer(job.organizer);
+      // console.log(job);
+      setFormData(job);
+      //setFormData({ ...job, startDate: "2021-06-15" });
+    },
+  });
 
   const { mutate, isLoading: updateJobLoading } = useMutation(updateJob, {
     onSuccess: () => {
@@ -123,7 +123,7 @@ const JobEdit = () => {
   }
 
   if (isError) {
-    return <NotFound />;
+    return <Error error={error} />;
   }
 
   return (
@@ -178,8 +178,7 @@ const JobEdit = () => {
                     ))}
                   </div>
                 )}
-                MenuProps={MenuProps}
-              >
+                MenuProps={MenuProps}>
                 {categories?.map((category) => (
                   <MenuItem key={category} value={category}>
                     {category}
