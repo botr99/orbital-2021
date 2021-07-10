@@ -12,6 +12,19 @@ export const getCategories = async (req, res) => {
   }
 };
 
+export const getJobsOrganized = async (req, res) => {
+  try {
+    const jobsOrganized = await Job.find({
+      organizer: req.params.name,
+      isApproved: true,
+    }).sort({ createdAt: "desc" });
+
+    res.status(200).json(jobsOrganized);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 export const getApprovedJobs = (req, res) => {
   const searchQuery = req.query.search
     ? {
@@ -95,6 +108,23 @@ export const postJobRegistration = async (req, res) => {
     const updatedJob = await Job.findByIdAndUpdate(
       req.params.id,
       { $addToSet: { registrations: studentId } },
+      {
+        new: true,
+      }
+    );
+    res.status(200).json(updatedJob);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+};
+
+export const deleteJobRegistration = async (req, res) => {
+  // console.log("Students allowed here only");
+  try {
+    const studentId = req.user.id;
+    const updatedJob = await Job.findByIdAndUpdate(
+      req.params.id,
+      { $pull: { registrations: studentId } },
       {
         new: true,
       }

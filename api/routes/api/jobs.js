@@ -1,11 +1,13 @@
 import express from "express";
 import {
   getCategories,
+  getJobsOrganized,
   getApprovedJobs,
   getUnapprovedJobs,
   getJobRegistrations,
   getJobDetail,
   postJobRegistration,
+  deleteJobRegistration,
   postJob,
   updateJob,
   deleteJob,
@@ -26,6 +28,8 @@ const router = express.Router();
 // comes after /:id route, then the :id could be
 // matched to categories, causing an error.
 router.get("/categories", getCategories);
+
+router.get("/organizer/:name", getJobsOrganized);
 
 router.get("/", getApprovedJobs);
 
@@ -58,6 +62,14 @@ router.post(
   checkJobIsApproved,
   postJobRegistration
 ); // only students can register
+
+router.delete(
+  "/:id/registrations",
+  assignUser,
+  checkAuth([ROLES.Student]),
+  checkJobIsApproved,
+  deleteJobRegistration
+); // only students can unregister
 
 router.post(
   "/",
