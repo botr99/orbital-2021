@@ -1,45 +1,17 @@
-import { useState } from "react";
-import { Grid, Paper, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import ProfileOptions from "./ProfileOptions";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-  },
-}));
+import { useParams } from "react-router-dom";
+// import Description from "./Description";
+import UpdatePassword from "./UpdatePassword";
 
 const Profile = () => {
-  const classes = useStyles();
-  const options = [
-    "Description",
-    "Jobs Organized",
-    "Registered Jobs",
-    "Update Particulars",
-  ];
-  const [selectedOption, setSelectedOption] = useState(options[0]);
+  const { id } = useParams();
+  const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
+  const isUserProfile = user?.result?._id === id; // check if profile belongs to user
 
   return (
-    <div className={classes.root}>
-      <Grid container spacing={3}>
-        <ProfileOptions
-          options={options}
-          selectedOption={selectedOption}
-          setSelectedOption={setSelectedOption}
-        />
-        <Grid item xs>
-          <Paper className={classes.paper}>
-            <Typography>Content goes here</Typography>
-            <Typography>Display {selectedOption} component</Typography>
-          </Paper>
-        </Grid>
-      </Grid>
-    </div>
+    <>
+      {/* <Description isUserProfile={isUserProfile} /> */}
+      {isUserProfile && <UpdatePassword />}
+    </>
   );
 };
 
