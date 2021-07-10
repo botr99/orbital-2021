@@ -14,6 +14,7 @@ import RegisteredJobs from "./components/RegisteredJobs";
 import Error from "./components/Error";
 import ROLES from "./utils/roles";
 import Profile from "./components/Profile/Profile";
+import JobsOrganized from "./components/JobsOrganized";
 
 function App() {
   const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
@@ -51,6 +52,7 @@ function App() {
               )
             }
           />
+          <Route path="/organizers/:name" exact component={JobsOrganized} />
           <Route path="/admin" exact component={Admin} />
           <Route
             path="/submissions"
@@ -75,7 +77,7 @@ function App() {
             exact
             component={() => (!user ? <Auth /> : <Redirect to="/jobs" />)}
           />
-          <Route path="/profile" exact component={Profile} />
+          <Route path="/profile/:id" exact component={() => <Profile />} />
           <Route path="*" component={Error} />;
         </Switch>
       </main>

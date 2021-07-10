@@ -28,7 +28,7 @@ const OrganizerInfo = ({ jobDetail }) => {
         <Typography
           className={classes.link}
           component={Link}
-          to={`/${jobDetail.organizer}`}
+          to={`/organizers/${jobDetail.organizer}`}
           variant="h5">
           <b>{jobDetail.organizer}</b>
         </Typography>
