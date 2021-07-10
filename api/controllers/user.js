@@ -145,6 +145,28 @@ export const signup = async (req, res) => {
   }
 };
 
+export const updatePassword = async (req, res) => {
+  // const { website, contactNum, newPassword, confirmNewPassword } = req.body;
+  const { newPassword, confirmNewPassword } = req.body;
+  if (newPassword !== confirmNewPassword) {
+    return res.status(405).json({ message: "Passwords do not match" });
+  }
+
+  try {
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      { password: hashedPassword },
+      {
+        new: true,
+      }
+    );
+    res.status(200).json(updatedUser);
+  } catch (err) {
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
 // export const adminsignup = async (req, res) => {
 //   const { name, email, password } = req.body;
 
