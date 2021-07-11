@@ -114,9 +114,9 @@ const JobEdit = () => {
     });
   };
 
-  // if (user?.result?.name !== organizer) {
-  //   return null;
-  // }
+  if (user?.result?.name !== organizer) {
+    return <Error />;
+  }
 
   if (loadingJobDetail) {
     return <LoadingContainer />;

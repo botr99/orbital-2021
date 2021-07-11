@@ -172,11 +172,11 @@ const Auth = () => {
                   />
                   <Input
                     helperText={
-                      formData.website && !validateWebsite()
+                      !!formData.website && !validateWebsite()
                         ? "Please enter a valid website."
                         : ""
                     }
-                    handleError={formData.website && !validateWebsite()}
+                    handleError={!!formData.website && !validateWebsite()}
                     name="website"
                     label="Group/Organization Website"
                     handleChange={handleChange}
@@ -195,11 +195,11 @@ const Auth = () => {
             {isSignup && (
               <Input
                 helperText={
-                  formData.contactNum && !validateContact()
+                  !!formData.contactNum && !validateContact()
                     ? "Please enter a valid phone number"
                     : ""
                 }
-                handleError={formData.contactNum && !validateContact()}
+                handleError={!!formData.contactNum && !validateContact()}
                 name="contactNum"
                 label="Contact Number"
                 handleChange={handleChange}
@@ -209,7 +209,7 @@ const Auth = () => {
             )}
             <Input
               helperText={
-                formData.email &&
+                !!formData.email &&
                 (!validator.isEmail(formData.email)
                   ? "Please enter a valid email address"
                   : requireNUSEmail()
@@ -219,7 +219,7 @@ const Auth = () => {
                   : "")
               }
               handleError={
-                formData.email &&
+                !!formData.email &&
                 (!validator.isEmail(formData.email) ||
                   (requireNUSEmail() && !validateNUSEmail()))
               }
@@ -230,11 +230,13 @@ const Auth = () => {
             />
             <Input
               helperText={
-                formData.password && isSignup && !validatePassword()
+                !!formData.password && isSignup && !validatePassword()
                   ? "Please use a stronger password with a minimum length of 8 characters with at least 1 lowercase, uppercase, number and symbol"
                   : ""
               }
-              handleError={formData.password && isSignup && !validatePassword()}
+              handleError={
+                !!formData.password && isSignup && !validatePassword()
+              }
               name="password"
               label="Password"
               handleChange={handleChange}
@@ -244,12 +246,12 @@ const Auth = () => {
             {isSignup && (
               <Input
                 helperText={
-                  formData.confirmPassword && !validateRepeatPassword()
+                  !!formData.confirmPassword && !validateRepeatPassword()
                     ? "Passwords do not match"
                     : ""
                 }
                 handleError={
-                  formData.confirmPassword && !validateRepeatPassword()
+                  !!formData.confirmPassword && !validateRepeatPassword()
                 }
                 name="confirmPassword"
                 label="Repeat Password"

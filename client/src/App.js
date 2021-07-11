@@ -15,8 +15,10 @@ import Error from "./components/Error";
 import ROLES from "./utils/roles";
 import Profile from "./components/Profile/Profile";
 import JobsOrganized from "./components/JobsOrganized";
+import { useSelector } from "react-redux";
 
 function App() {
+  const isUserLoading = useSelector((state) => state.isUserLoading);
   const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
 
   return (
