@@ -125,13 +125,37 @@ const AddJob = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const imageData = new FormData();
-    imageData.append("file", image);
-    imageData.append("upload_preset", preset);
-    try {
-      const res = await axios.post(url, imageData);
-      const imageUrl = res.data.secure_url;
-      // console.log(imageUrl);
+    if (image) {
+      // Image selected
+      const imageData = new FormData();
+      imageData.append("file", image);
+      imageData.append("upload_preset", preset);
+      try {
+        const res = await axios.post(url, imageData);
+        const imageUrl = res.data.secure_url;
+        // console.log(imageUrl);
+        mutate({
+          organizer: user?.result?.name,
+          registerNum: user?.result?.registerNum,
+          contactName: formData.contactName,
+          telephoneNum: formData.telephoneNum,
+          mobileNum: formData.telephoneNum,
+          email: formData.email,
+          website: formData.website,
+          title: formData.title,
+          purpose: formData.purpose,
+          skills: formData.skills,
+          categories: formData.categories,
+          imageUrl,
+          startDate: formData.startDate,
+          endDate: formData.endDate,
+          hours: formData.hours,
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      // No image
       mutate({
         organizer: user?.result?.name,
         registerNum: user?.result?.registerNum,
@@ -144,13 +168,11 @@ const AddJob = () => {
         purpose: formData.purpose,
         skills: formData.skills,
         categories: formData.categories,
-        imageUrl,
+        imageUrl: formData.imageUrl,
         startDate: formData.startDate,
         endDate: formData.endDate,
         hours: formData.hours,
       });
-    } catch (err) {
-      console.log(err);
     }
   };
 

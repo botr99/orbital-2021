@@ -119,18 +119,27 @@ const JobEdit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const imageData = new FormData();
-    imageData.append("file", image);
-    imageData.append("upload_preset", preset);
-    try {
-      const res = await axios.post(url, imageData);
-      const imageUrl = res.data.secure_url;
+    if (image) {
+      // Image selected
+      const imageData = new FormData();
+      imageData.append("file", image);
+      imageData.append("upload_preset", preset);
+      try {
+        const res = await axios.post(url, imageData);
+        const imageUrl = res.data.secure_url;
+        mutate({
+          jobId: id,
+          jobFields: { ...formData, imageUrl },
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      // No image
       mutate({
         jobId: id,
-        jobFields: { ...formData, imageUrl },
+        jobFields: formData,
       });
-    } catch (err) {
-      console.log(err);
     }
   };
 
