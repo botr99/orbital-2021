@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Button, Grid, Typography } from "@material-ui/core";
+import { Box, Button, Container, Grid } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 import Input from "../Auth/Input";
 import validator from "validator";
 // import ROLES from "../../utils/roles";
@@ -60,11 +61,19 @@ const UpdatePassword = () => {
   };
 
   return (
-    <>
-      {isError && <Typography>{error.message}</Typography>}
-      {isSuccess && (
-        <Typography>User particulars are successfully updated</Typography>
-      )}
+    <Container maxWidth="md">
+      <Box marginBottom={2}>
+        {isError && (
+          <Alert variant="filled" severity="error">
+            {error.response.data?.message}
+          </Alert>
+        )}
+        {isSuccess && (
+          <Alert variant="filled" severity="success">
+            Password is successfully updated
+          </Alert>
+        )}
+      </Box>
       <form onSubmit={handleSubmit}>
         <Grid container spacing={2}>
           {/* {(role === ROLES.StudentGroup || role === ROLES.Organization) && (
@@ -115,15 +124,18 @@ const UpdatePassword = () => {
             handleChange={handleChange}
             type="password"
           />
-          <Button
-            type="submit"
-            variant="outlined"
-            disabled={!(validatePassword() && validateRepeatPassword())}>
-            {isLoading ? <LoadingSpinner /> : "Update password"}
-          </Button>
+          <Grid item xs={12}>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={!(validatePassword() && validateRepeatPassword())}>
+              {isLoading ? <LoadingSpinner /> : "Update password"}
+            </Button>
+          </Grid>
         </Grid>
       </form>
-    </>
+    </Container>
   );
 };
 
