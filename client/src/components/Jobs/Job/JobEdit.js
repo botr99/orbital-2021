@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { getCategories, getJobDetail, updateJob } from "../../../apis/JobsApi";
 import FileBase from "react-file-base64";
+import axios from "axios";
 import {
   Button,
   Chip,
@@ -37,6 +38,10 @@ const MenuProps = {
   },
 };
 
+// Cloudinary
+const url = " https://api.cloudinary.com/v1_1/volunteer-board/image/upload"; // API Base URL
+const preset = "x1nm4sms"; // Unsigned uploading preset
+
 const JobEdit = () => {
   const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
 
@@ -51,7 +56,7 @@ const JobEdit = () => {
     purpose: "",
     skills: "",
     categories: [],
-    selectedFile: "",
+    imageUrl: "",
     startDate: "",
     endDate: "",
     hours: "",
@@ -106,12 +111,27 @@ const JobEdit = () => {
     },
   });
 
-  const handleSubmit = (e) => {
+  const [image, setImage] = useState("");
+
+  const onImageChange = (e) => {
+    setImage(e.target.files[0]);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    mutate({
-      jobId: id,
-      jobFields: formData,
-    });
+    const imageData = new FormData();
+    imageData.append("file", image);
+    imageData.append("upload_preset", preset);
+    try {
+      const res = await axios.post(url, imageData);
+      const imageUrl = res.data.secure_url;
+      mutate({
+        jobId: id,
+        jobFields: { ...formData, imageUrl },
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   // if (user?.result?.name !== organizer) {
@@ -295,14 +315,20 @@ const JobEdit = () => {
             />
           </div>
           <div className="mb-3">
-            <p>Image:</p>
-            <FileBase
+            <InputLabel id="image">Image</InputLabel>
+            <input
+              type="file"
+              accept="image/*"
+              name="image"
+              onChange={onImageChange}
+            />
+            {/* <FileBase
               type="file"
               multiple={false}
               onDone={({ base64 }) =>
                 setFormData({ ...formData, selectedFile: base64 })
               }
-            />
+            /> */}
           </div>
           <Button variant="contained" color="primary" type="submit">
             {updateJobLoading ? <LoadingSpinner /> : "Update Job"}

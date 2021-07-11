@@ -20,7 +20,7 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
-import FileBase from "react-file-base64";
+// import FileBase from "react-file-base64";
 import axios from "axios";
 import TnC from "./Auth/TnC";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -56,8 +56,8 @@ const MenuProps = {
 /* end styles */
 
 // Cloudinary
-const url = " https://api.cloudinary.com/v1_1/volunteer-board/image/upload";
-const preset = "x1nm4sms";
+const url = " https://api.cloudinary.com/v1_1/volunteer-board/image/upload"; // API Base URL
+const preset = "x1nm4sms"; // Unsigned uploading preset
 
 const AddJob = () => {
   const classes = useStyles();
@@ -131,7 +131,7 @@ const AddJob = () => {
     try {
       const res = await axios.post(url, imageData);
       const imageUrl = res.data.secure_url;
-      console.log(imageUrl);
+      // console.log(imageUrl);
       mutate({
         organizer: user?.result?.name,
         registerNum: user?.result?.registerNum,
@@ -139,7 +139,7 @@ const AddJob = () => {
         telephoneNum: formData.telephoneNum,
         mobileNum: formData.telephoneNum,
         email: formData.email,
-        website: user?.result?.website,
+        website: formData.website,
         title: formData.title,
         purpose: formData.purpose,
         skills: formData.skills,
@@ -331,7 +331,13 @@ const AddJob = () => {
             />
           </div>
           <div className="mb-3">
-            <input type="file" name="image" onChange={onImageChange} />
+            <InputLabel id="image">Image</InputLabel>
+            <input
+              type="file"
+              accept="image/*"
+              name="image"
+              onChange={onImageChange}
+            />
             {/* <FileBase
               type="file"
               multiple={false}

@@ -96,9 +96,7 @@ const SubmissionDetail = () => {
         <Card className={classes.card}>
           <CardMedia
             className={classes.cardMedia}
-            image={
-              jobDetail.selectedFile || "https://source.unsplash.com/random"
-            }
+            image={jobDetail.imageUrl || "https://source.unsplash.com/random"}
             title="Job Image"
           />
           <CardContent className={classes.cardContent}>
