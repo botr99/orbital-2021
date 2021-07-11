@@ -20,7 +20,8 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
-import FileBase from "react-file-base64";
+// import FileBase from "react-file-base64";
+import axios from "axios";
 import TnC from "./Auth/TnC";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import LoadingSpinner from "./LoadingSpinner";
@@ -54,6 +55,10 @@ const MenuProps = {
 };
 /* end styles */
 
+// Cloudinary
+const url = " https://api.cloudinary.com/v1_1/volunteer-board/image/upload"; // API Base URL
+const preset = "x1nm4sms"; // Unsigned uploading preset
+
 const AddJob = () => {
   const classes = useStyles();
   const queryClient = useQueryClient();
@@ -71,7 +76,7 @@ const AddJob = () => {
     purpose: "",
     skills: "",
     categories: [],
-    selectedFile: "",
+    imageUrl: "",
     startDate: Date.now(),
     endDate: Date.now(),
     hours: "",
@@ -118,26 +123,63 @@ const AddJob = () => {
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(formData);
-    mutate({
-      organizer: user?.result?.name,
-      registerNum: user?.result?.registerNum,
-      contactName: formData.contactName,
-      telephoneNum: formData.telephoneNum,
-      mobileNum: formData.telephoneNum,
-      email: formData.email,
-      website: user?.result?.website,
-      title: formData.title,
-      purpose: formData.purpose,
-      skills: formData.skills,
-      categories: formData.categories,
-      selectedFile: formData.selectedFile,
-      startDate: formData.startDate,
-      endDate: formData.endDate,
-      hours: formData.hours,
-    });
+    if (image) {
+      // Image selected
+      const imageData = new FormData();
+      imageData.append("file", image);
+      imageData.append("upload_preset", preset);
+      try {
+        const res = await axios.post(url, imageData);
+        const imageUrl = res.data.secure_url;
+        // console.log(imageUrl);
+        mutate({
+          organizer: user?.result?.name,
+          registerNum: user?.result?.registerNum,
+          contactName: formData.contactName,
+          telephoneNum: formData.telephoneNum,
+          mobileNum: formData.telephoneNum,
+          email: formData.email,
+          website: formData.website,
+          title: formData.title,
+          purpose: formData.purpose,
+          skills: formData.skills,
+          categories: formData.categories,
+          imageUrl,
+          startDate: formData.startDate,
+          endDate: formData.endDate,
+          hours: formData.hours,
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      // No image
+      mutate({
+        organizer: user?.result?.name,
+        registerNum: user?.result?.registerNum,
+        contactName: formData.contactName,
+        telephoneNum: formData.telephoneNum,
+        mobileNum: formData.telephoneNum,
+        email: formData.email,
+        website: formData.website,
+        title: formData.title,
+        purpose: formData.purpose,
+        skills: formData.skills,
+        categories: formData.categories,
+        imageUrl: formData.imageUrl,
+        startDate: formData.startDate,
+        endDate: formData.endDate,
+        hours: formData.hours,
+      });
+    }
+  };
+
+  const [image, setImage] = useState("");
+
+  const onImageChange = (e) => {
+    setImage(e.target.files[0]);
   };
 
   return (
@@ -192,8 +234,7 @@ const AddJob = () => {
                     ))}
                   </div>
                 )}
-                MenuProps={MenuProps}
-              >
+                MenuProps={MenuProps}>
                 {categories?.map((category) => (
                   <MenuItem key={category} value={category}>
                     {category}
@@ -312,14 +353,20 @@ const AddJob = () => {
             />
           </div>
           <div className="mb-3">
-            <p>Image:</p>
-            <FileBase
+            <InputLabel id="image">Image</InputLabel>
+            <input
+              type="file"
+              accept="image/*"
+              name="image"
+              onChange={onImageChange}
+            />
+            {/* <FileBase
               type="file"
               multiple={false}
               onDone={({ base64 }) =>
                 setFormData({ ...formData, selectedFile: base64 })
               }
-            />
+            /> */}
           </div>
           <div className="mb-3">
             <>
@@ -342,8 +389,7 @@ const AddJob = () => {
               disabled={!agree}
               variant="contained"
               color="primary"
-              type="submit"
-            >
+              type="submit">
               {postJobLoading ? <LoadingSpinner /> : "Add Job"}
             </Button>
           </div>

@@ -21,7 +21,7 @@ const Job = ({ job }) => {
     purpose,
     categories,
     _id,
-    selectedFile,
+    imageUrl,
     startDate,
     endDate,
     skills,
@@ -40,7 +40,7 @@ const Job = ({ job }) => {
       <Card className={classes.card}>
         <CardMedia
           className={classes.cardMedia}
-          image={selectedFile || "https://source.unsplash.com/random"}
+          image={imageUrl || "https://source.unsplash.com/random"}
           title="Job Image"
         />
         <CardContent className={classes.cardContent}>

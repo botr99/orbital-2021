@@ -93,8 +93,7 @@ const JobDetail = () => {
                 <CardMedia
                   className={classes.cardMedia}
                   image={
-                    jobDetail.selectedFile ||
-                    "https://source.unsplash.com/random"
+                    jobDetail.imageUrl || "https://source.unsplash.com/random"
                   }
                   title="Job Image"
                 />
