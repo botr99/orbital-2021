@@ -20,6 +20,11 @@ export const getCategories = async () => {
   return data;
 };
 
+export const getJobsOrganized = async (name) => {
+  const { data } = await JobsApi.get(`/organizer/${name}`);
+  return data;
+};
+
 export const getApprovedJobs = async ({ queryKey }) => {
   const [, { page, limit, searchData }] = queryKey;
 
@@ -60,6 +65,11 @@ export const getJobDetail = async (jobId) => {
 
 export const postJobRegistration = async (jobId) => {
   const { data } = await JobsApi.post(`/${jobId}/registrations`);
+  return data;
+};
+
+export const deleteJobRegistration = async (jobId) => {
+  const { data } = await JobsApi.delete(`/${jobId}/registrations`);
   return data;
 };
 

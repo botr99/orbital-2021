@@ -1,5 +1,10 @@
 import express from "express";
-import { getRegisteredJobs, login, signup } from "../../../controllers/user.js";
+import {
+  getRegisteredJobs,
+  login,
+  signup,
+  updatePassword,
+} from "../../../controllers/user.js";
 import assignUser from "../../../middleware/assignUser.js";
 import checkAuth from "../../../middleware/checkAuth.js";
 import validateUser from "../../../middleware/validateUser.js";
@@ -18,6 +23,19 @@ router.get(
 router.post("/login", login);
 
 router.post("/signup", signup);
+
+router.patch(
+  "/:id/updatePassword",
+  assignUser,
+  checkAuth([
+    ROLES.Admin,
+    ROLES.Student,
+    ROLES.StudentGroup,
+    ROLES.Organization,
+  ]),
+  validateUser,
+  updatePassword
+);
 
 // router.post("/adminsignup", adminsignup);
 

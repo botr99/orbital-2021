@@ -23,3 +23,8 @@ export const getRegisteredJobs = async (userId) => {
   const { data } = await API.get(`/${userId}/registeredJobs`);
   return data;
 };
+
+export const updatePassword = async ({ userId, userFields }) => {
+  const { data } = await API.patch(`/${userId}/updatePassword`, userFields);
+  return data;
+};

@@ -105,7 +105,7 @@ const JobDetail = () => {
                     by{" "}
                     <Link
                       className={classes.link}
-                      to={`/${jobDetail.organizer}`}>
+                      to={`/organizers/${jobDetail.organizer}`}>
                       {jobDetail.organizer}
                     </Link>
                   </Typography>

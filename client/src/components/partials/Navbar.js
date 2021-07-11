@@ -56,14 +56,26 @@ const Navbar = () => {
             {[ROLES.Admin, ROLES.StudentGroup, ROLES.Organization].includes(
               user?.result?.role
             ) && (
-              <a className="nav-link" href="/jobs/new">
-                New Job
-              </a>
+              <>
+                <a
+                  className="nav-link"
+                  href={`/organizers/${user.result.name}`}>
+                  Jobs Organized
+                </a>
+                <a className="nav-link" href="/jobs/new">
+                  New Job
+                </a>
+              </>
             )}
             {user ? (
-              <a className="nav-link" href="/" onClick={logout}>
-                Logout
-              </a>
+              <>
+                <a className="nav-link" href={`/profile/${user.result._id}`}>
+                  Profile
+                </a>
+                <a className="nav-link" href="/" onClick={logout}>
+                  Logout
+                </a>
+              </>
             ) : (
               <a className="nav-link" href="/auth">
                 Login
