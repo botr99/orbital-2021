@@ -16,15 +16,17 @@ import ROLES from "./utils/roles";
 import Profile from "./components/Profile/Profile";
 import JobsOrganized from "./components/JobsOrganized";
 import { useSelector } from "react-redux";
+import LoadingContainer from "./components/LoadingContainer";
 
 function App() {
-  const isUserLoading = useSelector((state) => state.isUserLoading);
   const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
+  const isLoggingIn = useSelector((state) => state.isLoggingIn);
 
   return (
     <div className="d-flex flex-column vh-100">
       <Navbar />
       <main className="container mt-5 mb-5">
+        {isLoggingIn && LoadingContainer}
         <Switch>
           <Route path="/" exact component={() => <Redirect to="/jobs" />} />
           <Route path="/jobs" exact component={Jobs} />
