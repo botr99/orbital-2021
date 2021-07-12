@@ -15,7 +15,8 @@ const authReducer = (
       localStorage.clear();
 
       return { ...state, authData: null };
-
+    case "AUTH_ERROR":
+      return { ...state, message: action.message, severity: "error" };
     default:
       return state;
   }

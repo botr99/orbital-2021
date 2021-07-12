@@ -9,7 +9,7 @@ export const login = (formData, history) => async (dispatch) => {
     dispatch({ type: "END_LOADING" });
     history.push("/");
   } catch (error) {
-    window.alert(error.response.data.message);
+    dispatch({ type: "AUTH_ERROR", message: error.response.data.message });
   }
 };
 
@@ -21,6 +21,6 @@ export const signup = (formData, history) => async (dispatch) => {
     dispatch({ type: "END_LOADING" });
     history.push("/");
   } catch (error) {
-    window.alert(error.response.data.message);
+    dispatch({ type: "AUTH_ERROR", message: error.response.data.message });
   }
 };

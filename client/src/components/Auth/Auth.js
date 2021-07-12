@@ -23,6 +23,7 @@ import useStyles from "./styles";
 import Input from "./Input";
 import TnC from "./TnC";
 import ROLES from "../../utils/roles.js";
+import AlertMessage from "../AlertMessage.js";
 
 const Auth = () => {
   const initialFormData = {
@@ -114,6 +115,7 @@ const Auth = () => {
   return (
     <Container component="main" maxWidth="xs">
       <Paper className={classes.paper} elevation={3}>
+        <AlertMessage />
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
