@@ -26,7 +26,7 @@ function App() {
     <div className="d-flex flex-column vh-100">
       <Navbar />
       <main className="container mt-5 mb-5">
-        {isLoggingIn && LoadingContainer}
+        {isLoggingIn && <LoadingContainer />}
         <Switch>
           <Route path="/" exact component={() => <Redirect to="/jobs" />} />
           <Route path="/jobs" exact component={Jobs} />

@@ -13,8 +13,6 @@ import { useSelector } from "react-redux";
 
 const Jobs = () => {
   const user = JSON.parse(localStorage.getItem("profile"));
-  const userInfo = useSelector((state) => state.authData);
-  console.log(userInfo);
   const [jobs, setJobs] = useState(null);
 
   const [page, setPage] = useState(1);
