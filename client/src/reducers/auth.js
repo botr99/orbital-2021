@@ -1,13 +1,21 @@
-const authReducer = (state = { authData: null }, action) => {
+const authReducer = (
+  state = { authData: null, isLoggingIn: false },
+  action
+) => {
   switch (action.type) {
-    case 'AUTH':
-      localStorage.setItem('profile', JSON.stringify({ ...action?.data }));
+    case "START_LOADING":
+      return { ...state, isLoggingIn: true };
+    case "END_LOADING":
+      return { ...state, isLoggingIn: false };
+    case "AUTH": // Successful login/signup
+      localStorage.setItem("profile", JSON.stringify({ ...action?.data }));
 
-      return { ...state, authData: action.data, loading: false, errors: null };
-    case 'LOGOUT':
+      return { ...state, authData: action.data };
+    case "LOGOUT":
       localStorage.clear();
 
-      return { ...state, authData: null, loading: false, errors: null };
+      return { ...state, authData: null };
+
     default:
       return state;
   }

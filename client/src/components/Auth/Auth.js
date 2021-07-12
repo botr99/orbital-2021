@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Avatar,
   Button,
@@ -172,9 +172,11 @@ const Auth = () => {
                   />
                   <Input
                     helperText={
-                      !validateWebsite() ? "Please enter a valid website." : ""
+                      !!formData.website && !validateWebsite()
+                        ? "Please enter a valid website."
+                        : ""
                     }
-                    handleError={!validateWebsite()}
+                    handleError={!!formData.website && !validateWebsite()}
                     name="website"
                     label="Group/Organization Website"
                     handleChange={handleChange}
@@ -193,9 +195,11 @@ const Auth = () => {
             {isSignup && (
               <Input
                 helperText={
-                  !validateContact() ? "Please enter a valid phone number" : ""
+                  !!formData.contactNum && !validateContact()
+                    ? "Please enter a valid phone number"
+                    : ""
                 }
-                handleError={!validateContact()}
+                handleError={!!formData.contactNum && !validateContact()}
                 name="contactNum"
                 label="Contact Number"
                 handleChange={handleChange}
@@ -205,17 +209,19 @@ const Auth = () => {
             )}
             <Input
               helperText={
-                !validator.isEmail(formData.email)
+                !!formData.email &&
+                (!validator.isEmail(formData.email)
                   ? "Please enter a valid email address"
                   : requireNUSEmail()
                   ? validateNUSEmail()
                     ? ""
                     : "Please sign up using your NUS email address ending in 'u.nus.edu'"
-                  : ""
+                  : "")
               }
               handleError={
-                !validator.isEmail(formData.email) ||
-                (requireNUSEmail() && !validateNUSEmail())
+                !!formData.email &&
+                (!validator.isEmail(formData.email) ||
+                  (requireNUSEmail() && !validateNUSEmail()))
               }
               name="email"
               label="Email Address"
@@ -224,11 +230,13 @@ const Auth = () => {
             />
             <Input
               helperText={
-                isSignup && !validatePassword()
+                !!formData.password && isSignup && !validatePassword()
                   ? "Please use a stronger password with a minimum length of 8 characters with at least 1 lowercase, uppercase, number and symbol"
                   : ""
               }
-              handleError={isSignup && !validatePassword()}
+              handleError={
+                !!formData.password && isSignup && !validatePassword()
+              }
               name="password"
               label="Password"
               handleChange={handleChange}
@@ -238,9 +246,13 @@ const Auth = () => {
             {isSignup && (
               <Input
                 helperText={
-                  !validateRepeatPassword() ? "Passwords do not match" : ""
+                  !!formData.confirmPassword && !validateRepeatPassword()
+                    ? "Passwords do not match"
+                    : ""
                 }
-                handleError={!validateRepeatPassword()}
+                handleError={
+                  !!formData.confirmPassword && !validateRepeatPassword()
+                }
                 name="confirmPassword"
                 label="Repeat Password"
                 handleChange={handleChange}

@@ -12,6 +12,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 
 const store = createStore(authReducer, compose(applyMiddleware(thunk)));
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

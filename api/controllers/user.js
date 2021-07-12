@@ -122,7 +122,7 @@ export const signup = async (req, res) => {
       website,
     });
 
-    console.log(newUser);
+    // console.log(newUser);
 
     const token = jwt.sign(
       {
@@ -141,7 +141,7 @@ export const signup = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
 
-    console.log(error);
+    // console.log(error);
   }
 };
 

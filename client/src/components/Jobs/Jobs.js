@@ -9,10 +9,10 @@ import { Box, Button, Grid, Typography } from "@material-ui/core";
 import ROLES from "../../utils/roles";
 import { useQuery } from "react-query";
 import LoadingContainer from "../LoadingContainer";
+import { useSelector } from "react-redux";
 
 const Jobs = () => {
   const user = JSON.parse(localStorage.getItem("profile"));
-
   const [jobs, setJobs] = useState(null);
 
   const [page, setPage] = useState(1);
@@ -57,8 +57,7 @@ const Jobs = () => {
         display="flex"
         justifyContent="space-between"
         alignItems="center"
-        marginBottom={1}
-      >
+        marginBottom={1}>
         <Typography variant="h4">Available Jobs</Typography>
         {allowedToAddJob() && (
           <Link to="/jobs/new">
