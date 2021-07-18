@@ -23,7 +23,7 @@ const OrganizerInfo = ({ jobDetail }) => {
   const classes = useStyles();
 
   return (
-    <Card variant="outlined">
+    <Card className="mb-2" variant="outlined">
       <CardContent>
         <Typography
           className={classes.link}

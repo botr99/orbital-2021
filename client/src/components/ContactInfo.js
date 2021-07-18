@@ -20,13 +20,16 @@ const useStyles = makeStyles({
     // color: "inherit",
     color: "#003062",
   },
+  card: {
+    marginBottom: "3",
+  },
 });
 
 const ContactInfo = ({ jobDetail }) => {
   const classes = useStyles();
 
   return (
-    <Card variant="outlined">
+    <Card className="mb-2" variant="outlined">
       <CardContent>
         <Typography variant="h5">
           <b>Contact Information</b>
