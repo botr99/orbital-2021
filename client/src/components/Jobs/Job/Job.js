@@ -26,6 +26,8 @@ const Job = ({ job }) => {
     endDate,
     skills,
     hours,
+    location,
+    suitability,
   } = job;
 
   // add a "..." if title or purpose is too long to be shown entirely
@@ -59,6 +61,8 @@ const Job = ({ job }) => {
               hours={hours}
               startDate={startDate}
               endDate={endDate}
+              location={location}
+              suitability={suitability}
             />
             <Grid>
               {categories.map((category) => (

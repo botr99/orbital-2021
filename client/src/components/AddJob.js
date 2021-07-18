@@ -14,6 +14,8 @@ import {
   FormControlLabel,
   Checkbox,
   Grid,
+  Paper,
+  Container,
 } from "@material-ui/core";
 import DateFnsUtils from "@date-io/date-fns";
 import {
@@ -25,11 +27,20 @@ import axios from "axios";
 import TnC from "./Auth/TnC";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import LoadingSpinner from "./LoadingSpinner";
+import { getAddress } from "onemap-address-search-singapore";
+import suitabilityList from "../utils/suitabilityList";
 
 /* styles */
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
+  paper: {
+    // marginTop: theme.spacing(8),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    padding: theme.spacing(2),
+  },
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120,
@@ -80,6 +91,8 @@ const AddJob = () => {
     startDate: Date.now(),
     endDate: Date.now(),
     hours: "",
+    location: "",
+    suitability: [],
   };
 
   // const [startDate, setStartDate] = useState(Date.now());
@@ -120,8 +133,10 @@ const AddJob = () => {
     // setStartDate(startDate > date ? date : startDate);
   };
 
-  const handleChange = (e) =>
+  const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    console.log(formData);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -133,7 +148,7 @@ const AddJob = () => {
       try {
         const res = await axios.post(url, imageData);
         const imageUrl = res.data.secure_url;
-        // console.log(imageUrl);
+
         mutate({
           organizer: user?.result?.name,
           registerNum: user?.result?.registerNum,
@@ -150,6 +165,8 @@ const AddJob = () => {
           startDate: formData.startDate,
           endDate: formData.endDate,
           hours: formData.hours,
+          location: formData.location,
+          suitability: formData.suitability,
         });
       } catch (err) {
         console.log(err);
@@ -172,6 +189,8 @@ const AddJob = () => {
         startDate: formData.startDate,
         endDate: formData.endDate,
         hours: formData.hours,
+        location: formData.location,
+        suitability: formData.suitability,
       });
     }
   };
@@ -183,11 +202,13 @@ const AddJob = () => {
   };
 
   return (
-    <div className="row">
-      <Typography variant="h5" align="center" gutterBottom>
-        Add Job
-      </Typography>
-      <div className="col-6 offset-3">
+    <Container component="main" maxWidth="md">
+      <Paper className={classes.paper} elevation={3}>
+        <Typography variant="h5" align="center" gutterBottom>
+          Add Job
+        </Typography>
+
+        {/* <div className="col-6 offset-3"> */}
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <TextField
@@ -200,7 +221,7 @@ const AddJob = () => {
               required
             />
           </div>
-          <div className="mb-3">
+          <div>
             <TextField
               variant="outlined"
               label="Purpose"
@@ -352,6 +373,49 @@ const AddJob = () => {
               type="number"
             />
           </div>
+          <div>
+            <TextField
+              variant="outlined"
+              label="Location"
+              name="location"
+              value={formData.location}
+              onChange={handleChange}
+              fullWidth
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <FormControl required className={classes.formControl}>
+              <InputLabel id="mutiple-suitability-label">
+                Suitable for
+              </InputLabel>
+              <Select
+                labelId="mutiple-suitability-label"
+                multiple
+                name="suitability"
+                value={formData.suitability}
+                onChange={handleChange}
+                input={<Input id="select-multiple-chip" />}
+                renderValue={(selected) => (
+                  <div className={classes.chips}>
+                    {selected.map((value) => (
+                      <Chip
+                        key={value}
+                        label={value}
+                        className={classes.chip}
+                      />
+                    ))}
+                  </div>
+                )}
+                MenuProps={MenuProps}>
+                {suitabilityList?.map((category) => (
+                  <MenuItem key={category} value={category}>
+                    {category}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
           <div className="mb-3">
             <InputLabel id="image">Image</InputLabel>
             <input
@@ -394,11 +458,13 @@ const AddJob = () => {
             </Button>
           </div>
         </form>
-        <Button component={Link} to={`/`} color="primary">
-          Return to Board
-        </Button>
-      </div>
-    </div>
+
+        {/* </div> */}
+      </Paper>
+      <Button component={Link} to={`/`} color="primary">
+        Return to Board
+      </Button>
+    </Container>
   );
 };
 

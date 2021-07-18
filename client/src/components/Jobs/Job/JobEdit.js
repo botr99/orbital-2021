@@ -14,6 +14,8 @@ import {
   TextField,
   Typography,
   Grid,
+  Container,
+  Paper,
 } from "@material-ui/core";
 import {
   MuiPickersUtilsProvider,
@@ -26,6 +28,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import LoadingSpinner from "../../LoadingSpinner";
 import LoadingContainer from "../../LoadingContainer";
 import Error from "../../Error";
+import suitabilityList from "../../../utils/suitabilityList";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -60,6 +63,8 @@ const JobEdit = () => {
     startDate: "",
     endDate: "",
     hours: "",
+    location: "",
+    suitability: [],
   };
 
   const { id } = useParams();
@@ -156,11 +161,11 @@ const JobEdit = () => {
   }
 
   return (
-    <div className="row">
-      <Typography variant="h5" align="center" gutterBottom>
-        Edit Job
-      </Typography>
-      <div className="col-6 offset-3">
+    <Container component="main" maxWidth="md">
+      <Paper className={classes.paper} elevation={3}>
+        <Typography variant="h5" align="center" gutterBottom>
+          Edit Job
+        </Typography>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <TextField
@@ -323,6 +328,49 @@ const JobEdit = () => {
               type="number"
             />
           </div>
+          <div>
+            <TextField
+              variant="outlined"
+              label="Location"
+              name="location"
+              value={formData.location}
+              onChange={handleChange}
+              fullWidth
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <FormControl required className={classes.formControl}>
+              <InputLabel id="mutiple-suitability-label">
+                Suitable for
+              </InputLabel>
+              <Select
+                labelId="mutiple-suitability-label"
+                multiple
+                name="suitability"
+                value={formData.suitability}
+                onChange={handleChange}
+                input={<Input id="select-multiple-chip" />}
+                renderValue={(selected) => (
+                  <div className={classes.chips}>
+                    {selected.map((value) => (
+                      <Chip
+                        key={value}
+                        label={value}
+                        className={classes.chip}
+                      />
+                    ))}
+                  </div>
+                )}
+                MenuProps={MenuProps}>
+                {suitabilityList?.map((category) => (
+                  <MenuItem key={category} value={category}>
+                    {category}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
           <div className="mb-3">
             <InputLabel id="image">Image</InputLabel>
             <input
@@ -343,11 +391,11 @@ const JobEdit = () => {
             {updateJobLoading ? <LoadingSpinner /> : "Update Job"}
           </Button>
         </form>
-        <Button component={Link} to={`/jobs/${id}`} color="primary">
-          Back to Job
-        </Button>
-      </div>
-    </div>
+      </Paper>
+      <Button component={Link} to={`/jobs/${id}`} color="primary">
+        Back to Job
+      </Button>
+    </Container>
   );
 };
 

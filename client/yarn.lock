@@ -8248,6 +8248,13 @@
   dependencies:
     "wrappy" "1"
 
+"onemap-address-search-singapore@^1.0.2":
+  "integrity" "sha512-69c9TJ7iw8z5AQmiPd+jt1MsOBETbgYhl6dqcFjsCyrqIJSvzfcqoglyjfMncH6/DdkBaeXwc51PfbettI2IcA=="
+  "resolved" "https://registry.npmjs.org/onemap-address-search-singapore/-/onemap-address-search-singapore-1.0.2.tgz"
+  "version" "1.0.2"
+  dependencies:
+    "axios" "^0.21.1"
+
 "onetime@^5.1.0":
   "integrity" "sha512-kbpaSSGJTWdAY5KPVeMOKXSrPtr8C8C7wodJbcsd51jRnmD+GZu8Y0VoU6Dm5Z4vWr0Ig/1NKuWRKf7j5aaYSg=="
   "resolved" "https://registry.npmjs.org/onetime/-/onetime-5.1.2.tgz"

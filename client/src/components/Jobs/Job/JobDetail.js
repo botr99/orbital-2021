@@ -137,14 +137,14 @@ const JobDetail = () => {
                         />
                       ))}
                   </Grid>
-                  <hr />
+                  {/* <hr />
                   <Typography variant="h5">
                     <b>Things to note</b>
                   </Typography>
                   <Typography paragraph>
                     Optional Information maybe not pertaining to job itself but
                     registration and others
-                  </Typography>
+                  </Typography> */}
                 </CardContent>
                 <CardActions>
                   <Grid>
@@ -172,6 +172,8 @@ const JobDetail = () => {
                 hours={jobDetail.hours}
                 startDate={jobDetail.startDate}
                 endDate={jobDetail.endDate}
+                location={jobDetail.location}
+                suitability={jobDetail.suitability}
               />
               <ContactInfo jobDetail={jobDetail} />
               <ReportJob jobDetail={jobDetail} />
