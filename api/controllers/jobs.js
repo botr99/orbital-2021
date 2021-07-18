@@ -1,5 +1,6 @@
 import Job from "../models/Job.js";
 import paginateQuery from "../middleware/paginateQuery.js";
+import { ADMIN_EMAIL, sendEmail } from "../utils/mailer.js";
 
 export const getCategories = async (req, res) => {
   try {
@@ -112,6 +113,22 @@ export const postJobRegistration = async (req, res) => {
         new: true,
       }
     );
+
+    const subject = "Registered interest for a job";
+    // replace with http://localhost:3000 in dev
+    const mailContent = `
+      <p>This is to confirm that you have registered your interest for the job shown 
+        <a href="https://nus-ccsgp.netlify.app/jobs/${req.params.id}">
+          here.
+        </a>
+      </p>
+      <p>
+        Do note that your contact details have been provided to the job organizer, and you will be contacted
+        by them for more information regarding the job once registrations are filled up.
+      </p>
+    `;
+    sendEmail(ADMIN_EMAIL, req.user.email, subject, mailContent);
+
     res.status(200).json(updatedJob);
   } catch (err) {
     res.status(404).json({ message: err.message });
@@ -129,6 +146,18 @@ export const deleteJobRegistration = async (req, res) => {
         new: true,
       }
     );
+
+    const subject = "Unregistered interest for a job";
+    // replace with http://localhost:3000 in dev
+    const mailContent = `
+      <p>This is to confirm that you have unregistered your interest for the job shown 
+        <a href="https://nus-ccsgp.netlify.app/jobs/${req.params.id}">
+          here.
+        </a>
+      </p>
+    `;
+    sendEmail(ADMIN_EMAIL, req.user.email, subject, mailContent);
+
     res.status(200).json(updatedJob);
   } catch (err) {
     res.status(404).json({ message: err.message });
@@ -140,6 +169,15 @@ export const postJob = async (req, res) => {
   // console.log(newJob);
   try {
     await newJob.save();
+
+    const subject = "Job successfully created";
+    const mailContent = `
+      <p>This is to confirm that your job, titled "${req.body.title}", has been created.</p>
+      <p>The job is now being reviewed by the admin. Once the admin approves your job, your job will be on the home page 
+      and an email will be sent to notify you.</p>
+    `;
+    sendEmail(ADMIN_EMAIL, req.body.email, subject, mailContent);
+
     res.status(201).json(newJob);
   } catch (err) {
     res.status(409).json({ message: err.message });
@@ -151,6 +189,38 @@ export const updateJob = async (req, res) => {
     const updatedJob = await Job.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });
+    res.status(200).json(updatedJob);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+};
+
+export const approveJob = async (req, res) => {
+  try {
+    const updatedJob = await Job.findByIdAndUpdate(
+      req.params.id,
+      { isApproved: true },
+      {
+        new: true,
+      }
+    );
+
+    const jobEmail = updatedJob.email;
+    const subject = "Job is now public";
+    // replace with http://localhost:3000 in dev
+    const mailContent = `
+        <p>This is to confirm that your job has been approved.</p>
+        <p>You can view your job at this link: 
+          <a href="https://nus-ccsgp.netlify.app/jobs/${req.params.id}">
+            https://nus-ccsgp.netlify.app/jobs/${req.params.id}
+          </a>.
+        </p>
+        <p>Do note that you have to be logged in to make changes to your job and see the list of students that have
+        registered for your job.
+        </p>
+      `;
+    sendEmail(ADMIN_EMAIL, jobEmail, subject, mailContent);
+
     res.status(200).json(updatedJob);
   } catch (err) {
     res.status(404).json({ message: err.message });

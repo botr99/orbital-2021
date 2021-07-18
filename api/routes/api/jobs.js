@@ -9,6 +9,7 @@ import {
   postJobRegistration,
   deleteJobRegistration,
   postJob,
+  approveJob,
   updateJob,
   deleteJob,
 } from "../../controllers/jobs.js";
@@ -78,6 +79,8 @@ router.post(
   validateJob,
   postJob
 );
+
+router.patch("/:id/approve", assignUser, checkAuth([ROLES.Admin]), approveJob);
 
 router.patch(
   "/:id",

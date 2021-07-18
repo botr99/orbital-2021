@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 
-dotenv.config({ path: "../.env" });
+dotenv.config();
 
 // use mailtrap for testing purposes only.
 const transporter = nodemailer.createTransport({
@@ -16,31 +16,21 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const sendEmail = (email, content, subject) => {
+export const ADMIN_EMAIL = "randomAdminEmailTest@ccsgp.com"; // fake email
+
+export const sendEmail = (from, to, subject, mailContent) => {
   const mailOptions = {
-    from: "randomAdminEmailTest@ccsgp.com", // fake email
-    to: email,
-    subject: subject,
-    html: content,
+    from,
+    to,
+    subject,
+    html: mailContent,
   };
 
   transporter.sendMail(mailOptions, (err, info) => {
-    console.log(info.envelope);
-    console.log(info.messageId);
+    if (err) {
+      console.log(err);
+    }
+    // console.log(info.envelope);
+    // console.log(info.messageId);
   });
 };
-
-export const sendPostJobConfirmationEmail = (email, content) =>
-  sendEmail(email, content, "Job successfully created");
-
-export const sendApproveJobEmail = (email, content) =>
-  sendEmail(email, content, "Job is now public");
-
-export const sendRejectJobEmail = (email, content) =>
-  sendEmail(email, content, "Job is taken down");
-
-export const sendRegisterConfirmationEmail = (email, content) =>
-  sendEmail(email, content, "Registered interest for a job");
-
-export const sendUnregisterConfirmationEmail = (email, content) =>
-  sendEmail(email, content, "Unregistered interest for a job");
