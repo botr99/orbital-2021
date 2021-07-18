@@ -78,6 +78,11 @@ export const postJob = async (jobFields) => {
   return data;
 };
 
+export const approveJob = async (jobId) => {
+  const { data } = await JobsApi.patch(`/${jobId}/approve`);
+  return data;
+};
+
 export const updateJob = async ({ jobId, jobFields }) => {
   const { data } = await JobsApi.patch(`/${jobId}`, jobFields);
   return data;

@@ -18,7 +18,7 @@ import PhoneIcon from "@material-ui/icons/Phone";
 import PhoneAndroidIcon from "@material-ui/icons/PhoneAndroid";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import { Link, useHistory, useParams } from "react-router-dom";
-import { deleteJob, getJobDetail, updateJob } from "../../apis/JobsApi";
+import { approveJob, deleteJob, getJobDetail } from "../../apis/JobsApi";
 import useStyles from "./styles";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import LoadingContainer from "../LoadingContainer";
@@ -39,8 +39,8 @@ const SubmissionDetail = () => {
     error,
   } = useQuery(["jobs", id], () => getJobDetail(id));
 
-  const { mutate: mutatePatch, isLoading: updateJobLoading } = useMutation(
-    updateJob,
+  const { mutate: mutatePatch, isLoading: approveJobLoading } = useMutation(
+    approveJob,
     {
       onSuccess: () => {
         queryClient.invalidateQueries("unapprovedJobs");
@@ -63,13 +63,7 @@ const SubmissionDetail = () => {
 
   const handleApprove = () => {
     if (window.confirm("Approve this submission?")) {
-      mutatePatch({
-        jobId: id,
-        jobFields: {
-          ...jobDetail,
-          isApproved: true,
-        },
-      });
+      mutatePatch(id);
     }
   };
 
