@@ -6,11 +6,11 @@ import QueryBuilderIcon from "@material-ui/icons/QueryBuilder";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import EmojiPeopleIcon from "@material-ui/icons/EmojiPeople";
 
-const formatDate = (startDate, endDate) => {
-  const start = new Date(startDate);
-  const end = new Date(endDate);
-  return `${start.getDay()}/${start.getMonth()}/${start.getFullYear()} - ${end.getDay()}/${end.getMonth()}/${end.getFullYear()}`;
-};
+// const formatDate = (startDate, endDate) => {
+//   const start = new Date(startDate);
+//   const end = new Date(endDate);
+//   return `${start.getDay()}/${start.getMonth()}/${start.getFullYear()} - ${end.getDay()}/${end.getMonth()}/${end.getFullYear()}`;
+// };
 
 const useStyles = makeStyles({
   icon: {
@@ -24,20 +24,13 @@ const useStyles = makeStyles({
   },
 });
 
-const JobIcons = ({
-  skills,
-  hours,
-  startDate,
-  endDate,
-  location,
-  suitability,
-}) => {
+const JobIcons = ({ skills, hours, dates, location, suitability }) => {
   const classes = useStyles();
   return (
     <div>
       <Grid className={classes.iconText}>
         <DateRangeIcon className={classes.icon} />
-        {formatDate(startDate, endDate)}
+        {dates?.join(", ")}
       </Grid>
       <Grid className={classes.iconText}>
         <QueryBuilderIcon className={classes.icon} />

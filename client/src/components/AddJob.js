@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { getCategories, postJob } from "../apis/JobsApi";
 import {
@@ -109,17 +109,18 @@ const AddJob = () => {
   const handleDatesChange = (dates) => {
     setFormData({
       ...formData,
-      dates,
+      dates: dates.map((date) => date.format()),
     });
   };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    // console.log(formData);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    console.log(formData.dates);
     if (image) {
       // Image selected
       const imageData = new FormData();
@@ -165,8 +166,7 @@ const AddJob = () => {
         skills: formData.skills,
         categories: formData.categories,
         imageUrl: formData.imageUrl,
-        startDate: formData.startDate,
-        endDate: formData.endDate,
+        dates: formData.dates,
         hours: formData.hours,
         location: formData.location,
         suitability: formData.suitability,
@@ -352,6 +352,8 @@ const AddJob = () => {
                 width: "100%",
               }}
               calendarPosition="bottom-center"
+              format="DD MMMM YYYY"
+              sort
               multiple
               minDate={new Date()}
               value={formData.dates}

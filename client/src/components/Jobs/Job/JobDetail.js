@@ -173,8 +173,7 @@ const JobDetail = () => {
                   <JobIcons
                     skills={jobDetail.skills}
                     hours={jobDetail.hours}
-                    startDate={jobDetail.startDate}
-                    endDate={jobDetail.endDate}
+                    dates={jobDetail.dates}
                     location={jobDetail.location}
                     suitability={jobDetail.suitability}
                   />

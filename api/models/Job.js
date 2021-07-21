@@ -44,13 +44,8 @@ const jobSchema = new Schema(
       type: [{ type: String, enum: categories }], // allow for multiple categories
       required: true,
     },
-    startDate: {
-      type: Date,
-      required: true,
-    },
-    endDate: {
-      type: Date,
-      required: true,
+    dates: {
+      type: [],
     },
     hours: {
       type: Number,

@@ -22,8 +22,7 @@ const Job = ({ job }) => {
     categories,
     _id,
     imageUrl,
-    startDate,
-    endDate,
+    dates,
     skills,
     hours,
     location,
@@ -59,8 +58,7 @@ const Job = ({ job }) => {
             <JobIcons
               skills={skills}
               hours={hours}
-              startDate={startDate}
-              endDate={endDate}
+              dates={dates}
               location={location}
               suitability={suitability}
             />

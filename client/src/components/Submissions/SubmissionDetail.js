@@ -76,11 +76,11 @@ const SubmissionDetail = () => {
     }
   };
 
-  const formatDate = () => {
-    const start = new Date(jobDetail.startDate);
-    const end = new Date(jobDetail.endDate);
-    return `${start.getDay()}/${start.getMonth()}/${start.getFullYear()} - ${end.getDay()}/${end.getMonth()}/${end.getFullYear()}`;
-  };
+  // const formatDate = () => {
+  //   const start = new Date(jobDetail.startDate);
+  //   const end = new Date(jobDetail.endDate);
+  //   return `${start.getDay()}/${start.getMonth()}/${start.getFullYear()} - ${end.getDay()}/${end.getMonth()}/${end.getFullYear()}`;
+  // };
 
   if (isError) {
     return <Error error={error} />;
@@ -192,8 +192,7 @@ const SubmissionDetail = () => {
                 <JobIcons
                   skills={jobDetail.skills}
                   hours={jobDetail.hours}
-                  startDate={jobDetail.startDate}
-                  endDate={jobDetail.endDate}
+                  dates={jobDetail.dates}
                   location={jobDetail.location}
                   suitability={jobDetail.suitability}
                 />
