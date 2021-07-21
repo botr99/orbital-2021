@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { getCategories, getJobDetail, updateJob } from "../../../apis/JobsApi";
-import FileBase from "react-file-base64";
 import axios from "axios";
 import {
   Button,
@@ -17,11 +16,8 @@ import {
   Container,
   Paper,
 } from "@material-ui/core";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
-import DateFnsUtils from "@date-io/date-fns";
+import DatePicker from "react-multi-date-picker";
+import DatePanel from "react-multi-date-picker/plugins/date_panel";
 import useStyles from "./styles";
 
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -60,8 +56,7 @@ const JobEdit = () => {
     skills: "",
     categories: [],
     imageUrl: "",
-    startDate: "",
-    endDate: "",
+    dates: [],
     hours: "",
     location: "",
     suitability: [],
@@ -72,19 +67,10 @@ const JobEdit = () => {
 
   const [formData, setFormData] = useState(initialFormData);
 
-  const handleStartDateChange = (date) => {
+  const handleDatesChange = (dates) => {
     setFormData({
       ...formData,
-      startDate: date,
-      endDate: date > formData.endDate ? date : formData.endDate,
-    });
-  };
-
-  const handleEndDateChange = (date) => {
-    setFormData({
-      ...formData,
-      endDate: date,
-      startDate: formData.startDate > date ? date : formData.startDate,
+      dates,
     });
   };
 
@@ -148,9 +134,9 @@ const JobEdit = () => {
     }
   };
 
-  if (user?.result?.name !== organizer) {
-    return <Error />;
-  }
+  // if (user?.result?.name !== organizer) {
+  //   return <Error />;
+  // }
 
   if (loadingJobDetail) {
     return <LoadingContainer />;
@@ -287,34 +273,23 @@ const JobEdit = () => {
             />
           </div>
           <div className="mb-3">
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <Grid container justify="space-between">
-                <KeyboardDatePicker
-                  minDate={Date.now()}
-                  margin="normal"
-                  id="start-date-picker"
-                  label="Start Date"
-                  format="MM/dd/yyyy"
-                  value={formData.startDate}
-                  onChange={handleStartDateChange}
-                  KeyboardButtonProps={{
-                    "aria-label": "change start date",
-                  }}
-                />
-                <KeyboardDatePicker
-                  minDate={Date.now()}
-                  margin="normal"
-                  id="end-date-picker"
-                  label="End Date"
-                  format="MM/dd/yyyy"
-                  value={formData.endDate}
-                  onChange={handleEndDateChange}
-                  KeyboardButtonProps={{
-                    "aria-label": "change end date",
-                  }}
-                />
-              </Grid>
-            </MuiPickersUtilsProvider>
+            <InputLabel id="dates-label">Dates</InputLabel>
+            <DatePicker
+              style={{
+                width: "100%",
+                boxSizing: "border-box",
+                height: "26px",
+              }}
+              containerStyle={{
+                width: "100%",
+              }}
+              calendarPosition="bottom-center"
+              multiple
+              minDate={new Date()}
+              value={formData.dates}
+              onChange={handleDatesChange}
+              plugins={[<DatePanel />]}
+            />
           </div>
           <div className="mb-3">
             <TextField

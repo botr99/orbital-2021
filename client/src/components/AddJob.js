@@ -17,17 +17,12 @@ import {
   Paper,
   Container,
 } from "@material-ui/core";
-import DateFnsUtils from "@date-io/date-fns";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
-// import FileBase from "react-file-base64";
+import DatePicker from "react-multi-date-picker";
+import DatePanel from "react-multi-date-picker/plugins/date_panel";
 import axios from "axios";
 import TnC from "./Auth/TnC";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import LoadingSpinner from "./LoadingSpinner";
-import { getAddress } from "onemap-address-search-singapore";
 import suitabilityList from "../utils/suitabilityList";
 
 /* styles */
@@ -88,8 +83,7 @@ const AddJob = () => {
     skills: "",
     categories: [],
     imageUrl: "",
-    startDate: Date.now(),
-    endDate: Date.now(),
+    dates: [],
     hours: "",
     location: "",
     suitability: [],
@@ -112,30 +106,16 @@ const AddJob = () => {
 
   let history = useHistory();
 
-  const handleStartDateChange = (date) => {
+  const handleDatesChange = (dates) => {
     setFormData({
       ...formData,
-      startDate: date,
-      endDate: formData.endDate < date ? date : formData.endDate,
+      dates,
     });
-
-    // setStartDate(date);
-    // setEndDate(endDate < date ? date : endDate);
-  };
-
-  const handleEndDateChange = (date) => {
-    setFormData({
-      ...formData,
-      endDate: date,
-      startDate: formData.startDate > date ? date : formData.startDate,
-    });
-    // setEndDate(date);
-    // setStartDate(startDate > date ? date : startDate);
   };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    console.log(formData);
+    // console.log(formData);
   };
 
   const handleSubmit = async (e) => {
@@ -162,8 +142,7 @@ const AddJob = () => {
           skills: formData.skills,
           categories: formData.categories,
           imageUrl,
-          startDate: formData.startDate,
-          endDate: formData.endDate,
+          dates: formData.dates,
           hours: formData.hours,
           location: formData.location,
           suitability: formData.suitability,
@@ -331,7 +310,7 @@ const AddJob = () => {
               required
             />
           </div>
-          <div className="mb-3">
+          {/* <div className="mb-3">
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <Grid container justify="space-between">
                 <KeyboardDatePicker
@@ -360,7 +339,27 @@ const AddJob = () => {
                 />
               </Grid>
             </MuiPickersUtilsProvider>
+          </div> */}
+          <div className="mb-3">
+            <InputLabel id="dates-label">Dates</InputLabel>
+            <DatePicker
+              style={{
+                width: "100%",
+                boxSizing: "border-box",
+                height: "26px",
+              }}
+              containerStyle={{
+                width: "100%",
+              }}
+              calendarPosition="bottom-center"
+              multiple
+              minDate={new Date()}
+              value={formData.dates}
+              onChange={handleDatesChange}
+              plugins={[<DatePanel />]}
+            />
           </div>
+
           <div className="mb-3">
             <TextField
               variant="outlined"
@@ -424,13 +423,6 @@ const AddJob = () => {
               name="image"
               onChange={onImageChange}
             />
-            {/* <FileBase
-              type="file"
-              multiple={false}
-              onDone={({ base64 }) =>
-                setFormData({ ...formData, selectedFile: base64 })
-              }
-            /> */}
           </div>
           <div className="mb-3">
             <>
@@ -458,7 +450,6 @@ const AddJob = () => {
             </Button>
           </div>
         </form>
-
         {/* </div> */}
       </Paper>
       <Button component={Link} to={`/`} color="primary">
