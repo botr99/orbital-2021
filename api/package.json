@@ -25,7 +25,8 @@
     "joi": "^17.4.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.11",
-    "morgan": "~1.9.1"
+    "morgan": "~1.9.1",
+    "react-multi-date-picker": "^3.0.0"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { getCategories, postJob } from "../apis/JobsApi";
 import {
@@ -14,22 +14,28 @@ import {
   FormControlLabel,
   Checkbox,
   Grid,
+  Paper,
+  Container,
 } from "@material-ui/core";
-import DateFnsUtils from "@date-io/date-fns";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
-// import FileBase from "react-file-base64";
+import DatePicker from "react-multi-date-picker";
+import DatePanel from "react-multi-date-picker/plugins/date_panel";
 import axios from "axios";
 import TnC from "./Auth/TnC";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import LoadingSpinner from "./LoadingSpinner";
+import suitabilityList from "../utils/suitabilityList";
 
 /* styles */
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
+  paper: {
+    // marginTop: theme.spacing(8),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    padding: theme.spacing(2),
+  },
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120,
@@ -77,9 +83,10 @@ const AddJob = () => {
     skills: "",
     categories: [],
     imageUrl: "",
-    startDate: Date.now(),
-    endDate: Date.now(),
+    dates: [],
     hours: "",
+    location: "",
+    suitability: [],
   };
 
   // const [startDate, setStartDate] = useState(Date.now());
@@ -99,32 +106,21 @@ const AddJob = () => {
 
   let history = useHistory();
 
-  const handleStartDateChange = (date) => {
+  const handleDatesChange = (dates) => {
     setFormData({
       ...formData,
-      startDate: date,
-      endDate: formData.endDate < date ? date : formData.endDate,
+      dates: dates.map((date) => date.format()),
     });
-
-    // setStartDate(date);
-    // setEndDate(endDate < date ? date : endDate);
   };
 
-  const handleEndDateChange = (date) => {
-    setFormData({
-      ...formData,
-      endDate: date,
-      startDate: formData.startDate > date ? date : formData.startDate,
-    });
-    // setEndDate(date);
-    // setStartDate(startDate > date ? date : startDate);
-  };
-
-  const handleChange = (e) =>
+  const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    console.log(formData.dates);
     if (image) {
       // Image selected
       const imageData = new FormData();
@@ -133,7 +129,7 @@ const AddJob = () => {
       try {
         const res = await axios.post(url, imageData);
         const imageUrl = res.data.secure_url;
-        // console.log(imageUrl);
+
         mutate({
           organizer: user?.result?.name,
           registerNum: user?.result?.registerNum,
@@ -147,9 +143,10 @@ const AddJob = () => {
           skills: formData.skills,
           categories: formData.categories,
           imageUrl,
-          startDate: formData.startDate,
-          endDate: formData.endDate,
+          dates: formData.dates,
           hours: formData.hours,
+          location: formData.location,
+          suitability: formData.suitability,
         });
       } catch (err) {
         console.log(err);
@@ -169,9 +166,10 @@ const AddJob = () => {
         skills: formData.skills,
         categories: formData.categories,
         imageUrl: formData.imageUrl,
-        startDate: formData.startDate,
-        endDate: formData.endDate,
+        dates: formData.dates,
         hours: formData.hours,
+        location: formData.location,
+        suitability: formData.suitability,
       });
     }
   };
@@ -183,11 +181,13 @@ const AddJob = () => {
   };
 
   return (
-    <div className="row">
-      <Typography variant="h5" align="center" gutterBottom>
-        Add Job
-      </Typography>
-      <div className="col-6 offset-3">
+    <Container component="main" maxWidth="md">
+      <Paper className={classes.paper} elevation={3}>
+        <Typography variant="h5" align="center" gutterBottom>
+          Add Job
+        </Typography>
+
+        {/* <div className="col-6 offset-3"> */}
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <TextField
@@ -200,7 +200,7 @@ const AddJob = () => {
               required
             />
           </div>
-          <div className="mb-3">
+          <div>
             <TextField
               variant="outlined"
               label="Purpose"
@@ -310,7 +310,7 @@ const AddJob = () => {
               required
             />
           </div>
-          <div className="mb-3">
+          {/* <div className="mb-3">
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <Grid container justify="space-between">
                 <KeyboardDatePicker
@@ -339,7 +339,29 @@ const AddJob = () => {
                 />
               </Grid>
             </MuiPickersUtilsProvider>
+          </div> */}
+          <div className="mb-3">
+            <InputLabel id="dates-label">Dates</InputLabel>
+            <DatePicker
+              style={{
+                width: "100%",
+                boxSizing: "border-box",
+                height: "26px",
+              }}
+              containerStyle={{
+                width: "100%",
+              }}
+              calendarPosition="bottom-center"
+              format="DD MMMM YYYY"
+              sort
+              multiple
+              minDate={new Date()}
+              value={formData.dates}
+              onChange={handleDatesChange}
+              plugins={[<DatePanel />]}
+            />
           </div>
+
           <div className="mb-3">
             <TextField
               variant="outlined"
@@ -352,6 +374,49 @@ const AddJob = () => {
               type="number"
             />
           </div>
+          <div>
+            <TextField
+              variant="outlined"
+              label="Location"
+              name="location"
+              value={formData.location}
+              onChange={handleChange}
+              fullWidth
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <FormControl required className={classes.formControl}>
+              <InputLabel id="mutiple-suitability-label">
+                Suitable for
+              </InputLabel>
+              <Select
+                labelId="mutiple-suitability-label"
+                multiple
+                name="suitability"
+                value={formData.suitability}
+                onChange={handleChange}
+                input={<Input id="select-multiple-chip" />}
+                renderValue={(selected) => (
+                  <div className={classes.chips}>
+                    {selected.map((value) => (
+                      <Chip
+                        key={value}
+                        label={value}
+                        className={classes.chip}
+                      />
+                    ))}
+                  </div>
+                )}
+                MenuProps={MenuProps}>
+                {suitabilityList?.map((category) => (
+                  <MenuItem key={category} value={category}>
+                    {category}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
           <div className="mb-3">
             <InputLabel id="image">Image</InputLabel>
             <input
@@ -360,13 +425,6 @@ const AddJob = () => {
               name="image"
               onChange={onImageChange}
             />
-            {/* <FileBase
-              type="file"
-              multiple={false}
-              onDone={({ base64 }) =>
-                setFormData({ ...formData, selectedFile: base64 })
-              }
-            /> */}
           </div>
           <div className="mb-3">
             <>
@@ -394,11 +452,12 @@ const AddJob = () => {
             </Button>
           </div>
         </form>
-        <Button component={Link} to={`/`} color="primary">
-          Return to Board
-        </Button>
-      </div>
-    </div>
+        {/* </div> */}
+      </Paper>
+      <Button component={Link} to={`/`} color="primary">
+        Return to Board
+      </Button>
+    </Container>
   );
 };
 

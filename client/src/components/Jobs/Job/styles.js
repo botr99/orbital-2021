@@ -2,6 +2,13 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   /* styles for ./Job.js and ./JobDetail.js */
+  paper: {
+    // marginTop: theme.spacing(8),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    padding: theme.spacing(2),
+  },
   card: {
     height: "100%",
     display: "flex",

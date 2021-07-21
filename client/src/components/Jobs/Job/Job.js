@@ -22,10 +22,11 @@ const Job = ({ job }) => {
     categories,
     _id,
     imageUrl,
-    startDate,
-    endDate,
+    dates,
     skills,
     hours,
+    location,
+    suitability,
   } = job;
 
   // add a "..." if title or purpose is too long to be shown entirely
@@ -57,8 +58,9 @@ const Job = ({ job }) => {
             <JobIcons
               skills={skills}
               hours={hours}
-              startDate={startDate}
-              endDate={endDate}
+              dates={dates}
+              location={location}
+              suitability={suitability}
             />
             <Grid>
               {categories.map((category) => (

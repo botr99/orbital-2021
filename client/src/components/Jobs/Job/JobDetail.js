@@ -137,14 +137,14 @@ const JobDetail = () => {
                         />
                       ))}
                   </Grid>
-                  <hr />
+                  {/* <hr />
                   <Typography variant="h5">
                     <b>Things to note</b>
                   </Typography>
                   <Typography paragraph>
                     Optional Information maybe not pertaining to job itself but
                     registration and others
-                  </Typography>
+                  </Typography> */}
                 </CardContent>
                 <CardActions>
                   <Grid>
@@ -164,15 +164,22 @@ const JobDetail = () => {
 
             <Grid item md={4} xs={12}>
               <OrganizerInfo jobDetail={jobDetail} />
-              <Typography variant="h5">
-                <b>Dates and Duration</b>
-              </Typography>
-              <JobIcons
-                skills={jobDetail.skills}
-                hours={jobDetail.hours}
-                startDate={jobDetail.startDate}
-                endDate={jobDetail.endDate}
-              />
+              <Card className="mb-2" variant="outlined">
+                <CardContent>
+                  <Typography variant="h5">
+                    <b>Dates and Duration</b>
+                  </Typography>
+                  <hr />
+                  <JobIcons
+                    skills={jobDetail.skills}
+                    hours={jobDetail.hours}
+                    dates={jobDetail.dates}
+                    location={jobDetail.location}
+                    suitability={jobDetail.suitability}
+                  />
+                </CardContent>
+              </Card>
+
               <ContactInfo jobDetail={jobDetail} />
               <ReportJob jobDetail={jobDetail} />
               {/* <Button component={Link} to={`/`}>
