@@ -1,6 +1,6 @@
 import Job from "../models/Job.js";
 import paginateQuery from "../middleware/paginateQuery.js";
-import { ADMIN_EMAIL, sendEmail } from "../utils/mailer.js";
+import { ADMIN_EMAIL, sendEmail } from "../utils/mailer/mailer.js";
 
 export const getCategories = async (req, res) => {
   try {

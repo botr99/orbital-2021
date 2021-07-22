@@ -18,7 +18,7 @@ const transporter = nodemailer.createTransport({
 
 export const ADMIN_EMAIL = "randomAdminEmailTest@ccsgp.com"; // fake email
 
-export const sendEmail = (from, to, subject, mailContent) => {
+export const sendEmail = async (from, to, subject, mailContent) => {
   const mailOptions = {
     from,
     to,
@@ -26,11 +26,17 @@ export const sendEmail = (from, to, subject, mailContent) => {
     html: mailContent,
   };
 
-  transporter.sendMail(mailOptions, (err, info) => {
-    if (err) {
-      console.log(err);
-    }
-    // console.log(info.envelope);
-    // console.log(info.messageId);
-  });
+  // transporter.sendMail(mailOptions, (err, info) => {
+  //   if (err) {
+  //     console.log(err);
+  //   }
+  //   // console.log(info.envelope);
+  //   // console.log(info.messageId);
+  // });
+
+  try {
+    await transporter.sendMail(mailOptions);
+  } catch (err) {
+    console.log(err);
+  }
 };
