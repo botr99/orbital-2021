@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import useStyles from "./styles";
-import { updateJob } from "../../apis/JobsApi";
+import { approveJob } from "../../apis/JobsApi";
 import { useMutation, useQueryClient } from "react-query";
 import LoadingSpinner from "../LoadingSpinner";
 import JobIcons from "../JobIcons";
@@ -33,7 +33,7 @@ const Submission = ({ job }) => {
     suitability,
   } = job;
 
-  const { mutate, isLoading } = useMutation(updateJob, {
+  const { mutate, isLoading } = useMutation(approveJob, {
     onSuccess: () => {
       queryClient.invalidateQueries("unapprovedJobs");
       queryClient.invalidateQueries("jobs");
@@ -49,13 +49,7 @@ const Submission = ({ job }) => {
 
   const handleClick = () => {
     if (window.confirm("Approve this submission?")) {
-      mutate({
-        jobId: _id,
-        jobFields: {
-          ...job,
-          isApproved: true,
-        },
-      });
+      mutate(_id);
     }
   };
 

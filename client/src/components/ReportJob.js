@@ -10,10 +10,30 @@ import {
   TextField,
 } from "@material-ui/core";
 import OutlinedFlagRoundedIcon from "@material-ui/icons/OutlinedFlagRounded";
-import { useForm, ValidationError } from "@formspree/react";
+// import { useForm, ValidationError } from "@formspree/react";
+import { unapproveJob } from "../apis/JobsApi";
+import { useMutation, useQueryClient } from "react-query";
+import { useHistory } from "react-router-dom";
 
 const ReportJob = ({ jobDetail }) => {
   const user = JSON.parse(localStorage.getItem("profile")); // get logged in user
+  const queryClient = useQueryClient();
+  let history = useHistory();
+
+  const initialFormData = {
+    email: user?.result.email, // email of complainant
+    feedback: "",
+  };
+
+  const [formData, setFormData] = useState(initialFormData);
+
+  const { mutate } = useMutation(unapproveJob, {
+    onSuccess: () => {
+      // queryClient.removeQueries(["jobs", jobDetail.id]);
+      queryClient.invalidateQueries("unapprovedJobs");
+      queryClient.invalidateQueries("jobs");
+    },
+  });
 
   // For dialog form
   const [open, setOpen] = useState(false);
@@ -24,15 +44,26 @@ const ReportJob = ({ jobDetail }) => {
     setOpen(false);
   };
 
-  // const handleSubmit = () => {
-  //   setOpen(false);
-  // };
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-  // For formspree
-  const [state, handleSubmit] = useForm("mnqlzynr");
-  if (state.succeeded) {
-    return <Typography>Thank you for your feedback!</Typography>;
-  }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (window.confirm("Report this job?")) {
+      mutate({ jobId: jobDetail._id, feedbackData: formData });
+      history.push("/");
+      // window.alert(JSON.stringify(formData));
+    }
+    // setOpen(false);
+  };
+
+  // // For formspree
+  // const [state, handleSubmit] = useForm("mnqlzynr");
+  // if (state.succeeded) {
+  //   return <Typography>Thank you for your feedback!</Typography>;
+  // }
 
   return (
     <div>
@@ -59,14 +90,8 @@ const ReportJob = ({ jobDetail }) => {
           </DialogContentText>
           <form onSubmit={handleSubmit}>
             <TextField
-              value={jobDetail.organizer}
-              id="organizer"
-              name="organizer"
-              hidden
-            />
-            <TextField value={jobDetail.title} id="title" name="title" hidden />
-            <TextField
-              value={user?.result?.email}
+              value={formData.email}
+              onChange={handleChange}
               autoFocus
               id="email"
               name="email"
@@ -75,25 +100,27 @@ const ReportJob = ({ jobDetail }) => {
               fullWidth
               required
             />
-            <ValidationError
+            {/* <ValidationError
               prefix="Email"
               field="email"
               errors={state.errors}
-            />
+            /> */}
             <TextField
               id="feedback"
               name="feedback"
+              value={formData.feedback}
+              onChange={handleChange}
               label="Your Feedback"
               rows="10"
               multiline
               fullWidth
               required
             />
-            <ValidationError
+            {/* <ValidationError
               prefix="Feedback"
               field="feedback"
               errors={state.errors}
-            />
+            /> */}
 
             <DialogActions>
               <Button type="button" onClick={handleClose} color="primary">
@@ -102,7 +129,7 @@ const ReportJob = ({ jobDetail }) => {
               <Button
                 type="submit"
                 onClick={handleClose}
-                disabled={state.submitting}
+                // disabled={state.submitting}
                 color="primary">
                 Submit
               </Button>

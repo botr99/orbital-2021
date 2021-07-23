@@ -120,7 +120,7 @@ const AddJob = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(formData.dates);
+    // console.log(formData.dates);
     if (image) {
       // Image selected
       const imageData = new FormData();
