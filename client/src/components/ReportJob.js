@@ -52,11 +52,11 @@ const ReportJob = ({ jobDetail }) => {
     e.preventDefault();
 
     if (window.confirm("Report this job?")) {
-      mutate(jobDetail._id);
+      mutate({ jobId: jobDetail._id, feedbackData: formData });
       history.push("/");
       // window.alert(JSON.stringify(formData));
     }
-    setOpen(false);
+    // setOpen(false);
   };
 
   // // For formspree

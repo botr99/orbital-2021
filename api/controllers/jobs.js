@@ -114,7 +114,7 @@ export const postJobRegistration = async (req, res) => {
       }
     );
 
-    const subject = "Registered interest for a job";
+    const subject = `Registered interest for "${updatedJob.title}"`;
     // replace with http://localhost:3000 in dev
     const mailContent = `
       <p>This is to confirm that you have registered your interest for the job shown 
@@ -206,10 +206,10 @@ export const approveJob = async (req, res) => {
     );
 
     const jobEmail = updatedJob.email;
-    const subject = "Job is now public";
+    const subject = `"${updatedJob.title}" is now public`;
     // replace with http://localhost:3000 in dev
     const mailContent = `
-        <p>This is to confirm that your job has been approved.</p>
+        <p>This is to confirm that your job, ${updatedJob.title}, has been approved.</p>
         <p>You can view your job at this link: 
           <a href="https://nus-ccsgp.netlify.app/jobs/${req.params.id}">
             https://nus-ccsgp.netlify.app/jobs/${req.params.id}
@@ -228,8 +228,8 @@ export const approveJob = async (req, res) => {
 };
 
 export const unapproveJob = async (req, res) => {
-  // const feedbackData = req.body;
-  // console.log("Unapproved!");
+  const feedbackData = req.body;
+
   try {
     const reportedJob = await Job.findByIdAndUpdate(
       req.params.id,
@@ -238,28 +238,32 @@ export const unapproveJob = async (req, res) => {
         new: true,
       }
     );
+
     const jobEmail = reportedJob.email;
-    const subjectToOrganizer = "Job has been suspended temporarily";
+    const subjectToOrganizer = `"${reportedJob.title}" has been suspended temporarily`;
     const mailContentToOrganizer = `
-        <p>This is to inform you that your job, ${reportedJob.title}, has been temporarily suspended due to a report made against it.</p>
-        <p>Investigations are ongoing and our admins will be contacting you shortly for further actions.
-        </p>
-      `;
+          <p>This is to inform you that your job, ${reportedJob.title}, has been temporarily suspended due to a report made against it.</p>
+          <p>Investigations are ongoing and our admins will be contacting you shortly for further actions.
+          </p>
+        `;
     sendEmail(
       ADMIN_EMAIL,
       jobEmail,
       subjectToOrganizer,
       mailContentToOrganizer
     );
-    const subjectToAdmin = `Report made against job ${reportedJob.title}`;
+
+    const subjectToAdmin = `Report made against "${reportedJob.title}"`;
     const mailContentToAdmin = `
-    <p>${reportedJob.title}, organized by ${reportedJob.organizer}, has been temporarily suspended due to a report made against it.</p>
-    <p>You can view the reported job at this link:
-      <a href="https://nus-ccsgp.netlify.app/submissions/${req.params.id}">
-         https://nus-ccsgp.netlify.app/submissions/${req.params.id}
-       </a>.
-    </p>
-  `;
+      <p>${reportedJob.title}, organized by ${reportedJob.organizer}, has been temporarily suspended due to a report made against it.</p>
+      <p>Email of complainant: ${feedbackData.email}</p>
+      <p>Feedback: ${feedbackData.feedback}</p>
+      <p>You can view the reported job at this link:
+        <a href="https://nus-ccsgp.netlify.app/submissions/${req.params.id}">
+           https://nus-ccsgp.netlify.app/submissions/${req.params.id}
+         </a>.
+      </p>
+    `;
     sendEmail(ADMIN_EMAIL, ADMIN_EMAIL, subjectToAdmin, mailContentToAdmin);
   } catch (err) {
     res.status(404).json({ message: err.message });
