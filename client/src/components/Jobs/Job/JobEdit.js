@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { getCategories, getJobDetail, updateJob } from "../../../apis/JobsApi";
-import FileBase from "react-file-base64";
 import axios from "axios";
 import {
   Button,
@@ -14,18 +13,18 @@ import {
   TextField,
   Typography,
   Grid,
+  Container,
+  Paper,
 } from "@material-ui/core";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
-import DateFnsUtils from "@date-io/date-fns";
+import DatePicker from "react-multi-date-picker";
+import DatePanel from "react-multi-date-picker/plugins/date_panel";
 import useStyles from "./styles";
 
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import LoadingSpinner from "../../LoadingSpinner";
 import LoadingContainer from "../../LoadingContainer";
 import Error from "../../Error";
+import suitabilityList from "../../../utils/suitabilityList";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -57,9 +56,10 @@ const JobEdit = () => {
     skills: "",
     categories: [],
     imageUrl: "",
-    startDate: "",
-    endDate: "",
+    dates: [],
     hours: "",
+    location: "",
+    suitability: [],
   };
 
   const { id } = useParams();
@@ -67,19 +67,10 @@ const JobEdit = () => {
 
   const [formData, setFormData] = useState(initialFormData);
 
-  const handleStartDateChange = (date) => {
+  const handleDatesChange = (dates) => {
     setFormData({
       ...formData,
-      startDate: date,
-      endDate: date > formData.endDate ? date : formData.endDate,
-    });
-  };
-
-  const handleEndDateChange = (date) => {
-    setFormData({
-      ...formData,
-      endDate: date,
-      startDate: formData.startDate > date ? date : formData.startDate,
+      dates,
     });
   };
 
@@ -143,9 +134,9 @@ const JobEdit = () => {
     }
   };
 
-  if (user?.result?.name !== organizer) {
-    return <Error />;
-  }
+  // if (user?.result?.name !== organizer) {
+  //   return <Error />;
+  // }
 
   if (loadingJobDetail) {
     return <LoadingContainer />;
@@ -156,11 +147,11 @@ const JobEdit = () => {
   }
 
   return (
-    <div className="row">
-      <Typography variant="h5" align="center" gutterBottom>
-        Edit Job
-      </Typography>
-      <div className="col-6 offset-3">
+    <Container component="main" maxWidth="md">
+      <Paper className={classes.paper} elevation={3}>
+        <Typography variant="h5" align="center" gutterBottom>
+          Edit Job
+        </Typography>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <TextField
@@ -282,34 +273,23 @@ const JobEdit = () => {
             />
           </div>
           <div className="mb-3">
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <Grid container justify="space-between">
-                <KeyboardDatePicker
-                  minDate={Date.now()}
-                  margin="normal"
-                  id="start-date-picker"
-                  label="Start Date"
-                  format="MM/dd/yyyy"
-                  value={formData.startDate}
-                  onChange={handleStartDateChange}
-                  KeyboardButtonProps={{
-                    "aria-label": "change start date",
-                  }}
-                />
-                <KeyboardDatePicker
-                  minDate={Date.now()}
-                  margin="normal"
-                  id="end-date-picker"
-                  label="End Date"
-                  format="MM/dd/yyyy"
-                  value={formData.endDate}
-                  onChange={handleEndDateChange}
-                  KeyboardButtonProps={{
-                    "aria-label": "change end date",
-                  }}
-                />
-              </Grid>
-            </MuiPickersUtilsProvider>
+            <InputLabel id="dates-label">Dates</InputLabel>
+            <DatePicker
+              style={{
+                width: "100%",
+                boxSizing: "border-box",
+                height: "26px",
+              }}
+              containerStyle={{
+                width: "100%",
+              }}
+              calendarPosition="bottom-center"
+              multiple
+              minDate={new Date()}
+              value={formData.dates}
+              onChange={handleDatesChange}
+              plugins={[<DatePanel />]}
+            />
           </div>
           <div className="mb-3">
             <TextField
@@ -322,6 +302,49 @@ const JobEdit = () => {
               required
               type="number"
             />
+          </div>
+          <div>
+            <TextField
+              variant="outlined"
+              label="Location"
+              name="location"
+              value={formData.location}
+              onChange={handleChange}
+              fullWidth
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <FormControl required className={classes.formControl}>
+              <InputLabel id="mutiple-suitability-label">
+                Suitable for
+              </InputLabel>
+              <Select
+                labelId="mutiple-suitability-label"
+                multiple
+                name="suitability"
+                value={formData.suitability}
+                onChange={handleChange}
+                input={<Input id="select-multiple-chip" />}
+                renderValue={(selected) => (
+                  <div className={classes.chips}>
+                    {selected.map((value) => (
+                      <Chip
+                        key={value}
+                        label={value}
+                        className={classes.chip}
+                      />
+                    ))}
+                  </div>
+                )}
+                MenuProps={MenuProps}>
+                {suitabilityList?.map((category) => (
+                  <MenuItem key={category} value={category}>
+                    {category}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </div>
           <div className="mb-3">
             <InputLabel id="image">Image</InputLabel>
@@ -343,11 +366,11 @@ const JobEdit = () => {
             {updateJobLoading ? <LoadingSpinner /> : "Update Job"}
           </Button>
         </form>
-        <Button component={Link} to={`/jobs/${id}`} color="primary">
-          Back to Job
-        </Button>
-      </div>
-    </div>
+      </Paper>
+      <Button component={Link} to={`/jobs/${id}`} color="primary">
+        Back to Job
+      </Button>
+    </Container>
   );
 };
 

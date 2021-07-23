@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 // const Registration = require("./Registration");
 import { categories } from "../seeds/seedHelpers.js"; // To provide default categories
+import suitabilityList from "../utils/suitabilityList.js";
 const Schema = mongoose.Schema;
 
 const jobSchema = new Schema(
@@ -43,13 +44,8 @@ const jobSchema = new Schema(
       type: [{ type: String, enum: categories }], // allow for multiple categories
       required: true,
     },
-    startDate: {
-      type: Date,
-      required: true,
-    },
-    endDate: {
-      type: Date,
-      required: true,
+    dates: {
+      type: [],
     },
     hours: {
       type: Number,
@@ -63,6 +59,8 @@ const jobSchema = new Schema(
     ],
     isApproved: { type: Boolean, default: false },
     imageUrl: { type: String }, // Url to Cloudinary
+    location: { type: String },
+    suitability: [{ type: String, enum: suitabilityList }],
   },
   { timestamps: true } // assigns createdAt and updatedAt fields to the schema
 );
