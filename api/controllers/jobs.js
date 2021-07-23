@@ -227,6 +227,45 @@ export const approveJob = async (req, res) => {
   }
 };
 
+export const unapproveJob = async (req, res) => {
+  // const feedbackData = req.body;
+  // console.log("Unapproved!");
+  try {
+    const reportedJob = await Job.findByIdAndUpdate(
+      req.params.id,
+      { isApproved: false },
+      {
+        new: true,
+      }
+    );
+    const jobEmail = reportedJob.email;
+    const subjectToOrganizer = "Job has been suspended temporarily";
+    const mailContentToOrganizer = `
+        <p>This is to inform you that your job, ${reportedJob.title}, has been temporarily suspended due to a report made against it.</p>
+        <p>Investigations are ongoing and our admins will be contacting you shortly for further actions.
+        </p>
+      `;
+    sendEmail(
+      ADMIN_EMAIL,
+      jobEmail,
+      subjectToOrganizer,
+      mailContentToOrganizer
+    );
+    const subjectToAdmin = `Report made against job ${reportedJob.title}`;
+    const mailContentToAdmin = `
+    <p>${reportedJob.title}, organized by ${reportedJob.organizer}, has been temporarily suspended due to a report made against it.</p>
+    <p>You can view the reported job at this link:
+      <a href="https://nus-ccsgp.netlify.app/submissions/${req.params.id}">
+         https://nus-ccsgp.netlify.app/submissions/${req.params.id}
+       </a>.
+    </p>
+  `;
+    sendEmail(ADMIN_EMAIL, ADMIN_EMAIL, subjectToAdmin, mailContentToAdmin);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+};
+
 export const deleteJob = async (req, res) => {
   try {
     const deletedJob = await Job.findByIdAndDelete(req.params.id);
