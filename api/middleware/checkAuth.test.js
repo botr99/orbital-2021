@@ -5,7 +5,7 @@ import { jest } from "@jest/globals";
 import checkAuth from "./checkAuth";
 import ROLES from "../utils/roles";
 
-describe("checkAuth function that takes in a permissions array and returns a middleware", () => {
+describe("Middleware that makes use of checkAuth function applied with a permissions array", () => {
   describe("Passing in permissions that is not an array", () => {
     test("Should respond with a 401 status code", () => {
       // assign some random string/boolean/number to permissions
@@ -15,7 +15,7 @@ describe("checkAuth function that takes in a permissions array and returns a mid
         url: "/api/jobs/unapproved",
       });
       const res = httpMocks.createResponse();
-      const next = jest.fn(); // spy
+      const next = jest.fn();
 
       const middleware = checkAuth(permissions);
       middleware(req, res, next);
@@ -32,7 +32,7 @@ describe("checkAuth function that takes in a permissions array and returns a mid
         url: "/api/jobs/unapproved",
       });
       const res = httpMocks.createResponse();
-      const next = jest.fn(); // spy
+      const next = jest.fn();
 
       const middleware = checkAuth(permissions);
       middleware(req, res, next);
@@ -55,7 +55,7 @@ describe("checkAuth function that takes in a permissions array and returns a mid
         },
       });
       const res = httpMocks.createResponse();
-      const next = jest.fn(); // spy
+      const next = jest.fn();
 
       const middleware = checkAuth(permissions);
       middleware(req, res, next);

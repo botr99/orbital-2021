@@ -7,8 +7,12 @@ import assignUser from "./assignUser";
 import ROLES from "../utils/roles";
 
 describe("assignUser middleware", () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   describe("A request without authorization header", () => {
-    test("Should call the next middleware", () => {
+    test("Should call the next middleware", async () => {
       const req = httpMocks.createRequest({
         method: "GET",
         url: "/api/jobs/unapproved",
@@ -19,7 +23,7 @@ describe("assignUser middleware", () => {
       const res = httpMocks.createResponse();
       const next = jest.fn(); // spy
 
-      assignUser(req, res, next);
+      await assignUser(req, res, next);
 
       expect(next).toHaveBeenCalled();
     });
@@ -27,7 +31,7 @@ describe("assignUser middleware", () => {
 
   describe("A request with authorization header", () => {
     describe("Which contains a valid JWT token", () => {
-      test("Should call the next middleware", () => {
+      test("Should call the next middleware", async () => {
         const req = httpMocks.createRequest({
           method: "GET",
           url: "/api/jobs/unapproved",
@@ -46,15 +50,14 @@ describe("assignUser middleware", () => {
           name: faker.name.findName(),
         });
 
-        assignUser(req, res, next);
-        verify.mockRestore(); // restore back to original implementation
+        await assignUser(req, res, next);
 
         expect(next).toHaveBeenCalled();
       });
     });
 
     describe("Which contains an invalid JWT token", () => {
-      test("Should respond with a 401 status code", () => {
+      test("Should respond with a 401 status code", async () => {
         const req = httpMocks.createRequest({
           method: "GET",
           url: "/api/jobs/unapproved",
@@ -63,9 +66,9 @@ describe("assignUser middleware", () => {
           },
         });
         const res = httpMocks.createResponse();
-        const next = jest.fn(); // spy
+        const next = jest.fn();
 
-        assignUser(req, res, next);
+        await assignUser(req, res, next);
 
         expect(res.statusCode).toBe(401);
       });
