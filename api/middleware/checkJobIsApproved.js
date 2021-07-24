@@ -5,7 +5,7 @@ const checkJobIsApproved = async (req, res, next) => {
   try {
     const job = await Job.findById(req.params.id);
 
-    if (job && (job.isApproved || req.user?.role === ROLES.Admin)) {
+    if (job.isApproved || req.user?.role === ROLES.Admin) {
       // admin can read/update/delete any approved/unapproved jobs
       req.jobDetail = job;
       return next();
