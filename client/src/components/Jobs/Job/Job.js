@@ -47,7 +47,7 @@ const Job = ({ job }) => {
         <CardContent className={classes.cardContent}>
           <Typography variant="h5">{truncatedTitle}</Typography>
           <Typography gutterBottom variant="subtitle1" color="textSecondary">
-            {organizer}
+            by {organizer}
           </Typography>
           <Grid>
             <Typography variant="body1">{truncatedPurpose}</Typography>

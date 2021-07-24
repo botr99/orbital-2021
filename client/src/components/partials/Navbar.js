@@ -26,8 +26,11 @@ const Navbar = () => {
       className="navbar sticky-top navbar-expand-lg navbar-dark"
       style={{ backgroundColor: "black", fontSize: "large" }}>
       <div className="container-fluid">
-        <a className="navbar-brand" href="/">
+        <a className="navbar-brand d-none d-md-block" href="/">
           <img src={logo} alt="CCSGP Volunteer Board" width="271" height="52" />
+        </a>
+        <a className="navbar-brand d-md-none" href="/">
+          CCSGP Volunteer Board
         </a>
         <button
           className="navbar-toggler"
