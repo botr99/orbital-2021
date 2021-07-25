@@ -69,7 +69,7 @@ const Navbar = () => {
                   Jobs Organized
                 </a>
                 <a className="nav-link" href="/jobs/new">
-                  New Job
+                  Add Job
                 </a>
               </>
             )}

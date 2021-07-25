@@ -97,3 +97,10 @@ export const deleteJob = async (jobId) => {
   const { data } = await JobsApi.delete(`/${jobId}`);
   return data;
 };
+
+export const rejectJob = async ({ jobId, reason }) => {
+  const { data } = await JobsApi.delete(`/${jobId}/reject`, {
+    data: { reason: reason },
+  });
+  return data;
+};
