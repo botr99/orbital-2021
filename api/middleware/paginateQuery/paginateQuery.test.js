@@ -63,14 +63,16 @@ describe("paginateQuery middleware", () => {
         url: "/api/jobs",
       });
       const res = httpMocks.createResponse();
-      const model = jest.fn();
 
-      const findStub = jest.fn().mockRejectedValue(new Error("Network error"));
-      model.mockImplementationOnce(() => ({
-        find: findStub,
+      const find = jest.spyOn(Job, "find");
+      const countDocumentsStub = jest
+        .fn()
+        .mockRejectedValueOnce(new Error("Network error"));
+      find.mockImplementationOnce(() => ({
+        countDocuments: countDocumentsStub,
       }));
 
-      await paginateQuery(req, res, model);
+      await paginateQuery(req, res, Job);
 
       expect(res.statusCode).toBe(500);
     });
