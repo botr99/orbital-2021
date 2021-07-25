@@ -11,6 +11,29 @@ describe("checkJobIsApproved middleware", () => {
     jest.restoreAllMocks();
   });
 
+  describe("When the job with id corresponding to the request parameter id is not found", () => {
+    test("Should respond with a 404 status code", async () => {
+      const randomId = faker.datatype.uuid();
+
+      const req = httpMocks.createRequest({
+        method: "GET",
+        url: `/api/jobs/${randomId}`,
+        params: {
+          id: randomId,
+        },
+      });
+      const res = httpMocks.createResponse();
+      const next = jest.fn(); // spy
+      // stub
+      const findById = jest.spyOn(Job, "findById");
+      findById.mockRejectedValue(new Error("Job not found"));
+
+      await checkJobIsApproved(req, res, next);
+
+      expect(res.statusCode).toBe(404);
+    });
+  });
+
   describe("When the job found is approved", () => {
     test("Should call the next middleware", async () => {
       const randomId = faker.datatype.uuid();
