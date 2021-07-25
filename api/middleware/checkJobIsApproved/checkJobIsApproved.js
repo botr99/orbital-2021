@@ -1,5 +1,5 @@
-import Job from "../models/Job.js";
-import ROLES from "../utils/roles.js";
+import Job from "../../models/Job.js";
+import ROLES from "../../utils/roles.js";
 
 const checkJobIsApproved = async (req, res, next) => {
   try {

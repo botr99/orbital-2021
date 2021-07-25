@@ -1,4 +1,4 @@
-import jobSchema from "../schemas.js";
+import jobSchema from "../../schemas.js";
 
 const validateJob = (req, res, next) => {
   const { value, error } = jobSchema.validate(req.body, { allowUnknown: true });

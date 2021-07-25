@@ -2,7 +2,7 @@ import faker from "faker";
 import httpMocks from "node-mocks-http";
 import { jest } from "@jest/globals";
 
-import Job from "../models/Job";
+import Job from "../../models/Job";
 import paginateQuery from "./paginateQuery";
 
 describe("paginateQuery middleware", () => {

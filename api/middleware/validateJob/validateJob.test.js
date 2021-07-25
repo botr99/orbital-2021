@@ -2,7 +2,7 @@ import faker from "faker";
 import httpMocks from "node-mocks-http";
 import { jest } from "@jest/globals";
 
-import jobSchema from "../schemas";
+import jobSchema from "../../schemas";
 import validateJob from "./validateJob";
 
 describe("validateJob middleware", () => {

@@ -1,4 +1,4 @@
-import ROLES from "../utils/roles.js";
+import ROLES from "../../utils/roles.js";
 
 const validateOrganizer = (req, res, next) => {
   if (

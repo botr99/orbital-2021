@@ -14,11 +14,11 @@ import {
   updateJob,
   deleteJob,
 } from "../../../controllers/jobs.js";
-import validateJob from "../../../middleware/validateJob.js";
-import assignUser from "../../../middleware/assignUser.js";
-import checkAuth from "../../../middleware/checkAuth.js";
-import checkJobIsApproved from "../../../middleware/checkJobIsApproved.js";
-import validateOrganizer from "../../../middleware/validateOrganizer.js";
+import validateJob from "../../../middleware/validateJob/validateJob.js";
+import assignUser from "../../../middleware/assignUser/assignUser.js";
+import checkAuth from "../../../middleware/checkAuth/checkAuth.js";
+import checkJobIsApproved from "../../../middleware/checkJobIsApproved/checkJobIsApproved.js";
+import validateOrganizer from "../../../middleware/validateOrganizer/validateOrganizer.js";
 import ROLES from "../../../utils/roles.js";
 
 const router = express.Router();

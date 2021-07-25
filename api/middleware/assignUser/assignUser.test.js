@@ -4,7 +4,7 @@ import { jest } from "@jest/globals";
 import jwt from "jsonwebtoken";
 
 import assignUser from "./assignUser";
-import ROLES from "../utils/roles";
+import ROLES from "../../utils/roles";
 
 describe("assignUser middleware", () => {
   afterEach(() => {

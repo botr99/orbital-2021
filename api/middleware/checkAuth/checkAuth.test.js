@@ -3,7 +3,7 @@ import httpMocks from "node-mocks-http";
 import { jest } from "@jest/globals";
 
 import checkAuth from "./checkAuth";
-import ROLES from "../utils/roles";
+import ROLES from "../../utils/roles";
 
 describe("Middleware that makes use of checkAuth function applied with a permissions array", () => {
   describe("Passing in permissions that is not an array", () => {

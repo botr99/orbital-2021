@@ -3,8 +3,8 @@ import httpMocks from "node-mocks-http";
 import { jest } from "@jest/globals";
 
 import checkJobIsApproved from "./checkJobIsApproved";
-import Job from "../models/Job";
-import ROLES from "../utils/roles";
+import Job from "../../models/Job";
+import ROLES from "../../utils/roles";
 
 describe("checkJobIsApproved middleware", () => {
   afterEach(() => {

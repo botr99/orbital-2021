@@ -2,7 +2,7 @@ import faker from "faker";
 import httpMocks from "node-mocks-http";
 import { jest } from "@jest/globals";
 
-import ROLES from "../utils/roles";
+import ROLES from "../../utils/roles";
 import validateOrganizer from "./validateOrganizer";
 
 describe("validateOrganizer middleware", () => {
