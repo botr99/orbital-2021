@@ -9,7 +9,7 @@ import {
   Button,
   TextField,
 } from "@material-ui/core";
-import OutlinedFlagRoundedIcon from "@material-ui/icons/OutlinedFlagRounded";
+import FlagRoundedIcon from "@material-ui/icons/FlagRounded";
 // import { useForm, ValidationError } from "@formspree/react";
 import { unapproveJob } from "../apis/JobsApi";
 import { useMutation, useQueryClient } from "react-query";
@@ -68,7 +68,7 @@ const ReportJob = ({ jobDetail }) => {
   return (
     <div>
       <Button
-        startIcon={<OutlinedFlagRoundedIcon />}
+        startIcon={<FlagRoundedIcon />}
         variant="outlined"
         color="secondary"
         onClick={handleClickOpen}>
