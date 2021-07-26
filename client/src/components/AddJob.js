@@ -132,7 +132,7 @@ const AddJob = () => {
 
         mutate({
           organizer: user?.result?.name,
-          registerNum: user?.result?.registerNum,
+          // registerNum: user?.result?.registerNum,
           contactName: formData.contactName,
           telephoneNum: formData.telephoneNum,
           mobileNum: formData.telephoneNum,
@@ -155,7 +155,7 @@ const AddJob = () => {
       // No image
       mutate({
         organizer: user?.result?.name,
-        registerNum: user?.result?.registerNum,
+        // registerNum: user?.result?.registerNum,
         contactName: formData.contactName,
         telephoneNum: formData.telephoneNum,
         mobileNum: formData.telephoneNum,
@@ -365,7 +365,7 @@ const AddJob = () => {
           <div className="mb-3">
             <TextField
               variant="outlined"
-              label="Number of Hours Required"
+              label="Number of Hours Required per Session"
               name="hours"
               value={formData.hours}
               onChange={handleChange}

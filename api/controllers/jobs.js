@@ -278,3 +278,22 @@ export const deleteJob = async (req, res) => {
     res.status(404).json({ message: err.message });
   }
 };
+
+export const rejectJob = async (req, res) => {
+  const { reason } = req.body;
+  try {
+    const rejectedJob = await Job.findByIdAndDelete(req.params.id);
+
+    const jobEmail = rejectedJob.email;
+    const subject = `"${rejectedJob.title}" has been rejected`;
+    const mailContent = `
+          <p>This is to inform you that your job, ${rejectedJob.title}, has been rejected due to the following reason(s):</p>
+          <p>${reason}</p>
+        `;
+    sendEmail(ADMIN_EMAIL, jobEmail, subject, mailContent);
+
+    res.status(204).json(rejectedJob);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+};

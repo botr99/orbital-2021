@@ -70,7 +70,7 @@ const JobEdit = () => {
   const handleDatesChange = (dates) => {
     setFormData({
       ...formData,
-      dates,
+      dates: dates.map((date) => date.format()),
     });
   };
 
@@ -284,6 +284,8 @@ const JobEdit = () => {
                 width: "100%",
               }}
               calendarPosition="bottom-center"
+              format="DD MMMM YYYY"
+              sort
               multiple
               minDate={new Date()}
               value={formData.dates}

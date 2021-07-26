@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import ROLES from "../../utils/roles";
+import logo from "../../images/CCSGP Logo Text.png";
 
 const Navbar = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
@@ -21,10 +22,15 @@ const Navbar = () => {
   }, [location]);
 
   return (
-    <nav className="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+    <nav
+      className="navbar sticky-top navbar-expand-lg navbar-dark"
+      style={{ backgroundColor: "black", fontSize: "large" }}>
       <div className="container-fluid">
-        <a className="navbar-brand" href="/">
-          NUS CCSGP Volunteer Board
+        <a className="navbar-brand d-none d-md-block" href="/">
+          <img src={logo} alt="CCSGP Volunteer Board" width="271" height="52" />
+        </a>
+        <a className="navbar-brand d-md-none" href="/">
+          CCSGP Volunteer Board
         </a>
         <button
           className="navbar-toggler"
@@ -63,7 +69,7 @@ const Navbar = () => {
                   Jobs Organized
                 </a>
                 <a className="nav-link" href="/jobs/new">
-                  New Job
+                  Add Job
                 </a>
               </>
             )}

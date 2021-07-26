@@ -9,9 +9,9 @@ const jobSchema = new Schema(
     organizer: {
       type: String,
     },
-    registerNum: {
-      type: String,
-    },
+    // registerNum: {
+    //   type: String,
+    // },
     contactName: {
       type: String,
     },

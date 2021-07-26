@@ -60,15 +60,16 @@ const JobDetail = () => {
       user?.result?.role === ROLES.Admin) && (
       <Grid>
         <Button
-          variant="contained"
+          variant="outlined"
           color="primary"
           startIcon={<EditIcon />}
           component={Link}
           to={`/jobs/${jobDetail._id}/edit`}>
           Edit
         </Button>
+
         <Button
-          variant="contained"
+          variant="outlined"
           color="secondary"
           className={classes.button}
           startIcon={<DeleteIcon />}

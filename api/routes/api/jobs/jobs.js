@@ -13,7 +13,8 @@ import {
   unapproveJob,
   updateJob,
   deleteJob,
-} from "../../../controllers/jobs.js";
+  rejectJob,
+} from "../../controllers/jobs.js";
 import validateJob from "../../../middleware/validateJob/validateJob.js";
 import assignUser from "../../../middleware/assignUser/assignUser.js";
 import checkAuth from "../../../middleware/checkAuth/checkAuth.js";
@@ -103,5 +104,7 @@ router.delete(
   validateOrganizer,
   deleteJob
 );
+
+router.delete("/:id/reject", assignUser, checkAuth([ROLES.Admin]), rejectJob);
 
 export default router;

@@ -6,20 +6,26 @@ import {
   CardMedia,
   CardContent,
   Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Grid,
   Typography,
+  TextField,
 } from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/Delete";
+
 import { Link, useHistory, useParams } from "react-router-dom";
-import { approveJob, deleteJob, getJobDetail } from "../../apis/JobsApi";
+import { approveJob, rejectJob, getJobDetail } from "../../apis/JobsApi";
 import useStyles from "./styles";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useState } from "react";
 import LoadingContainer from "../LoadingContainer";
 import Error from "../Error";
 import OrganizerInfo from "../OrganizerInfo";
 import JobIcons from "../JobIcons";
 import ContactInfo from "../ContactInfo";
-import ReportJob from "../ReportJob";
 
 const SubmissionDetail = () => {
   const classes = useStyles();
@@ -47,8 +53,8 @@ const SubmissionDetail = () => {
     }
   );
 
-  const { mutate: mutateDelete, isLoading: deleteJobLoading } = useMutation(
-    deleteJob,
+  const { mutate: mutateReject, isLoading: deleteJobLoading } = useMutation(
+    rejectJob,
     {
       onSuccess: () => {
         queryClient.removeQueries(["jobs", id]);
@@ -58,23 +64,34 @@ const SubmissionDetail = () => {
     }
   );
 
+  // For dialog form
+  const [open, setOpen] = useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const handleApprove = () => {
     if (window.confirm("Approve this submission?")) {
       mutatePatch(id);
     }
   };
 
-  const handleDelete = () => {
+  const handleReject = (e) => {
+    e.preventDefault();
     if (window.confirm("Reject this submission?")) {
-      mutateDelete(id);
+      mutateReject({ jobId: id, reason });
+      history.push("/");
     }
   };
 
-  // const formatDate = () => {
-  //   const start = new Date(jobDetail.startDate);
-  //   const end = new Date(jobDetail.endDate);
-  //   return `${start.getDay()}/${start.getMonth()}/${start.getFullYear()} - ${end.getDay()}/${end.getMonth()}/${end.getFullYear()}`;
-  // };
+  const [reason, setReason] = useState("");
+
+  const handleChange = (e) => {
+    setReason(e.target.value);
+  };
 
   if (isError) {
     return <Error error={error} />;
@@ -150,17 +167,59 @@ const SubmissionDetail = () => {
                       onClick={handleApprove}
                       color="primary"
                       className={classes.button}
-                      variant="contained">
+                      variant="outlined">
                       Approve
                     </Button>
                     <Button
-                      variant="contained"
+                      variant="outlined"
                       color="secondary"
-                      className={classes.button}
-                      startIcon={<DeleteIcon />}
-                      onClick={handleDelete}>
+                      onClick={handleClickOpen}>
                       Reject
                     </Button>
+                    <Dialog
+                      style={{ textAlign: "center" }}
+                      fullWidth
+                      maxWidth="sm"
+                      open={open}
+                      onClose={handleClose}
+                      aria-labelledby="form-dialog-title">
+                      <DialogTitle id="form-dialog-title">
+                        Reject Submission
+                      </DialogTitle>
+                      <DialogContent>
+                        <DialogContentText>
+                          Reason(s) for rejection of this job submission
+                        </DialogContentText>
+                        <form onSubmit={handleReject}>
+                          <TextField
+                            id="reason"
+                            name="reason"
+                            value={reason}
+                            onChange={handleChange}
+                            label="Reason"
+                            rows="10"
+                            multiline
+                            fullWidth
+                            required
+                          />
+
+                          <DialogActions>
+                            <Button
+                              type="button"
+                              onClick={handleClose}
+                              color="primary">
+                              Cancel
+                            </Button>
+                            <Button
+                              type="submit"
+                              onClick={handleClose}
+                              color="primary">
+                              Submit
+                            </Button>
+                          </DialogActions>
+                        </form>
+                      </DialogContent>
+                    </Dialog>
                   </Grid>
                   <Button component={Link} to={`/submissions`} color="primary">
                     Return to Submissions
@@ -193,10 +252,6 @@ const SubmissionDetail = () => {
               </CardContent>
             </Card>
             <ContactInfo jobDetail={jobDetail} />
-            <ReportJob jobDetail={jobDetail} />
-            {/* <Button component={Link} to={`/`}>
-                Report
-              </Button> */}
           </Grid>
         </Grid>
       )}
