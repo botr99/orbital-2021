@@ -1,5 +1,5 @@
 // permissions array to restrict access to certain roles
-const checkAuth = (permissions) => async (req, res, next) => {
+const checkAuth = (permissions) => (req, res, next) => {
   if (
     !(
       Array.isArray(permissions) &&
