@@ -14,7 +14,7 @@ import {
   updateJob,
   deleteJob,
   rejectJob,
-} from "../../controllers/jobs.js";
+} from "../../../controllers/jobs.js";
 import { validateJob } from "../../middleware/validateJob.js";
 import assignUser from "../../middleware/assignUser.js";
 import checkAuth from "../../middleware/checkAuth.js";
