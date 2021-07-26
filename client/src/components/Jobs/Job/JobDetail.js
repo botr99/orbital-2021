@@ -94,7 +94,8 @@ const JobDetail = () => {
                 <CardMedia
                   className={classes.cardMedia}
                   image={
-                    jobDetail.imageUrl || "https://source.unsplash.com/random"
+                    jobDetail.imageUrl ||
+                    "https://res.cloudinary.com/volunteer-board/image/upload/v1627284343/NoImage_klvezh.jpg"
                   }
                   title="Job Image"
                 />
