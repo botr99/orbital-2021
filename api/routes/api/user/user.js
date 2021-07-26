@@ -5,9 +5,9 @@ import {
   signup,
   updatePassword,
 } from "../../../controllers/user.js";
-import assignUser from "../../../middleware/assignUser.js";
-import checkAuth from "../../../middleware/checkAuth.js";
-import validateUser from "../../../middleware/validateUser.js";
+import assignUser from "../../../middleware/assignUser/assignUser.js";
+import checkAuth from "../../../middleware/checkAuth/checkAuth.js";
+import validateUser from "../../../middleware/validateUser/validateUser.js";
 import ROLES from "../../../utils/roles.js";
 
 const router = express.Router();
